@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { lazy } from 'react'
+// import { lazy } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
 // const HomeLayout = lazy(() => import('~/layout/HomeLayout'))
