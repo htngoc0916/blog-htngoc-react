@@ -1,0 +1,5 @@
+export { default as PostMeta } from './PostMeta'
+export { default as PostImage } from './PostImage'
+export { default as PostContent } from './PostContent'
+export { default as PostContentLeft } from './PostContentLeft'
+export { default as PostContentMain } from './PostContentMain'
