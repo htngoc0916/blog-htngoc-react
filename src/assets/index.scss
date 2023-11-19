@@ -1,0 +1,70 @@
+@import 'reset';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .pt-page {
+    @apply pt-32;
+  }
+  .container-page {
+    @apply max-w-screen-2xl lg:px-10 px-4 mx-auto;
+  }
+
+  .skill-card-enter {
+    opacity: 0;
+    transform: scale(0.5);
+    /* transform: translateY(-100%); */
+  }
+  .skill-item-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    /* transform: translateY(0); */
+    transition: all 300ms;
+  }
+  .skill-item-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .skill-item-exit-active {
+    opacity: 0;
+    transform: scale(0.5);
+    /* transform: translateY(-100%); */
+    transition: all 300ms;
+  }
+
+  .post-banner .swiper-pagination-bullet-active-main {
+    @apply bg-primary-700;
+  }
+
+  .post-related .swiper-slide {
+    @apply md:max-w-[370px] max-w-[310px] w-full h-auto;
+  }
+
+  .post-related .swiper-pagination-bullet-active-main {
+    @apply bg-primary-700;
+  }
+
+  .sidebar-group + .sidebar-group {
+    @apply border-t border-gray-200 first:mt-0 first:border-t-0 first:pt-0;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap');
+
+  body {
+    @apply font-primary text-base font-normal mx-auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    // font-family: 'Roboto', sans-serif;
+    @apply text-text1 dark:text-white bg-[#fff];
+  }
+}
