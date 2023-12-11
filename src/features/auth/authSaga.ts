@@ -1,15 +1,18 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { LoginPayload, login, loginSuccess, logout } from './authSlice'
+import { login, loginSuccess, logout } from './authSlice'
 import { call, fork, put, take } from 'redux-saga/effects'
+import { LoginRequest, ROLE } from '~/types/user'
+import { redirect } from 'react-router-dom'
 
-function* handleLogin(payload: LoginPayload) {
+function* handleLogin(payload: LoginRequest) {
   console.log(payload)
   try {
     localStorage.setItem('access_token', 'fake_value')
-    yield put(loginSuccess({ id: 1, name: 'htngoc' }))
+    yield put(loginSuccess({ id: 1, userName: 'htngoc', email: 'admin01@gmail.com', role: ROLE.ROLE_ADMIN }))
 
-    // redirect to admin page
-    // redirect('/login')
+    // redirect to home page
+    console.log('login successfully!')
+    redirect('/')
   } catch (error) {
     console.log(error)
   }
@@ -17,14 +20,16 @@ function* handleLogin(payload: LoginPayload) {
 function* handleLogout(): Generator {
   localStorage.removeItem('access_token')
   yield console.log('handleLogout')
-  // yield call(redirect('/login'))
+
+  //redirect to login page
+  //redirect('/login')
 }
 
 function* watchAuthFlow() {
   while (true) {
-    const isLoggedIn = Boolean(localStorage.getItem('access_token'))
-    if (!isLoggedIn) {
-      const action: PayloadAction<LoginPayload> = yield take(login.type)
+    const isAuthenticated = Boolean(localStorage.getItem('access_token'))
+    if (!isAuthenticated) {
+      const action: PayloadAction<LoginRequest> = yield take(login.type)
       yield fork(handleLogin, action.payload)
     }
 

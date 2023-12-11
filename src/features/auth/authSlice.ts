@@ -1,21 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '~/app/store'
-import { User } from '~/types/user'
-
-export interface LoginPayload {
-  userName: string
-  password: string
-}
+import { LoginRequest, User } from '~/types/user'
 
 export interface AuthState {
-  logging?: boolean
-  isLogged: boolean
+  isLogging?: boolean
+  isAuthenticated: boolean
   userInfo?: User
 }
 
 const initialState: AuthState = {
-  logging: false,
-  isLogged: false,
+  isLogging: false,
+  isAuthenticated: false,
   userInfo: undefined
 }
 
@@ -23,25 +18,25 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<LoginPayload>) {
+    login(state, action: PayloadAction<LoginRequest>) {
       console.log(action)
-      state.logging = true
+      state.isLogging = true
     },
 
     loginSuccess(state, action: PayloadAction<User>) {
-      state.logging = true
-      state.isLogged = true
+      state.isLogging = true
+      state.isAuthenticated = true
       state.userInfo = action.payload
     },
 
     loginFailed(state, action: PayloadAction<string>) {
       console.log(action)
-      state.logging = false
+      state.isLogging = false
     },
 
     logout(state) {
-      state.isLogged = false
-      state.logging = false
+      state.isAuthenticated = false
+      state.isLogging = false
       state.userInfo = undefined
     }
   }
@@ -49,4 +44,8 @@ const authSlice = createSlice({
 
 export const { login, loginFailed, loginSuccess, logout } = authSlice.actions
 export const authSelector = (state: RootState) => state.auth
+
+export const userInfoSelector = (state: RootState) => state.auth.userInfo
+export const isLoggingSelector = (state: RootState) => state.auth.isLogging
+export const isAuthenticatedSelector = (state: RootState) => state.auth.isAuthenticated
 export default authSlice.reducer

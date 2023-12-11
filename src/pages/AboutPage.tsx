@@ -1,6 +1,4 @@
 import React from 'react'
-import AboutContact from '~/modules/about/AboutContact'
-import AboutFooter from '~/modules/about/AboutFooter'
 
 const AboutBanner = React.lazy(() => import('~/modules/about/AboutBanner'))
 const AboutIntroduction = React.lazy(() => import('~/modules/about/AboutIntroduction'))
@@ -8,6 +6,8 @@ const AboutProject = React.lazy(() => import('~/modules/about/AboutProject'))
 const AboutSkills = React.lazy(() => import('~/modules/about/AboutSkills'))
 const AboutSendToMail = React.lazy(() => import('~/modules/about/AboutSendToMail'))
 const AboutEducation = React.lazy(() => import('~/modules/about/AboutEducation'))
+const AboutContact = React.lazy(() => import('~/modules/about/AboutContact'))
+const AboutFooter = React.lazy(() => import('~/modules/about/AboutFooter'))
 
 export default function AboutPage() {
   return (

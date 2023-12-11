@@ -4,10 +4,23 @@ import { HiMail, HiLockClosed } from 'react-icons/hi'
 import InputPassword from '~/components/input/InputPassword'
 import { Link } from 'react-router-dom'
 import IconGoogle from '~/components/icons/IconGoogle'
-
-export interface ILoginFormProps {}
+import { useAppDispatch, useAppSelector } from '~/app/hooks'
+import { isLoggingSelector, login } from '~/features/auth/authSlice'
 
 export default function LoginForm() {
+  const dispatch = useAppDispatch()
+  const isLogging = useAppSelector(isLoggingSelector)
+
+  const handleLogin = () => {
+    //test
+    dispatch(
+      login({
+        email: '',
+        password: ''
+      })
+    )
+  }
+
   return (
     <form className='w-full mx-auto md:max-w-md'>
       <Field>
@@ -35,7 +48,7 @@ export default function LoginForm() {
         </Link>
       </div>
 
-      <Button fullSized gradientDuoTone='primary' className='mt-8 font-bold h-11'>
+      <Button fullSized gradientDuoTone='primary' className='mt-8 font-bold h-11' onClick={handleLogin}>
         Đăng nhập
       </Button>
 

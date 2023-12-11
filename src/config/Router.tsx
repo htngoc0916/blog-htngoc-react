@@ -1,5 +1,7 @@
 import { lazy } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import { ROLE } from '~/types/user'
+import { PrivateRoute } from './PrivateRoute'
 
 const HomeLayout = lazy(() => import('~/layout/HomeLayout'))
 const DashboardLayout = lazy(() => import('~/layout/DashboardLayout'))
@@ -18,7 +20,6 @@ const UserPage = lazy(() => import('~/pages/UserPage'))
 const routers = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path='/' element={<p>Test</p>}></Route>
       <Route path='/' element={<HomeLayout></HomeLayout>}>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path='/about' element={<AboutPage></AboutPage>}></Route>
@@ -31,7 +32,7 @@ const routers = createBrowserRouter(
       <Route path='/404' element={<NotFoundPage></NotFoundPage>}></Route>
       <Route path='*' element={<NotFoundPage></NotFoundPage>}></Route>
 
-      <Route path='/auth' element={<DashboardLayout></DashboardLayout>}>
+      <Route path='/auth' element={<PrivateRoute roles={[ROLE.ROLE_ADMIN]} component={DashboardLayout} />}>
         <Route path='dashboard' element={<DashboardPage></DashboardPage>}></Route>
         <Route path='category' element={<CategotyPage></CategotyPage>}></Route>
         <Route path='user' element={<UserPage></UserPage>}></Route>
