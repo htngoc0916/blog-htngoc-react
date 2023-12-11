@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@types/react-transition-group": "^4.4.9",
     "@types/redux-logger": "^3.0.12",
+    "axios": "^1.6.2",
     "flowbite-react": "^0.6.4",
     "node-sass": "^9.0.0",
     "react": "^18.2.0",

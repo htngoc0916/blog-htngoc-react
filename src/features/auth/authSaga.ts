@@ -1,28 +1,20 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { login, loginSuccess, logout } from './authSlice'
+import { login, loginSuccess, logout, logoutSuccess } from './authSlice'
 import { call, fork, put, take } from 'redux-saga/effects'
 import { LoginRequest, ROLE } from '~/types/user'
-import { redirect } from 'react-router-dom'
 
 function* handleLogin(payload: LoginRequest) {
-  console.log(payload)
   try {
+    //goi api
     localStorage.setItem('access_token', 'fake_value')
     yield put(loginSuccess({ id: 1, userName: 'htngoc', email: 'admin01@gmail.com', role: ROLE.ROLE_ADMIN }))
-
-    // redirect to home page
-    console.log('login successfully!')
-    redirect('/')
   } catch (error) {
     console.log(error)
   }
 }
-function* handleLogout(): Generator {
+function* handleLogout() {
   localStorage.removeItem('access_token')
-  yield console.log('handleLogout')
-
-  //redirect to login page
-  //redirect('/login')
+  yield put(logoutSuccess())
 }
 
 function* watchAuthFlow() {

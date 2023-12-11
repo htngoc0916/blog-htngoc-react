@@ -2,10 +2,19 @@ import { Avatar, Dropdown } from 'flowbite-react'
 import { twMerge } from 'tailwind-merge'
 import { DefaultProps } from '~/utils/defautProp'
 import { dataMenu } from './dataMenu'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '~/app/hooks'
+import { logout } from '~/features/auth/authSlice'
 
 export default function HeaderUserInfo(props: DefaultProps) {
   const data = dataMenu().filter((item) => item.type === 'private')
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/login')
+  }
 
   return (
     <div className={twMerge(props.className)}>
@@ -26,9 +35,7 @@ export default function HeaderUserInfo(props: DefaultProps) {
         ))}
 
         <Dropdown.Divider />
-        <Link to='login' className='block'>
-          <Dropdown.Item>Sign out</Dropdown.Item>
-        </Link>
+        <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
       </Dropdown>
     </div>
   )

@@ -2,17 +2,25 @@ import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
 import { Field } from '~/components/field'
 import { HiMail, HiLockClosed } from 'react-icons/hi'
 import InputPassword from '~/components/input/InputPassword'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import IconGoogle from '~/components/icons/IconGoogle'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
-import { isLoggingSelector, login } from '~/features/auth/authSlice'
+import { isAuthenticatedSelector, loadingSelector, login } from '~/features/auth/authSlice'
+import { useEffect } from 'react'
 
 export default function LoginForm() {
   const dispatch = useAppDispatch()
-  const isLogging = useAppSelector(isLoggingSelector)
+  const loading = useAppSelector(loadingSelector)
+  const isAuthenticated = useAppSelector(isAuthenticatedSelector)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated, navigate])
 
   const handleLogin = () => {
-    //test
     dispatch(
       login({
         email: '',
@@ -48,7 +56,13 @@ export default function LoginForm() {
         </Link>
       </div>
 
-      <Button fullSized gradientDuoTone='primary' className='mt-8 font-bold h-11' onClick={handleLogin}>
+      <Button
+        fullSized
+        gradientDuoTone='primary'
+        className='mt-8 font-bold h-11'
+        onClick={handleLogin}
+        isProcessing={loading}
+      >
         Đăng nhập
       </Button>
 
