@@ -29,8 +29,7 @@ const authSlice = createSlice({
       state.userInfo = action.payload
     },
 
-    loginFailed(state, action: PayloadAction<string>) {
-      console.log(action)
+    loginFailed(state) {
       state.loading = false
     },
 
@@ -61,7 +60,8 @@ const authSlice = createSlice({
   }
 })
 
-export const { login, loginFailed, loginSuccess, logout, logoutSuccess } = authSlice.actions
+export const { login, loginFailed, loginSuccess, logout, logoutSuccess, register, registerSuccess, registerFailed } =
+  authSlice.actions
 export const authSelector = (state: RootState) => state.auth
 
 export const userInfoSelector = (state: RootState) => state.auth.userInfo

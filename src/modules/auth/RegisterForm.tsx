@@ -1,11 +1,34 @@
 import { Button, Label, TextInput } from 'flowbite-react'
 import { Field } from '~/components/field'
 import { HiMail } from 'react-icons/hi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import IconGoogle from '~/components/icons/IconGoogle'
-export interface ISignUpFormProps {}
+import { useAppDispatch, useAppSelector } from '~/app/hooks'
+import { isAuthenticatedSelector, loadingSelector, register } from '~/app/auth/authSlice'
+import { useEffect } from 'react'
 
-export default function SignUpForm() {
+export default function RegisterForm() {
+  const dispatch = useAppDispatch()
+  const loading = useAppSelector(loadingSelector)
+  const isAuthenticated = useAppSelector(isAuthenticatedSelector)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated, navigate])
+
+  const handleRegister = () => {
+    dispatch(
+      register({
+        userName: 'hoang tuan ngoc',
+        email: 'admin04@gmail.com',
+        password: '123456'
+      })
+    )
+  }
+
   return (
     <form className='w-full mx-auto md:max-w-md'>
       <Field>
@@ -13,7 +36,13 @@ export default function SignUpForm() {
         <TextInput type='email' color='primary' id='email' icon={HiMail} placeholder='Nhập email của bạn'></TextInput>
       </Field>
 
-      <Button fullSized gradientDuoTone='primary' className='mt-8 font-bold h-11'>
+      <Button
+        fullSized
+        gradientDuoTone='primary'
+        className='mt-8 font-bold h-11'
+        onClick={handleRegister}
+        processingSpinner={loading}
+      >
         Tạo mới
       </Button>
 

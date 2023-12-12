@@ -11,7 +11,7 @@ const AboutPage = lazy(() => import('~/pages/AboutPage'))
 const DashboardPage = lazy(() => import('~/pages/DashboardPage'))
 const HomePage = lazy(() => import('~/pages/HomePage'))
 const LoginPage = lazy(() => import('~/pages/LoginPage'))
-const SignupPage = lazy(() => import('~/pages/SignUpPage'))
+const SignupPage = lazy(() => import('~/pages/RegisterPage'))
 const PostDetailPage = lazy(() => import('~/pages/PostDetailPage'))
 const CategotyPage = lazy(() => import('~/pages/CategoryPage'))
 const PostListPage = lazy(() => import('~/pages/PostListPage'))
@@ -29,7 +29,7 @@ const routers = createBrowserRouter(
       </Route>
 
       <Route path='/login' element={<LoginPage></LoginPage>}></Route>
-      <Route path='/sign-up' element={<SignupPage></SignupPage>}></Route>
+      <Route path='/register' element={<SignupPage></SignupPage>}></Route>
       <Route path='/404' element={<NotFoundPage></NotFoundPage>}></Route>
       <Route path='*' element={<NotFoundPage></NotFoundPage>}></Route>
 

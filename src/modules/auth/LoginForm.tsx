@@ -77,7 +77,7 @@ export default function LoginForm() {
 
       <div className='flex gap-3 text-sm pt-7 md:text-base'>
         Bạn chưa có tài khoản?
-        <Link to='/sign-up' className='font-semibold text-primary-800 dark:text-primary-600'>
+        <Link to='/register' className='font-semibold text-primary-800 dark:text-primary-600'>
           Đăng ký
         </Link>
       </div>
