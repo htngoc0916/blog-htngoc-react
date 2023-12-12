@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
-import { isAuthenticatedSelector, userInfoSelector } from '~/features/auth/authSlice'
+import { isAuthenticatedSelector, userInfoSelector } from '~/app/auth/authSlice'
 import AccessDenied from '~/pages/AccessDenied'
 import { ROLE } from '~/types/user'
 

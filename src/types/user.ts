@@ -8,12 +8,18 @@ export interface User {
   email: string
   role: ROLE
 }
-export interface UserResponse {
-  user: User
+export interface LoginResponse {
   token: string
+  tokenType: string
 }
 
 export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface RegisterRequest {
+  userName: string
   email: string
   password: string
 }

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '~/app/store'
-import { LoginRequest, User } from '~/types/user'
+import { LoginRequest, RegisterRequest, User } from '~/types/user'
 
 export interface AuthState {
-  loading?: boolean
+  loading: boolean
   isAuthenticated: boolean
   userInfo?: User
 }
@@ -42,6 +42,21 @@ const authSlice = createSlice({
       state.isAuthenticated = false
       state.userInfo = undefined
       state.loading = false
+    },
+
+    register(state, action: PayloadAction<RegisterRequest>) {
+      console.log(action)
+      state.loading = true
+    },
+    registerSuccess(state, action: PayloadAction<User>) {
+      state.isAuthenticated = true
+      state.loading = false
+      state.userInfo = action.payload
+    },
+    registerFailed(state) {
+      state.isAuthenticated = false
+      state.loading = false
+      state.userInfo = undefined
     }
   }
 })

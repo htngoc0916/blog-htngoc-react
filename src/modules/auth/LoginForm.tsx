@@ -5,7 +5,7 @@ import InputPassword from '~/components/input/InputPassword'
 import { Link, useNavigate } from 'react-router-dom'
 import IconGoogle from '~/components/icons/IconGoogle'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
-import { isAuthenticatedSelector, loadingSelector, login } from '~/features/auth/authSlice'
+import { isAuthenticatedSelector, loadingSelector, login } from '~/app/auth/authSlice'
 import { useEffect } from 'react'
 
 export default function LoginForm() {
@@ -23,8 +23,8 @@ export default function LoginForm() {
   const handleLogin = () => {
     dispatch(
       login({
-        email: '',
-        password: ''
+        email: 'admin01@gmail.com',
+        password: '123456'
       })
     )
   }

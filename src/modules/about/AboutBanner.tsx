@@ -44,7 +44,7 @@ export default function AboutBanner(props: AboutIntroProps) {
               alt='banner'
               className='absolute top-0 right-0 z-0 translate-y-1 w-100'
             />
-            <img srcSet='/img/about_banner2.png' alt='logo' className='relative z-10 object-cover' />
+            {/* <img srcSet='/img/about_banner2.png' alt='logo' className='relative z-10 object-cover' /> */}
           </div>
         </div>
       </div>

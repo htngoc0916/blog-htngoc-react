@@ -4,7 +4,7 @@ import { DefaultProps } from '~/utils/defautProp'
 import { dataMenu } from './dataMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '~/app/hooks'
-import { logout } from '~/features/auth/authSlice'
+import { logout } from '~/app/auth/authSlice'
 
 export default function HeaderUserInfo(props: DefaultProps) {
   const data = dataMenu().filter((item) => item.type === 'private')
