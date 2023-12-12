@@ -4,6 +4,7 @@ import { call, fork, put, take } from 'redux-saga/effects'
 import { LoginRequest, ROLE } from '~/types/user'
 
 function* handleLogin(payload: LoginRequest) {
+  console.log('handleLogin', payload)
   try {
     //goi api
     localStorage.setItem('access_token', 'fake_value')

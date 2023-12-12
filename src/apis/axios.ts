@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
 
 const axiosClient = axios.create({
   baseURL: 'http://js-post-api.herokuapp.com/api',
