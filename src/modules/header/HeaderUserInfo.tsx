@@ -11,7 +11,6 @@ export default function HeaderUserInfo(props: DefaultProps) {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
-  console.log('🚀 ~ file: HeaderUserInfo.tsx:14 ~ HeaderUserInfo ~ userInfo:', userInfo)
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
 
   const handleLogout = () => {

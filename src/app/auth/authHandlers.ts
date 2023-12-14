@@ -5,39 +5,37 @@ import { loginFailed, loginSuccess, logoutSuccess, registerSuccess, registerFail
 import { call, put } from 'redux-saga/effects'
 import { removeToken, saveToken } from '~/utils/auth'
 import authApi from '~/apis/authApi'
-import { API_STATUS, ApiResponse, AuthResponse } from '~/types'
+import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
 
 export default function* handleAuthRegister(action: PayloadAction<RegisterRequest>) {
   try {
-    const response: ApiResponse<User> = yield call(authApi.authRegister, action.payload)
+    const response: ApiResponseDTO<User> = yield call(authApi.authRegister, action.payload)
     if (response?.status && response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(registerSuccess(response.data))
-      toast.success('Created new account successfully')
+      toast.success('Created new account successfully!')
     }
+    console.log(response.message)
+    toast.error('Created new account failed!')
   } catch (error) {
-    console.log('🚀 ~ file: authHandlers.ts:18 ~ function*handleAuthRegister ~ error:', error)
     yield put(registerFailed())
-    return
   }
 }
 
 function* handleAuthLogin(action: PayloadAction<LoginRequest>) {
   const { payload } = action
   try {
-    const response: ApiResponse<AuthResponse> = yield call(authApi.login, payload)
+    const response: ApiResponseDTO<AuthResponseDTO> = yield call(authApi.login, payload)
     if (response?.status && response?.status.includes(API_STATUS.SUCCESS)) {
-      const token = response.data?.accessToken
-      const userInfoPayload = { email: payload.email, token }
+      const { accessToken, refreshToken } = response.data
+      saveToken(accessToken, refreshToken)
+      const userInfo: User = { ...response.data }
 
-      saveToken(token)
-      const userInfo: ApiResponse<User> = yield call(authApi.authFetchMe, userInfoPayload)
+      yield put(loginSuccess(userInfo))
 
-      yield put(loginSuccess(userInfo.data))
+      toast.success('login successfully!')
     }
   } catch (error) {
-    console.log('🚀 ~ file: authHandlers.ts:37 ~ function*handleAuthLogin ~ error:', error)
     yield put(loginFailed())
-    return
   }
 }
 

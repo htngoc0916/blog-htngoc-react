@@ -3,19 +3,19 @@ export enum API_STATUS {
   FAILED = 'FAILED'
 }
 
-export interface ApiResponse<T> {
+export interface ApiResponseDTO<T> {
   date: Date
   message: string
   status: string
   data: T
 }
 
-export interface ListResponse<T> {
+export interface ListResponseDTO<T> {
   data: T
-  pagination: PaginationResponse
+  pagination: PaginationResponseDTO
 }
 
-export interface PaginationResponse {
+export interface PaginationResponseDTO {
   pageNo: number
   pageSize: number
   totalElements: number
@@ -23,7 +23,7 @@ export interface PaginationResponse {
   last: boolean
 }
 
-export interface ListParams {
+export interface ListParamsDTO {
   _pageNo?: number
   _pageSize?: number
   _sortBy?: string

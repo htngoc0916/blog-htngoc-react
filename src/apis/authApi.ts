@@ -1,15 +1,15 @@
 import axiosClient from './axios'
-import { ApiResponse, AuthResponse, LoginRequest, User, RegisterRequest } from '~/types'
+import { ApiResponseDTO, AuthResponseDTO, LoginRequest, User, RegisterRequest } from '~/types'
 import { API_VERSION } from '~/utils/constant'
 
 const authApi = {
-  login(data: LoginRequest): Promise<ApiResponse<AuthResponse>> {
+  login(data: LoginRequest): Promise<ApiResponseDTO<AuthResponseDTO>> {
     const { email, password } = data
     const url = '/auth/login'
     return axiosClient.post(url, { email, password })
   },
 
-  authFetchMe(data: { email: string; token: string }): Promise<ApiResponse<User>> {
+  authFetchMe(data: { email: string; token: string }): Promise<ApiResponseDTO<User>> {
     const { email, token } = data
     const url = `${API_VERSION}/users/email/${email}`
     return axiosClient.get(url, {
@@ -20,7 +20,7 @@ const authApi = {
     })
   },
 
-  authRegister(data: RegisterRequest): Promise<ApiResponse<User>> {
+  authRegister(data: RegisterRequest): Promise<ApiResponseDTO<User>> {
     const url = '/auth/register'
     return axiosClient.post(url, { ...data })
   }
