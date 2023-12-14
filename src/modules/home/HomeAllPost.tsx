@@ -8,11 +8,23 @@ import CardImage from '~/components/common/CardImage'
 import { Link } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import slugify from 'slugify'
+import categoryApi from '~/apis/categoryApi'
+import { Category } from '~/types'
 
 export interface IHomeAllPostProps extends DefaultProps {}
 
 export default function HomeAllPost(props: IHomeAllPostProps) {
   const data = PostList()
+
+  const handleLoadMore = async () => {
+    const category: Category = await categoryApi.addTag({
+      categoryName: 'Test category',
+      description: 'test api',
+      regId: 1
+    })
+
+    console.log(category)
+  }
 
   return (
     <section className={twMerge(props.className)}>
@@ -71,7 +83,7 @@ export default function HomeAllPost(props: IHomeAllPostProps) {
         </div>
 
         <div className='flex items-center justify-center pt-10'>
-          <Button size='sm' gradientDuoTone='primary' isProcessing>
+          <Button size='sm' gradientDuoTone='primary' isProcessing onClick={handleLoadMore}>
             Load More
           </Button>
         </div>

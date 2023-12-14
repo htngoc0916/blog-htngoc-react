@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '~/app/store'
 import { RefreshTokenDTO } from '~/types'
-import { LoginRequest, RegisterRequest, User } from '~/types'
+import { LoginRequestDTO, RegisterRequestDTO, User } from '~/types'
 
 export interface AuthState {
   loading: boolean
@@ -19,7 +19,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<LoginRequest>) {
+    login(state, action: PayloadAction<LoginRequestDTO>) {
       console.log(action)
       state.loading = true
     },
@@ -44,7 +44,7 @@ const authSlice = createSlice({
       state.loading = false
     },
 
-    register(state, action: PayloadAction<RegisterRequest>) {
+    register(state, action: PayloadAction<RegisterRequestDTO>) {
       console.log(action)
       state.loading = true
     },
@@ -58,7 +58,7 @@ const authSlice = createSlice({
       state.loading = false
       state.userInfo = undefined
     },
-    refreshToken(state, payload: PayloadAction<RefreshTokenDTO>) {
+    authRefreshToken(state, payload: PayloadAction<RefreshTokenDTO>) {
       console.log(state, payload)
     }
   }
@@ -73,7 +73,7 @@ export const {
   register,
   registerSuccess,
   registerFailed,
-  refreshToken
+  authRefreshToken
 } = authSlice.actions
 export const authSelector = (state: RootState) => state.auth
 

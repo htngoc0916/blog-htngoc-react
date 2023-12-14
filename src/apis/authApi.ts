@@ -1,12 +1,11 @@
 import axiosClient from './axios'
-import { ApiResponseDTO, AuthResponseDTO, LoginRequest, User, RegisterRequest } from '~/types'
-import { API_VERSION } from '~/utils/constant'
+import { ApiResponseDTO, AuthResponseDTO, LoginRequestDTO, User, RegisterRequestDTO, RefreshTokenDTO } from '~/types'
+import { API_VERSION, AUTH_LOGIN_URL, AUTH_REFRESH_TOKEN, AUTH_REGISTER_URL } from './apiConstanst'
 
 const authApi = {
-  login(data: LoginRequest): Promise<ApiResponseDTO<AuthResponseDTO>> {
+  login(data: LoginRequestDTO): Promise<ApiResponseDTO<AuthResponseDTO>> {
     const { email, password } = data
-    const url = '/auth/login'
-    return axiosClient.post(url, { email, password })
+    return axiosClient.post(AUTH_LOGIN_URL, { email, password })
   },
 
   authFetchMe(data: { email: string; token: string }): Promise<ApiResponseDTO<User>> {
@@ -20,9 +19,12 @@ const authApi = {
     })
   },
 
-  authRegister(data: RegisterRequest): Promise<ApiResponseDTO<User>> {
-    const url = '/auth/register'
-    return axiosClient.post(url, { ...data })
+  authRegister(data: RegisterRequestDTO): Promise<ApiResponseDTO<User>> {
+    return axiosClient.post(AUTH_REGISTER_URL, { ...data })
+  },
+
+  authRefreshToken(data: RefreshTokenDTO): Promise<ApiResponseDTO<AuthResponseDTO>> {
+    return axiosClient.post(AUTH_REFRESH_TOKEN, { ...data })
   }
 }
 

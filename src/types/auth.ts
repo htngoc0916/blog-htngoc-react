@@ -10,21 +10,23 @@ export interface AuthResponseDTO {
   avatar: string
   roles: Set<ROLE>
 }
-export interface LoginResponse {
+
+export interface LoginResponseDTO {
   token: string
   tokenType: string
 }
 
-export interface LoginRequest {
+export interface LoginRequestDTO {
   email: string
   password: string
 }
 
-export interface RegisterRequest {
+export interface RegisterRequestDTO {
   userName: string
   email: string
   password: string
 }
+
 export interface RefreshTokenDTO {
-  refreshToken: string
+  refreshToken?: string
 }

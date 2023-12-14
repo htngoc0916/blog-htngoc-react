@@ -23,11 +23,18 @@ export interface PaginationResponseDTO {
   last: boolean
 }
 
-export interface ListParamsDTO {
-  _pageNo?: number
-  _pageSize?: number
-  _sortBy?: string
-  _sortDir?: 'asc' | 'desc'
+export interface FetchPramsDTO {
+  pageNo?: number
+  pageSize?: number
+  sortBy?: string
+  sortDir?: 'asc' | 'desc'
 
   [key: string]: any
+}
+
+export interface BaseDTO {
+  regId?: number
+  regDt?: Date
+  modId?: number
+  modDt?: Date
 }
