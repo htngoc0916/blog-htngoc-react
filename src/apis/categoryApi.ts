@@ -1,12 +1,18 @@
 import axiosClient from './axios'
 import { Category } from '~/types'
-import { API_VERSION, CATEGORY_ADD_URL } from './apiConstanst'
+import { CATEGORY_ADD_URL } from './apiConstanst'
+import { getToken } from '~/utils/auth'
 
 const categoryApi = {
   addTag(data: Category): Promise<Category> {
-    const url = `${API_VERSION}${CATEGORY_ADD_URL}`
-    return axiosClient.post(url, { ...data })
+    const accessToken = getToken()
+    console.log('call:', accessToken)
+    return axiosClient.post(CATEGORY_ADD_URL, data, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   }
 }
-
 export default categoryApi

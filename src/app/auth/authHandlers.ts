@@ -24,12 +24,12 @@ function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
 function* handleAuthLogin(action: PayloadAction<LoginRequestDTO>) {
   const { payload } = action
   try {
-    const response: ApiResponseDTO<AuthResponseDTO> = yield call(authApi.login, payload)
+    const response: ApiResponseDTO<AuthResponseDTO> = yield call(authApi.authLogin, payload)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       const { accessToken, refreshToken } = response.data
       saveToken(accessToken, refreshToken)
-      const userInfo: User = { ...response.data }
 
+      const userInfo: User = { ...response.data }
       yield put(loginSuccess(userInfo))
       toast.success('login successfully!')
     }
@@ -38,7 +38,7 @@ function* handleAuthLogin(action: PayloadAction<LoginRequestDTO>) {
   }
 }
 
-function* handleAuthRefreshToken(action: PayloadAction<RefreshTokenDTO>) {
+function* handleRefreshToken(action: PayloadAction<RefreshTokenDTO>) {
   const { payload } = action
   try {
     const response: ApiResponseDTO<AuthResponseDTO> = yield call(authApi.authRefreshToken, payload)
@@ -59,4 +59,4 @@ function* handleAuthLogOut() {
   removeToken()
 }
 
-export { handleAuthLogin, handleAuthRegister, handleAuthLogOut, handleAuthRefreshToken }
+export { handleAuthLogin, handleAuthRegister, handleAuthLogOut, handleRefreshToken }

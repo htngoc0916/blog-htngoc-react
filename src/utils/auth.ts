@@ -2,6 +2,7 @@ const ACCESS_TOKEN_KEY = 'htn_access_token'
 const REFRESH_TOKEN_KEY = 'htn_refresh_token'
 export const removeToken = () => {
   localStorage.removeItem(ACCESS_TOKEN_KEY)
+  localStorage.removeItem(REFRESH_TOKEN_KEY)
 }
 export const getToken = () => {
   const access_token = localStorage.getItem(ACCESS_TOKEN_KEY)

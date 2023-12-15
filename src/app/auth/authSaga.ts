@@ -1,6 +1,6 @@
-import { all, call, takeLatest } from 'redux-saga/effects'
-import { authRefreshToken, login, logout, register } from './authSlice'
-import { handleAuthLogOut, handleAuthLogin, handleAuthRegister, handleAuthRefreshToken } from './authHandlers'
+import { all, call, takeLatest, takeLeading } from 'redux-saga/effects'
+import { login, logout, refreshTokenJob, register } from './authSlice'
+import { handleAuthLogOut, handleAuthLogin, handleAuthRegister, handleRefreshToken } from './authHandlers'
 
 export function* onLogin() {
   yield takeLatest(login.type, handleAuthLogin)
@@ -15,7 +15,7 @@ export function* onRegister() {
 }
 
 export function* onRefreshToken() {
-  yield takeLatest(authRefreshToken.type, handleAuthRefreshToken)
+  yield takeLatest(refreshTokenJob.type, handleRefreshToken)
 }
 
 export default function* authSaga() {

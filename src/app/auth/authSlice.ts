@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '~/app/store'
-import { RefreshTokenDTO } from '~/types'
-import { LoginRequestDTO, RegisterRequestDTO, User } from '~/types'
+import { LoginRequestDTO, RefreshTokenDTO, RegisterRequestDTO, User } from '~/types'
 
 export interface AuthState {
   loading: boolean
@@ -23,27 +22,22 @@ const authSlice = createSlice({
       console.log(action)
       state.loading = true
     },
-
     loginSuccess(state, action: PayloadAction<User>) {
       state.loading = false
       state.isAuthenticated = true
       state.userInfo = action.payload
     },
-
     loginFailed(state) {
       state.loading = false
     },
-
     logout(state) {
       state.loading = true
     },
-
     logoutSuccess(state) {
       state.isAuthenticated = false
       state.userInfo = undefined
       state.loading = false
     },
-
     register(state, action: PayloadAction<RegisterRequestDTO>) {
       console.log(action)
       state.loading = true
@@ -58,8 +52,8 @@ const authSlice = createSlice({
       state.loading = false
       state.userInfo = undefined
     },
-    authRefreshToken(state, payload: PayloadAction<RefreshTokenDTO>) {
-      console.log(state, payload)
+    refreshTokenJob(state, action: PayloadAction<RefreshTokenDTO>) {
+      console.log(state, action)
     }
   }
 })
@@ -73,7 +67,7 @@ export const {
   register,
   registerSuccess,
   registerFailed,
-  authRefreshToken
+  refreshTokenJob
 } = authSlice.actions
 export const authSelector = (state: RootState) => state.auth
 
