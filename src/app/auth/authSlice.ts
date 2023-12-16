@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '~/app/store'
-import { LoginRequestDTO, RefreshTokenDTO, RegisterRequestDTO, User } from '~/types'
+import { LoginRequestDTO, LogoutRequestDTO, RefreshTokenDTO, RegisterRequestDTO, User } from '~/types'
 
 export interface AuthState {
   loading: boolean
@@ -18,7 +18,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<LoginRequestDTO>) {
+    loginStart(state, action: PayloadAction<LoginRequestDTO>) {
       console.log(action)
       state.loading = true
     },
@@ -30,7 +30,8 @@ const authSlice = createSlice({
     loginFailed(state) {
       state.loading = false
     },
-    logout(state) {
+    logoutStart(state, action: PayloadAction<LogoutRequestDTO>) {
+      console.log(action)
       state.loading = true
     },
     logoutSuccess(state) {
@@ -38,7 +39,7 @@ const authSlice = createSlice({
       state.userInfo = undefined
       state.loading = false
     },
-    register(state, action: PayloadAction<RegisterRequestDTO>) {
+    registerStart(state, action: PayloadAction<RegisterRequestDTO>) {
       console.log(action)
       state.loading = true
     },
@@ -52,22 +53,35 @@ const authSlice = createSlice({
       state.loading = false
       state.userInfo = undefined
     },
-    refreshTokenJob(state, action: PayloadAction<RefreshTokenDTO>) {
-      console.log(state, action)
+    refreshTokenStart(state, action: PayloadAction<RefreshTokenDTO>) {
+      console.log(action)
+      state.loading = true
+    },
+    refreshTokenSuccess(state, action: PayloadAction<User>) {
+      state.isAuthenticated = true
+      state.loading = false
+      state.userInfo = action.payload
+    },
+    refreshTokenFailed(state) {
+      state.isAuthenticated = false
+      state.loading = false
+      state.userInfo = undefined
     }
   }
 })
 
 export const {
-  login,
+  loginStart,
   loginFailed,
   loginSuccess,
-  logout,
+  logoutStart,
   logoutSuccess,
-  register,
+  registerStart,
   registerSuccess,
   registerFailed,
-  refreshTokenJob
+  refreshTokenStart,
+  refreshTokenSuccess,
+  refreshTokenFailed
 } = authSlice.actions
 export const authSelector = (state: RootState) => state.auth
 

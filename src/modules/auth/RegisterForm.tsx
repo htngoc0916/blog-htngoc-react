@@ -4,7 +4,7 @@ import { HiMail } from 'react-icons/hi'
 import { Link, useNavigate } from 'react-router-dom'
 import IconGoogle from '~/components/icons/IconGoogle'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
-import { isAuthenticatedSelector, loadingSelector, register } from '~/app/auth/authSlice'
+import { isAuthenticatedSelector, loadingSelector, registerStart } from '~/app/auth/authSlice'
 import { useEffect } from 'react'
 
 export default function RegisterForm() {
@@ -21,7 +21,7 @@ export default function RegisterForm() {
 
   const handleRegister = () => {
     dispatch(
-      register({
+      registerStart({
         userName: 'hoang tuan ngoc',
         email: 'admin04@gmail.com',
         password: '123456'

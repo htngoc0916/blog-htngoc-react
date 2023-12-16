@@ -1,6 +1,7 @@
 export enum API_STATUS {
   SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED'
+  FAILED = 'FAILED',
+  FORBIDDEN = 'FORBIDDEN'
 }
 
 export interface ApiResponseDTO<T> {

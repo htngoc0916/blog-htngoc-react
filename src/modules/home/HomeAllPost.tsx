@@ -5,7 +5,7 @@ import { PostList } from './data.post'
 import { Button, Card } from 'flowbite-react'
 import { CardTag, CardTitle, CardAuthor, AuthorName, CardPostTime, AuthorAvatar } from '~/components/common'
 import CardImage from '~/components/common/CardImage'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import slugify from 'slugify'
 import categoryApi from '~/apis/categoryApi'
@@ -15,12 +15,14 @@ export interface IHomeAllPostProps extends DefaultProps {}
 
 export default function HomeAllPost(props: IHomeAllPostProps) {
   const data = PostList()
+  const navigate = useNavigate()
 
   const handleLoadMore = async () => {
     const category: Category = await categoryApi.addTag({
       categoryName: 'Test category',
       description: 'test api',
-      regId: 1
+      regId: 1,
+      navigate
     })
 
     console.log(category)

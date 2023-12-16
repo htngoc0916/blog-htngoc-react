@@ -4,7 +4,7 @@ import { DefaultProps } from '~/utils/defautProp'
 import { dataMenu } from './dataMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
-import { isAuthenticatedSelector, logout, userInfoSelector } from '~/app/auth/authSlice'
+import { isAuthenticatedSelector, logoutStart, userInfoSelector } from '~/app/auth/authSlice'
 
 export default function HeaderUserInfo(props: DefaultProps) {
   const data = dataMenu().filter((item) => item.type === 'private')
@@ -14,13 +14,12 @@ export default function HeaderUserInfo(props: DefaultProps) {
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
 
   const handleLogout = () => {
-    dispatch(logout())
-    navigate('/login')
+    dispatch(logoutStart({ navigate }))
   }
 
   return (
     <div className={twMerge(props.className)}>
-      {isAuthenticated ? (
+      {isAuthenticated && userInfo ? (
         <Dropdown
           arrowIcon={false}
           inline

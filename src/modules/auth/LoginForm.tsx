@@ -5,8 +5,17 @@ import InputPassword from '~/components/input/InputPassword'
 import { Link, useNavigate } from 'react-router-dom'
 import IconGoogle from '~/components/icons/IconGoogle'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
-import { isAuthenticatedSelector, loadingSelector, login } from '~/app/auth/authSlice'
+import { isAuthenticatedSelector, loadingSelector, loginStart } from '~/app/auth/authSlice'
 import { useEffect } from 'react'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { LoginRequestDTO } from '~/types'
+
+const schema = yup.object({
+  email: yup.string().email('').required('Please enter your email'),
+  password: yup.string().required('Please enter your password').min(8, 'Password must be 8 character')
+})
 
 export default function LoginForm() {
   const dispatch = useAppDispatch()
@@ -14,23 +23,32 @@ export default function LoginForm() {
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
   const navigate = useNavigate()
 
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onSubmit'
+  })
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/')
     }
   }, [isAuthenticated, navigate])
 
-  const handleLogin = () => {
-    dispatch(
-      login({
-        email: 'admin01@gmail.com',
-        password: '123456'
-      })
-    )
+  const handleLogin = (values: LoginRequestDTO) => {
+    console.log('🚀 ~ file: LoginForm.tsx:42 ~ handleLogin ~ values:', values)
+    // dispatch(
+    //   loginStart({
+    //     ...values
+    //   })
+    // )
   }
 
   return (
-    <form className='w-full mx-auto md:max-w-md'>
+    <form onSubmit={handleSubmit(handleLogin)} className='w-full mx-auto md:max-w-md'>
       <Field>
         <Label value='Email' htmlFor='email' className='md:text-base'></Label>
         <TextInput type='email' color='primary' id='email' icon={HiMail} placeholder='Nhập email của bạn'></TextInput>
@@ -39,10 +57,11 @@ export default function LoginForm() {
       <Field>
         <Label value='Password' htmlFor='password' className='md:text-base'></Label>
         <InputPassword
-          id='password'
+          name='password'
           icon={HiLockClosed}
-          color='primary'
           placeholder='Nhập password của bạn'
+          control={control}
+          message={errors.password?.message}
         ></InputPassword>
       </Field>
 
@@ -56,13 +75,7 @@ export default function LoginForm() {
         </Link>
       </div>
 
-      <Button
-        fullSized
-        gradientDuoTone='primary'
-        className='mt-8 font-bold h-11'
-        onClick={handleLogin}
-        isProcessing={loading}
-      >
+      <Button type='submit' fullSized gradientDuoTone='primary' className='mt-8 font-bold h-11' isProcessing={loading}>
         Đăng nhập
       </Button>
 

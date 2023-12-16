@@ -27,6 +27,11 @@ export interface RegisterRequestDTO {
   password: string
 }
 
+export interface LogoutRequestDTO {
+  navigate: (to: string) => void
+}
+
 export interface RefreshTokenDTO {
   refreshToken?: string
+  navigate: (to: string) => void
 }

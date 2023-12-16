@@ -2,7 +2,7 @@
 import { lazy } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { ROLE } from '~/types/user'
-import { PrivateRoute } from './PrivateRoute'
+import { PrivateRoute } from './PrivateRouter'
 
 const HomeLayout = lazy(() => import('~/layout/HomeLayout'))
 const DashboardLayout = lazy(() => import('~/layout/DashboardLayout'))

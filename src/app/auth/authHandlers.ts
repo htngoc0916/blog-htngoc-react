@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
-import { LoginRequestDTO, RefreshTokenDTO, RegisterRequestDTO, User } from '~/types'
+import { LoginRequestDTO, LogoutRequestDTO, RegisterRequestDTO, User } from '~/types'
 import { loginFailed, loginSuccess, logoutSuccess, registerSuccess, registerFailed } from './authSlice'
 import { call, put } from 'redux-saga/effects'
 import { removeToken, saveToken } from '~/utils/auth'
@@ -12,12 +12,12 @@ function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
     const response: ApiResponseDTO<User> = yield call(authApi.authRegister, action.payload)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(registerSuccess(response.data))
-      toast.success('Created new account successfully!')
+      return toast.success('Created new account successfully!')
     }
-    console.log(response.message)
-    toast.error('Created new account failed!')
+    toast.error(response.message)
   } catch (error) {
     yield put(registerFailed())
+    toast.success('Created new account failed!')
   }
 }
 
@@ -28,35 +28,22 @@ function* handleAuthLogin(action: PayloadAction<LoginRequestDTO>) {
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       const { accessToken, refreshToken } = response.data
       saveToken(accessToken, refreshToken)
-
       const userInfo: User = { ...response.data }
       yield put(loginSuccess(userInfo))
-      toast.success('login successfully!')
+      return toast.success('login successfully!')
     }
+    toast.error(response.message)
   } catch (error) {
     yield put(loginFailed())
+    toast.error('login faild!')
   }
 }
 
-function* handleRefreshToken(action: PayloadAction<RefreshTokenDTO>) {
+function* handleAuthLogOut(action: PayloadAction<LogoutRequestDTO>) {
   const { payload } = action
-  try {
-    const response: ApiResponseDTO<AuthResponseDTO> = yield call(authApi.authRefreshToken, payload)
-    if (response?.status.includes(API_STATUS.SUCCESS)) {
-      const { accessToken, refreshToken } = response.data
-      saveToken(accessToken, refreshToken)
-
-      const userInfo: User = { ...response.data }
-      yield put(loginSuccess(userInfo))
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-function* handleAuthLogOut() {
   yield put(logoutSuccess())
   removeToken()
+  payload.navigate('/login')
 }
 
-export { handleAuthLogin, handleAuthRegister, handleAuthLogOut, handleRefreshToken }
+export { handleAuthLogin, handleAuthRegister, handleAuthLogOut }
