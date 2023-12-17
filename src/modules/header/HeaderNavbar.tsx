@@ -1,10 +1,11 @@
-import { DarkThemeToggle, Navbar } from 'flowbite-react'
+import { Navbar } from 'flowbite-react'
 import HeaderUserInfo from './HeaderUserInfo'
 import HeaderLogo from './HeaderLogo'
 import HeaderItems from './HeaderItems'
 import { DefaultProps } from '~/utils/defautProp'
 import { twMerge } from 'tailwind-merge'
 import useScrollPosition from '~/hooks/useScrollPosition'
+import { ButtonDarkMode } from '~/components/button'
 
 const classes = {
   root: {
@@ -35,7 +36,7 @@ export function HeaderNavbar(props: DefaultProps) {
             <HeaderLogo href='/' className='logo'></HeaderLogo>
 
             <div className='flex gap-3 md:order-2 avatar'>
-              <DarkThemeToggle></DarkThemeToggle>
+              <ButtonDarkMode></ButtonDarkMode>
               <HeaderUserInfo />
               <Navbar.Toggle />
             </div>

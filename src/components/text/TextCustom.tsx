@@ -19,13 +19,13 @@ const classes = {
   }
 }
 
-export interface ITextCustomProps extends DefaultProps {
+export interface TextCustomProps extends DefaultProps {
   color?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg' | 'xl'
   gradient?: 'primary' | 'secondary'
 }
 
-export default function TextCustom(props: ITextCustomProps) {
+export default function TextCustom(props: TextCustomProps) {
   const { color, size = 'md', gradient } = props
   return (
     <div

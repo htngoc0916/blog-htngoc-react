@@ -11,10 +11,11 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { LoginRequestDTO } from '~/types'
+import { InputCustom } from '~/components/input'
 
 const schema = yup.object({
-  email: yup.string().email('').required('Please enter your email'),
-  password: yup.string().required('Please enter your password').min(8, 'Password must be 8 character')
+  email: yup.string().email('Invalid email format').required('Please enter your email'),
+  password: yup.string().required('Please enter your password').min(6, 'Password must be 6 character')
 })
 
 export default function LoginForm() {
@@ -39,19 +40,24 @@ export default function LoginForm() {
   }, [isAuthenticated, navigate])
 
   const handleLogin = (values: LoginRequestDTO) => {
-    console.log('🚀 ~ file: LoginForm.tsx:42 ~ handleLogin ~ values:', values)
-    // dispatch(
-    //   loginStart({
-    //     ...values
-    //   })
-    // )
+    dispatch(
+      loginStart({
+        ...values
+      })
+    )
   }
 
   return (
-    <form onSubmit={handleSubmit(handleLogin)} className='w-full mx-auto md:max-w-md'>
+    <form autoComplete='off' onSubmit={handleSubmit(handleLogin)} className='w-full mx-auto md:max-w-md'>
       <Field>
         <Label value='Email' htmlFor='email' className='md:text-base'></Label>
-        <TextInput type='email' color='primary' id='email' icon={HiMail} placeholder='Nhập email của bạn'></TextInput>
+        <InputCustom
+          name='email'
+          type='email'
+          icon={HiMail}
+          placeholder='Nhập email của bạn'
+          control={control}
+        ></InputCustom>
       </Field>
 
       <Field>
