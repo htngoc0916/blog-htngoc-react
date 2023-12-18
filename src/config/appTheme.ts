@@ -20,7 +20,7 @@ export const customTheme: CustomFlowbiteTheme = {
         colors: {
           outline: 'border-none rounded-none',
           primary:
-            'border-gray-200 bg-gray-50 placeholder-text3 dark:placeholder-text5 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-gray-100 dark:focus:border-primary-500 dark:focus:ring-primary-500'
+            'border-gray-200 bg-gray-50 placeholder-text5 dark:placeholder-text5 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-gray-100 dark:focus:border-primary-500 dark:focus:ring-primary-500'
         }
       }
     }

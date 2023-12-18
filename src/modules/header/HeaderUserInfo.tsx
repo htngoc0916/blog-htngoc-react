@@ -1,13 +1,11 @@
-import { Avatar, Dropdown } from 'flowbite-react'
+import { Avatar, Button, Dropdown } from 'flowbite-react'
 import { twMerge } from 'tailwind-merge'
 import { DefaultProps } from '~/utils/defautProp'
-import { dataMenu } from './dataMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { isAuthenticatedSelector, logoutStart, userInfoSelector } from '~/app/auth/authSlice'
 
 export default function HeaderUserInfo(props: DefaultProps) {
-  const data = dataMenu().filter((item) => item.type === 'private')
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
@@ -20,31 +18,26 @@ export default function HeaderUserInfo(props: DefaultProps) {
   return (
     <div className={twMerge(props.className)}>
       {isAuthenticated && userInfo ? (
-        <Dropdown
-          arrowIcon={false}
-          inline
-          label={
-            <Avatar alt='User avatar' rounded img={'https://flowbite.com/docs/images/people/profile-picture-5.jpg'} />
-          }
-        >
+        <Dropdown arrowIcon={false} inline label={<Avatar alt='User avatar' rounded img={userInfo.avatar} />}>
           <Dropdown.Header>
-            <span className='block text-sm font-bold'>Tuan Ngoc</span>
-            <span className='block text-sm font-medium truncate'>htngoc0916.dev@gmail.com</span>
+            <span className='block text-sm font-bold'>{userInfo.userName}</span>
+            <span className='block text-sm font-medium truncate'>{userInfo.email}</span>
           </Dropdown.Header>
 
-          {data.map((item) => (
-            <Dropdown.Item key={item.id}>
-              <Link to={item.path}>{item.title}</Link>
-            </Dropdown.Item>
-          ))}
+          <Dropdown.Item>
+            <Link to='/auth/dashboard'>Trang Admin</Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to='auth/user'>Thông tin của tôi</Link>
+          </Dropdown.Item>
 
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+          <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
         </Dropdown>
       ) : (
-        <Link to='/login'>
-          <Avatar alt='User avatar' rounded />
-        </Link>
+        <Button size='sm' gradientDuoTone='primary' onClick={() => navigate('/login')}>
+          Đăng nhập
+        </Button>
       )}
     </div>
   )

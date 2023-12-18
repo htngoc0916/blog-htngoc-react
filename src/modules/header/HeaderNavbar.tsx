@@ -32,10 +32,10 @@ export function HeaderNavbar(props: DefaultProps) {
         )}
       >
         <div className='container-page'>
-          <Navbar fluid rounded className='bg-transparent sm:px-0 dark:bg-darkbg'>
+          <Navbar fluid rounded className='transition-all bg-transparent sm:px-0 dark:bg-darkbg'>
             <HeaderLogo href='/' className='logo'></HeaderLogo>
 
-            <div className='flex gap-3 md:order-2 avatar'>
+            <div className='flex items-center justify-center gap-3 md:order-2 avatar'>
               <ButtonDarkMode></ButtonDarkMode>
               <HeaderUserInfo />
               <Navbar.Toggle />

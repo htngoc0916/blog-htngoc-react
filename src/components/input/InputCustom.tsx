@@ -19,14 +19,16 @@ export default function InputCustom(props: InputCustomProps) {
   })
 
   return (
-    <div>
+    <div className='relative mb-1'>
       <div className='relative'>
         <TextInput color={fieldState.invalid ? 'failure' : 'primary'} id={name} {...rest} {...field}></TextInput>
         {children && (
           <div className='absolute right-0 inline-block h-full px-2 -translate-y-1/2 top-1/2'>{children}</div>
         )}
       </div>
-      {message && <span className='text-sm text-red-600'>{message}</span>}
+      <div className='absolute left-0 top-full'>
+        <span className='mt-2 text-sm text-red-600 dark:text-red-500'>{message}</span>
+      </div>
     </div>
   )
 }

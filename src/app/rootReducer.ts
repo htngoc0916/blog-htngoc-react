@@ -1,9 +1,10 @@
 // rootReducer.ts
 import { combineReducers } from '@reduxjs/toolkit'
-import authReducer from '~/app/auth/authSlice'
-import darkModeReducer from '~/app/darkMode/darkModeSlice'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
+import authSlice from './auth/authSlice'
+import darkModeSlice from './darkMode/darkModeSlice'
+import menuSlice from './menu/menuSlice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -12,8 +13,9 @@ const authPersistConfig = {
 }
 
 const rootReducer = combineReducers({
-  auth: persistReducer(authPersistConfig, authReducer),
-  darkMode: darkModeReducer
+  auth: persistReducer(authPersistConfig, authSlice),
+  darkMode: darkModeSlice,
+  menu: menuSlice
 })
 
 export default rootReducer

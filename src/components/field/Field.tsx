@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge'
 import { DefaultProps } from '~/utils/defautProp'
 
 const classess = {
-  base: 'flex gap-2 mb-5',
+  base: 'flex gap-2 mb-8',
   horizontally: {
     on: 'flex-row items-center',
     off: 'flex-col'

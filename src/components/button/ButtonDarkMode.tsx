@@ -17,11 +17,12 @@ function ButtonDarkMode(props: ButtonDarkModeProps) {
   }
 
   return (
-    <div className='flex items-center justify-center p-2 mr-3 rounded-lg cursor-pointer'>
-      <button className={`inline-block cursor-pointer transition-all ${className}`} onClick={toggleDarkMode}>
-        <IconDark dark={themeDarkMode === 'dark'}></IconDark>
-      </button>
-    </div>
+    <button
+      className={` rounded-lg transition-all frounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700 ${className}`}
+      onClick={toggleDarkMode}
+    >
+      <IconDark dark={themeDarkMode === 'dark'}></IconDark>
+    </button>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
+import { Button, Checkbox, Label } from 'flowbite-react'
 import { Field } from '~/components/field'
 import { HiMail, HiLockClosed } from 'react-icons/hi'
 import InputPassword from '~/components/input/InputPassword'
@@ -12,10 +12,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { LoginRequestDTO } from '~/types'
 import { InputCustom } from '~/components/input'
+import { Form } from '~/components/form'
 
 const schema = yup.object({
-  email: yup.string().email('Invalid email format').required('Please enter your email'),
-  password: yup.string().required('Please enter your password').min(6, 'Password must be 6 character')
+  email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
+  password: yup.string().required('Vui lòng nhập mật khẩu').min(6, 'Mật khẩu phải ít nhất 6 ký tự')
 })
 
 export default function LoginForm() {
@@ -48,26 +49,25 @@ export default function LoginForm() {
   }
 
   return (
-    <form autoComplete='off' onSubmit={handleSubmit(handleLogin)} className='w-full mx-auto md:max-w-md'>
+    <Form onSubmit={handleSubmit(handleLogin)}>
       <Field>
-        <Label value='Email' htmlFor='email' className='md:text-base'></Label>
         <InputCustom
           name='email'
           type='email'
           icon={HiMail}
           placeholder='Nhập email của bạn'
           control={control}
+          message={errors?.email?.message}
         ></InputCustom>
       </Field>
 
       <Field>
-        <Label value='Password' htmlFor='password' className='md:text-base'></Label>
         <InputPassword
           name='password'
           icon={HiLockClosed}
-          placeholder='Nhập password của bạn'
+          placeholder='Nhập mật khẩu của bạn'
           control={control}
-          message={errors.password?.message}
+          message={errors?.password?.message}
         ></InputPassword>
       </Field>
 
@@ -81,7 +81,14 @@ export default function LoginForm() {
         </Link>
       </div>
 
-      <Button type='submit' fullSized gradientDuoTone='primary' className='mt-8 font-bold h-11' isProcessing={loading}>
+      <Button
+        type='submit'
+        fullSized
+        gradientDuoTone='primary'
+        className='mt-8 font-bold h-11'
+        isProcessing={loading}
+        disabled={loading}
+      >
         Đăng nhập
       </Button>
 
@@ -100,6 +107,6 @@ export default function LoginForm() {
           Đăng ký
         </Link>
       </div>
-    </form>
+    </Form>
   )
 }

@@ -34,6 +34,7 @@ function App() {
         draggable
         pauseOnHover
         theme={theme === 'dark' ? 'dark' : 'light'}
+        className='mt-24'
       />
     </>
   )

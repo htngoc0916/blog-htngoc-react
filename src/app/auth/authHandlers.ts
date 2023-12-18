@@ -6,18 +6,21 @@ import { call, put } from 'redux-saga/effects'
 import { removeToken, saveToken } from '~/utils/auth'
 import authApi from '~/apis/authApi'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
+import { LOGIN_SUCCESS, REGISTER_SUCCESS } from '~/utils/message'
 
 function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
   try {
     const response: ApiResponseDTO<User> = yield call(authApi.authRegister, action.payload)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(registerSuccess(response.data))
-      return toast.success('Created new account successfully!')
+      return toast.success(REGISTER_SUCCESS)
     }
-    toast.error(response.message)
-  } catch (error) {
+    console.log(response.message)
+    return toast.error(response.message)
+  } catch (error: any) {
+    console.log(error?.response?.data.message)
     yield put(registerFailed())
-    toast.success('Created new account failed!')
+    toast.error(error?.response?.data.message)
   }
 }
 
@@ -30,12 +33,13 @@ function* handleAuthLogin(action: PayloadAction<LoginRequestDTO>) {
       saveToken(accessToken, refreshToken)
       const userInfo: User = { ...response.data }
       yield put(loginSuccess(userInfo))
-      return toast.success('login successfully!')
+      return toast.success(LOGIN_SUCCESS)
     }
-    toast.error(response.message)
-  } catch (error) {
+    return toast.error(response.message)
+  } catch (error: any) {
+    console.log(error?.response?.data.message)
     yield put(loginFailed())
-    toast.error('login faild!')
+    toast.error(error?.response?.data.message)
   }
 }
 
