@@ -32,6 +32,7 @@ import { useAppSelector } from '~/app/hooks'
 import { isAuthenticatedSelector, userInfoSelector } from '~/app/auth/authSlice'
 import AccessDenied from '~/pages/AccessDenied'
 import { ROLE } from '~/types/user'
+import checkAdmin from '~/utils/checkAdmin'
 
 interface Props {
   component: React.ComponentType
@@ -47,8 +48,7 @@ export const PrivateRoute: React.FC<Props> = ({ component: RouteComponent, roles
     return <Navigate to='/' />
   }
 
-  const userRoles = [...(userInfo?.roles || new Set<ROLE>())]
-  const userHasRequiredRole = roles.some((requiredRole) => userRoles.includes(requiredRole))
+  const userHasRequiredRole = checkAdmin(userInfo?.roles)
 
   if (userHasRequiredRole) {
     return <RouteComponent />

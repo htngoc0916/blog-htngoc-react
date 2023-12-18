@@ -5,11 +5,15 @@ import { RootState } from '../store'
 export interface MenuState {
   loading: boolean
   menuList: Menu[]
+  pulicMenus: Menu[]
+  privateMenus: Menu[]
 }
 
 const initialState: MenuState = {
   loading: false,
-  menuList: []
+  menuList: [],
+  pulicMenus: [],
+  privateMenus: []
 }
 
 const menuSlice = createSlice({

@@ -7,5 +7,5 @@ export interface User {
   userName: string
   email: string
   avatar: string
-  roles: Set<ROLE>
+  roles: ROLE[]
 }

@@ -19,8 +19,8 @@ export default function AuthenticationLayout(props: IAuthenticationLayoutProps) 
     <section className='h-screen dark:bg-darkbg bg-primary-50'>
       <div className={twMerge(classess.base, className)}>
         <div className={classess.child}>
-          <Link to='/' className='mb-4 md:mb-7'>
-            <img src='https://flowbite.com/docs/images/logo.svg' className='mr-3 h-7 sm:h-9' alt='logo' />
+          <Link to='/' className='px-1 mb-4 rounded-lg w-14 md:mb-7'>
+            <img src='/img/logo_htn.png' className='object-cover w-full rounded-lg' alt='logo' />
           </Link>
 
           <div className={twMerge(classess.heading)}>{heading}</div>

@@ -1,6 +1,6 @@
 export interface Menu {
   id: number
-  menucode: string
+  menuCode: string
   menuName: string
   parentId: number
   menuOrd: number
