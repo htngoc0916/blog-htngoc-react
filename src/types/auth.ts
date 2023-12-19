@@ -8,7 +8,7 @@ export interface AuthResponseDTO {
   userName: string
   email: string
   avatar: string
-  roles: Set<ROLE>
+  roles: ROLE[]
 }
 
 export interface LoginResponseDTO {

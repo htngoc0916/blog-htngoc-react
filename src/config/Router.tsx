@@ -35,9 +35,9 @@ const routers = createBrowserRouter(
 
       <Route path='/auth' element={<PrivateRoute roles={[ROLE.ROLE_ADMIN]} component={DashboardLayout} />}>
         <Route path='dashboard' element={<DashboardPage></DashboardPage>}></Route>
-        <Route path='category' element={<CategotyPage></CategotyPage>}></Route>
-        <Route path='user' element={<UserPage></UserPage>}></Route>
-        <Route path='post' element={<PostListPage></PostListPage>}></Route>
+        <Route path='categories' element={<CategotyPage></CategotyPage>}></Route>
+        <Route path='users' element={<UserPage></UserPage>}></Route>
+        <Route path='posts' element={<PostListPage></PostListPage>}></Route>
         <Route path='system' element={<SystemPage></SystemPage>}></Route>
       </Route>
     </>

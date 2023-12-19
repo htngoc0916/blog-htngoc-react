@@ -1,3 +1,7 @@
+export enum MENU_CODE {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE'
+}
 export interface Menu {
   id: number
   menuCode: string

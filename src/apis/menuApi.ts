@@ -9,6 +9,7 @@ const menuApi = {
   },
   getAllMenuByCode(code: string): Promise<ApiResponseDTO<Menu[]>> {
     const url = MENU_GET_BY_CODE + '/' + code
+    console.log(url)
     return axiosPublic.get(url)
   }
 }

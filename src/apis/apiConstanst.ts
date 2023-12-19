@@ -11,4 +11,4 @@ export const CATEGORY_ADD_URL = `${API_VERSION}/categories`
 export const USER_CHECK_EMAIL = `${API_VERSION}/users/checkEmail`
 
 export const MENU_GET_ALL = `${API_VERSION}/menus`
-export const MENU_GET_BY_CODE = `${API_VERSION}/menus`
+export const MENU_GET_BY_CODE = `${API_VERSION}/menus/menuCode`
