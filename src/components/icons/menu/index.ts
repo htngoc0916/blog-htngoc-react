@@ -1,15 +1,21 @@
 import IconCategories from './IconCategories'
-import IconDashBoard from './IconDashBoard'
+import IconDashboard from './IconDashBoard'
 import IconPosts from './IconPosts'
 import IconUsers from './IconUsers'
 import IconTags from './IconTags'
+import IconComments from './IconComments'
+import IconSystem from './IconSystem'
+import IconContacts from './IconContacts'
 
 export const icons = {
-  IconDashBoard,
+  IconDashboard,
   IconUsers,
   IconCategories,
   IconPosts,
-  IconTags
+  IconTags,
+  IconComments,
+  IconSystem,
+  IconContacts
 } as const
 
 export type IconName = keyof typeof icons

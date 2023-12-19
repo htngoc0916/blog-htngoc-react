@@ -24,7 +24,7 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
           <HeaderLogo href='/'></HeaderLogo>
         </div>
         <SidebarGroup className='flex-1 mt-6'>
-          {privateMenus.length > 0 &&
+          {privateMenus &&
             privateMenus.map((item) => (
               <SidebarItem
                 key={item.id}

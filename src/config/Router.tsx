@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
-import { ROLE } from '~/types/user'
 import { PrivateRoute } from './PrivateRouter'
 
 const HomeLayout = lazy(() => import('~/layout/HomeLayout'))
@@ -13,10 +12,12 @@ const HomePage = lazy(() => import('~/pages/HomePage'))
 const LoginPage = lazy(() => import('~/pages/LoginPage'))
 const SignupPage = lazy(() => import('~/pages/RegisterPage'))
 const PostDetailPage = lazy(() => import('~/pages/PostDetailPage'))
-const CategotyPage = lazy(() => import('~/pages/CategoryPage'))
-const PostListPage = lazy(() => import('~/pages/PostListPage'))
+const CategoriesPage = lazy(() => import('~/pages/CategoriesPage'))
+const PostsPage = lazy(() => import('~/pages/PostsPage'))
+const UsersPage = lazy(() => import('~/pages/UsersPage'))
+const TagsPage = lazy(() => import('~/pages/TagsPage'))
+const ContactsPage = lazy(() => import('~/pages/ContactsPage'))
 const SystemPage = lazy(() => import('~/pages/SystemPage'))
-const UserPage = lazy(() => import('~/pages/UserPage'))
 
 const routers = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +26,6 @@ const routers = createBrowserRouter(
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path='/about' element={<AboutPage></AboutPage>}></Route>
         <Route path='/post/:slug' element={<PostDetailPage></PostDetailPage>}></Route>
-        <Route path='/category/:slug' element={<CategotyPage></CategotyPage>}></Route>
       </Route>
 
       <Route path='/login' element={<LoginPage></LoginPage>}></Route>
@@ -33,11 +33,13 @@ const routers = createBrowserRouter(
       <Route path='/404' element={<NotFoundPage></NotFoundPage>}></Route>
       <Route path='*' element={<NotFoundPage></NotFoundPage>}></Route>
 
-      <Route path='/auth' element={<PrivateRoute roles={[ROLE.ROLE_ADMIN]} component={DashboardLayout} />}>
+      <Route path='/auth' element={<PrivateRoute component={DashboardLayout} />}>
         <Route path='dashboard' element={<DashboardPage></DashboardPage>}></Route>
-        <Route path='categories' element={<CategotyPage></CategotyPage>}></Route>
-        <Route path='users' element={<UserPage></UserPage>}></Route>
-        <Route path='posts' element={<PostListPage></PostListPage>}></Route>
+        <Route path='categories' element={<CategoriesPage></CategoriesPage>}></Route>
+        <Route path='posts' element={<PostsPage></PostsPage>}></Route>
+        <Route path='tags' element={<TagsPage></TagsPage>}></Route>
+        <Route path='users' element={<UsersPage></UsersPage>}></Route>
+        <Route path='contacts' element={<ContactsPage></ContactsPage>}></Route>
         <Route path='system' element={<SystemPage></SystemPage>}></Route>
       </Route>
     </>

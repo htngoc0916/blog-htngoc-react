@@ -22,7 +22,7 @@ export default function HeaderItems(props: HeaderItemsProps) {
 
   return (
     <>
-      {pubListMenus.length > 0 &&
+      {pubListMenus &&
         pubListMenus.map((item) => (
           <NavLink
             key={item.id}

@@ -4,7 +4,7 @@ import PaginationCustom from '~/components/pagination/PaginationCustom'
 
 export interface CategoryProps {}
 
-export default function Category() {
+export default function CategoryList() {
   return (
     <div className='p-4 bg-white rounded-xl dark:bg-darkbg3'>
       <div className='flex items-center justify-end mb-6'>
