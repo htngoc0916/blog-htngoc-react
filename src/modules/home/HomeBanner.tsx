@@ -12,7 +12,9 @@ export default function HomeBanner(props: IHomeBannerProps) {
         <div className='flex flex-col items-center justify-center py-14'>
           <FeatureTitle className='text-3xl md:text-4xl'>htngoc Blog</FeatureTitle>
           <div className='mb-3 text-3xl font-bold md:text-5xl text-text2 dark:text-text7'>Chào mừng bro 🥳</div>
-          <div className='text-lg text-center'>Nơi chia sẽ những kiến thức thú vị. Cảm ơn bro đã ghé thăm.</div>
+          <div className='text-lg text-center'>
+            Đây là Blog cá nhân của mình, nơi chia sẽ những kiến thức thú vị về lập trình.
+          </div>
         </div>
       </div>
     </section>

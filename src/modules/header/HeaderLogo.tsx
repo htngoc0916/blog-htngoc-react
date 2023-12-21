@@ -16,10 +16,10 @@ export default function HeaderLogo(props: HeaderLogoProps) {
   const { href = '', className, children } = props
   return (
     <NavLink to={href} className={twMerge(clasess.base, className)}>
-      <div className='w-10 mr-1 overflow-hidden rounded-lg'>
-        <img src='/img/logo_htn.png' alt='Flowbite React Logo' className='object-cover w-full' />
+      <div className='w-10 mr-3 overflow-hidden rounded-lg'>
+        <img src='/img/logo_htn.png' alt='Blog Logo' className='object-cover w-full' />
       </div>
-      <span className='self-center hidden text-xl font-semibold whitespace-nowrap dark:text-white md:block '>
+      <span className='self-center hidden text-xl font-semibold whitespace-nowrap dark:text-white md:block'>
         htngoc
       </span>
       {children}
