@@ -26,7 +26,7 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
   return (
     <aside className='relative'>
       <button
-        className='absolute top-2 right-0 translate-x-1/2 z-[9999] inline-block cursor-pointer bg-white p-1 transition-all duration-300'
+        className='absolute top-2 right-0 translate-x-1/2 z-[9999] inline-block cursor-pointer bg-white py-2 transition-all duration-300'
         onClick={handleSideBar}
       >
         {openSideBar ? (
