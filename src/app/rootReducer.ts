@@ -5,6 +5,7 @@ import { persistReducer } from 'redux-persist'
 import authSlice from './auth/authSlice'
 import darkModeSlice from './darkMode/darkModeSlice'
 import menuSlice from './menu/menuSlice'
+import categorySlice from './category/categorySlice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -15,7 +16,8 @@ const authPersistConfig = {
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authSlice),
   darkMode: darkModeSlice,
-  menu: menuSlice
+  menus: menuSlice,
+  categories: categorySlice
 })
 
 export default rootReducer

@@ -12,6 +12,7 @@ const classes = {
     secondary: 'bg-gradient-secondary text-transparent bg-clip-text py-4'
   },
   size: {
+    xs: 'md:text-lg text-base',
     sm: 'md:text-2xl text-lg',
     md: 'md:text-3xl text-xl',
     lg: 'md:text-4xl text-2xl',
@@ -21,7 +22,7 @@ const classes = {
 
 export interface TextCustomProps extends DefaultProps {
   color?: 'primary' | 'secondary'
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   gradient?: 'primary' | 'secondary'
 }
 

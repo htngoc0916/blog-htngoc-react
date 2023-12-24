@@ -8,24 +8,14 @@ import CardImage from '~/components/common/CardImage'
 import { Link, useNavigate } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import slugify from 'slugify'
-import categoryApi from '~/apis/categoryApi'
-import { Category } from '~/types'
 
 export interface IHomeAllPostProps extends DefaultProps {}
 
 export default function HomeAllPost(props: IHomeAllPostProps) {
   const data = PostList()
-  const navigate = useNavigate()
 
   const handleLoadMore = async () => {
-    const category: Category = await categoryApi.addTag({
-      categoryName: 'Test category',
-      description: 'test api',
-      regId: 1,
-      navigate
-    })
-
-    console.log(category)
+    console.log('')
   }
 
   return (

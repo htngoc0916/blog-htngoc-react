@@ -9,7 +9,7 @@ import { ButtonDarkMode } from '~/components/button'
 
 const classes = {
   root: {
-    base: 'fixed top-0 left-0 w-full z-[100]'
+    base: 'fixed top-0 left-0 w-full z-[90]'
   },
   children: {
     base: 'py-1 bg-white border-b shadow-sm border-text7 dark:border-text3 dark:bg-darkbg backdrop-filter backdrop-blur-lg bg-opacity-60 firefox:bg-opacity-90 transition-all',

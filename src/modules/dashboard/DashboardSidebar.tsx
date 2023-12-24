@@ -17,8 +17,10 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
   const [openSideBar, setOpenSideBar] = useState(true)
 
   useEffect(() => {
-    dishpatch(getPrivateMenu())
-  }, [dishpatch])
+    if (!privateMenus) {
+      dishpatch(getPrivateMenu())
+    }
+  }, [dishpatch, privateMenus])
 
   const handleSideBar = () => {
     setOpenSideBar(!openSideBar)
@@ -26,7 +28,7 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
   return (
     <aside className='relative'>
       <button
-        className='absolute top-2 right-0 translate-x-1/2 z-[9999] inline-block cursor-pointer bg-white py-2 transition-all duration-300'
+        className='absolute top-2 right-0 translate-x-1/2 z-[100] inline-block cursor-pointer bg-white py-2 transition-transform duration-300 dark:bg-darkbg3'
         onClick={handleSideBar}
       >
         {openSideBar ? (

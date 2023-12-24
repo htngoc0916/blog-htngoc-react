@@ -2,7 +2,7 @@ import { ReactNode, FormEvent } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 const classes = {
-  base: 'w-full mx-auto md:max-w-md'
+  base: 'w-full mx-auto'
 }
 
 export interface FormProps {

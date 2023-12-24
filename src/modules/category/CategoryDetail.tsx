@@ -1,5 +1,145 @@
-export interface CategoryDetailProps {}
+import { Form } from '~/components/form'
+import { TextCustom } from '~/components/text'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { API_STATUS, ApiResponseDTO, Category, CategoryRequestDTO } from '~/types'
+import { InputCustom } from '~/components/input'
+import { Field } from '~/components/field'
+import { Label } from 'flowbite-react'
+import { useEffect, useState } from 'react'
+import { TextareaCustom } from '~/components/textarea'
+import { twMerge } from 'tailwind-merge'
+import { ActionClose, ActionSave } from '~/components/action'
+import { ButtonToggleSwitch } from '~/components/button'
+import categoryApi from '~/apis/categoryApi'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { SAVED_SUCCESS } from '~/utils/message'
+import { useAppSelector } from '~/app/hooks'
+import { userInfoSelector } from '~/app/auth/authSlice'
 
-export default function CategoryDetail(props: CategoryDetailProps) {
-  return <div>Category details</div>
+export interface CategoryDetailProps {
+  data: Category | null
+  className: string
+  onCloseCategory: () => void
+  onSaveCategory: () => void
+}
+
+const schema = yup.object({
+  id: yup.number(),
+  categoryName: yup.string().required('Vui lòng nhập tên category'),
+  description: yup.string(),
+  usedYn: yup.string(),
+  modId: yup.number()
+})
+
+export default function CategoryDetail({ data, className, onCloseCategory, onSaveCategory }: CategoryDetailProps) {
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onSubmit',
+    defaultValues: {
+      id: data?.id || 0,
+      categoryName: data?.categoryName || '',
+      description: data?.description || '',
+      usedYn: data?.usedYn || 'N',
+      modId: undefined
+    }
+  })
+  const navigate = useNavigate()
+  const userInfo = useAppSelector(userInfoSelector)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setValue('categoryName', data?.categoryName || '')
+    setValue('description', data?.description || '')
+    setValue('usedYn', data?.usedYn || 'N')
+    setValue('id', data?.id || 0)
+    setValue('modId', userInfo?.id || undefined)
+    setIsToggleChecked(data?.usedYn === 'Y')
+  }, [data, setValue, userInfo])
+
+  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn === 'Y')
+
+  const handleToggleChange = (value: boolean) => {
+    setValue('usedYn', value ? 'Y' : 'N')
+    setIsToggleChecked(value)
+  }
+
+  const handleSave = async (category: Category) => {
+    const categoryRequest: CategoryRequestDTO = {
+      ...category,
+      navigate
+    }
+
+    try {
+      setLoading(true)
+      if (data) {
+        console.log('Editing category:', category)
+        const response: ApiResponseDTO<Category> = await categoryApi.editCategory(categoryRequest)
+        if (response?.status.includes(API_STATUS.FAILED)) {
+          return toast.error(response.message)
+        }
+      } else {
+        console.log('Creating new category:', category)
+        const response: ApiResponseDTO<Category> = await categoryApi.addCategory(categoryRequest)
+        if (response?.status.includes(API_STATUS.FAILED)) {
+          return toast.error(response.message)
+        }
+      }
+      setLoading(false)
+      toast.success(SAVED_SUCCESS)
+      onSaveCategory()
+    } catch (error: any) {
+      console.log(error)
+      return toast.error(error)
+    }
+  }
+
+  return (
+    <div className={twMerge(className, 'relative')}>
+      <div className='absolute top-2 right-2'>
+        <ActionClose onClick={onCloseCategory}></ActionClose>
+      </div>
+      <div className='flex mb-10'>
+        <TextCustom size='xs' className='text-text2 dark:text-text7'>
+          {data ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
+        </TextCustom>
+      </div>
+
+      <Form onSubmit={handleSubmit(handleSave)}>
+        <Field>
+          <ButtonToggleSwitch name='usedYn' control={control} checked={isToggleChecked} onChange={handleToggleChange} />
+        </Field>
+        <Field>
+          <Label htmlFor='categoryName'>Category</Label>
+          <InputCustom
+            name='categoryName'
+            control={control}
+            message={errors?.categoryName?.message}
+            maxLength={100}
+          ></InputCustom>
+        </Field>
+        <Field>
+          <Label htmlFor='description'>Description</Label>
+          <TextareaCustom
+            id='description'
+            name='description'
+            color='primary'
+            rows={6}
+            control={control}
+            className='resize-none dark:bg-darkbg3'
+          />
+        </Field>
+        <div className='flex items-center justify-center'>
+          <ActionSave isProcessing={loading} disabled={loading} className='w-24' />
+        </div>
+      </Form>
+    </div>
+  )
 }

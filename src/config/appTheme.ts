@@ -20,7 +20,7 @@ export const customTheme: CustomFlowbiteTheme = {
         colors: {
           outline: 'border-none rounded-none',
           primary:
-            'border-gray-200 bg-gray-50 placeholder-text5 dark:placeholder-text5 dark:text-text1 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-gray-300 dark:focus:border-primary-500 dark:focus:ring-primary-500'
+            'border-gray-200 dark:text-white disable:bg-gray-100 placeholder-text5 dark:placeholder-text5 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-darkbg3 dark:focus:border-primary-500 dark:focus:ring-primary-500'
         }
       }
     }
@@ -56,7 +56,30 @@ export const customTheme: CustomFlowbiteTheme = {
       default:
         'rounded-none block w-full border-0 border-b-2 border-gray-300 bg-white text-gray-900 focus:border-primary-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-primary-500',
       primary:
-        'border-gray-50 text-primary-900 placeholder-primary-700 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-primary-100 dark:focus:border-primary-500 dark:focus:ring-primary-500'
+        'border-gray-300 placeholder-text4 focus:border-primary-500 focus:ring-primary-500 dark:border-primary-400 dark:bg-primary-100 dark:focus:border-primary-500 dark:focus:ring-primary-500'
+    }
+  },
+  toggleSwitch: {
+    toggle: {
+      base: 'toggle-bg rounded-full border group-focus:ring-4 group-focus:ring-primary-500/25',
+      checked: {
+        color: {
+          primary: 'bg-primary-700 border-primamry-900'
+        }
+      }
+    }
+  },
+  pagination: {
+    pages: {
+      selector: {
+        active:
+          'bg-primary-100 text-primary-600 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+      }
+    }
+  },
+  modal: {
+    root: {
+      base: 'fixed top-0 right-0 left-0 z-[9999] h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full'
     }
   }
 }

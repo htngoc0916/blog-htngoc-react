@@ -1,7 +1,7 @@
-import TextCustom from '~/components/text/TextCustom'
 import TextMark from './TextMark'
 import { Badge, Button } from 'flowbite-react'
 import { BadgeGroup } from '~/components/badge'
+import { TextCustom } from '~/components/text'
 
 export interface AboutIntroProps {
   className?: string

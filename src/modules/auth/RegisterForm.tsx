@@ -70,7 +70,7 @@ export default function RegisterForm() {
   }
 
   return (
-    <Form onSubmit={handleSubmit(handleRegister)}>
+    <Form onSubmit={handleSubmit(handleRegister)} className='md:max-w-md'>
       <Field>
         <InputCustom
           type='text'

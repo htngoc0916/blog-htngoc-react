@@ -31,7 +31,11 @@ export default function LoginForm() {
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'onSubmit'
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: ''
+    }
   })
 
   useEffect(() => {
@@ -49,7 +53,7 @@ export default function LoginForm() {
   }
 
   return (
-    <Form onSubmit={handleSubmit(handleLogin)}>
+    <Form onSubmit={handleSubmit(handleLogin)} className='md:max-w-md'>
       <Field>
         <InputCustom
           name='email'

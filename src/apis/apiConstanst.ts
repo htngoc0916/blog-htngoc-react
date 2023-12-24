@@ -6,7 +6,8 @@ export const AUTH_LOGIN_URL = '/auth/login'
 export const AUTH_REGISTER_URL = '/auth/register'
 export const AUTH_REFRESH_TOKEN = '/auth/refresh-token'
 
-export const CATEGORY_ADD_URL = `${API_VERSION}/categories`
+export const CATEGORY_URL = `${API_VERSION}/categories`
+export const CATEGORY_GET_ALL = `${API_VERSION}/categories`
 
 export const USER_CHECK_EMAIL = `${API_VERSION}/users/checkEmail`
 

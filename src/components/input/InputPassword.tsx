@@ -15,8 +15,7 @@ export default function InputPassword(props: InputPasswordProps) {
 
   const { field, fieldState } = useController({
     control,
-    name,
-    defaultValue: ''
+    name
   })
 
   const [showEye, setShowEye] = useState(false)

@@ -17,7 +17,7 @@ const initialState: MenuState = {
 }
 
 const menuSlice = createSlice({
-  name: 'menu',
+  name: 'menus',
   initialState,
   reducers: {
     getMenu(state) {
@@ -69,8 +69,8 @@ export const {
   getPrivateMenuFailed,
   getPrivateMenuSuccess
 } = menuSlice.actions
-export const menuSelector = (state: RootState) => state.menu
-export const menuListSelector = (state: RootState) => state.menu.menuList
-export const pulicMenuSelector = (state: RootState) => state.menu.pulicMenus
-export const privateMenuSelector = (state: RootState) => state.menu.privateMenus
+export const menuSelector = (state: RootState) => state.menus
+export const menuListSelector = (state: RootState) => state.menus.menuList
+export const pulicMenuSelector = (state: RootState) => state.menus.pulicMenus
+export const privateMenuSelector = (state: RootState) => state.menus.privateMenus
 export default menuSlice.reducer
