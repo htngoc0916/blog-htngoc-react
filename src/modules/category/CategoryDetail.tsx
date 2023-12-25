@@ -30,8 +30,7 @@ const schema = yup.object({
   id: yup.number(),
   categoryName: yup.string().required('Vui lòng nhập tên category'),
   description: yup.string(),
-  usedYn: yup.string(),
-  modId: yup.number()
+  usedYn: yup.string()
 })
 
 export default function CategoryDetail({ data, className, onCloseCategory, onSaveCategory }: CategoryDetailProps) {
@@ -47,8 +46,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
       id: data?.id || 0,
       categoryName: data?.categoryName || '',
       description: data?.description || '',
-      usedYn: data?.usedYn || 'N',
-      modId: undefined
+      usedYn: data?.usedYn || 'N'
     }
   })
   const navigate = useNavigate()
@@ -60,20 +58,21 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     setValue('description', data?.description || '')
     setValue('usedYn', data?.usedYn || 'N')
     setValue('id', data?.id || 0)
-    setValue('modId', userInfo?.id || undefined)
     setIsToggleChecked(data?.usedYn === 'Y')
   }, [data, setValue, userInfo])
 
   const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn === 'Y')
 
   const handleToggleChange = (value: boolean) => {
-    setValue('usedYn', value ? 'Y' : 'N')
     setIsToggleChecked(value)
+    setValue('usedYn', value ? 'Y' : 'N')
   }
 
   const handleSave = async (category: Category) => {
     const categoryRequest: CategoryRequestDTO = {
       ...category,
+      modId: data ? userInfo?.id : undefined,
+      regId: data ? undefined : userInfo?.id,
       navigate
     }
 

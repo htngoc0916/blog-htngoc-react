@@ -1,11 +1,15 @@
 import { call, put } from 'redux-saga/effects'
 import { getCategoryFailed, getCategorySuccess } from './categorySlice'
-import { API_STATUS, ApiResponseDTO, Category } from '~/types'
+import { API_STATUS, ApiResponseDTO, Category, FilterPramsDTO, ListResponseDTO } from '~/types'
 import categoryApi from '~/apis/categoryApi'
+import { PayloadAction } from '@reduxjs/toolkit'
 
-function* handleGetCategories() {
+function* handleGetCategories(action: PayloadAction<FilterPramsDTO>) {
   try {
-    const response: ApiResponseDTO<Category[]> = yield call(categoryApi.getAllCategories)
+    const response: ApiResponseDTO<ListResponseDTO<Category[]>> = yield call(
+      categoryApi.getAllCategories,
+      action.payload
+    )
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(getCategorySuccess(response?.data))
     }

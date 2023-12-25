@@ -1,3 +1,18 @@
+export const defaultPagination = {
+  pageNo: 1,
+  pageSize: 10,
+  totalElements: 0,
+  totalPage: 0,
+  last: false
+}
+
+export const defaultFilter = {
+  pageNo: 1,
+  pageSize: 10,
+  sortBy: '',
+  sortDir: 'DESC' as 'ASC' | 'DESC'
+}
+
 export enum API_STATUS {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
@@ -13,7 +28,11 @@ export interface ApiResponseDTO<T> {
 
 export interface ListResponseDTO<T> {
   data: T
-  pagination: PaginationResponseDTO
+  pageNo: number
+  pageSize: number
+  totalElements: number
+  totalPage: number
+  last: boolean
 }
 
 export interface PaginationResponseDTO {
@@ -24,13 +43,11 @@ export interface PaginationResponseDTO {
   last: boolean
 }
 
-export interface FetchPramsDTO {
-  pageNo?: number
-  pageSize?: number
-  sortBy?: string
-  sortDir?: 'asc' | 'desc'
-
-  [key: string]: any
+export interface FilterPramsDTO {
+  pageNo: number
+  pageSize: number
+  sortBy: string
+  sortDir: 'ASC' | 'DESC'
 }
 
 export interface BaseDTO {

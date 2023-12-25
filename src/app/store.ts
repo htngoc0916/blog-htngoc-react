@@ -17,13 +17,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    // getDefaultMiddleware({ serializableCheck: false }).concat(logger, sagaMiddleware)
-    getDefaultMiddleware({ serializableCheck: false }).concat(sagaMiddleware)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).concat(sagaMiddleware)
 })
 
 const persistor = persistStore(store)
-
 sagaMiddleware.run(rootSaga)
 
 export type RootState = ReturnType<typeof store.getState>

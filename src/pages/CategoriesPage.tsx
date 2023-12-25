@@ -1,26 +1,44 @@
 import { Pagination } from 'flowbite-react'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import categoryApi from '~/apis/categoryApi'
-import { categoryListSelector, getCategory } from '~/app/category/categorySlice'
+import {
+  categoryFilterSelector,
+  categoryListSelector,
+  categoryLoadingSelector,
+  categoryPaginationSelector,
+  getCategory
+} from '~/app/category/categorySlice'
+import { useAppSelector } from '~/app/hooks'
 import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { CategoryDetail, CategoryList } from '~/modules/category'
-import { API_STATUS, ApiResponseDTO, Category, CategoryRequestDTO } from '~/types'
+import { API_STATUS, ApiResponseDTO, Category, defaultFilter } from '~/types'
 import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function CategoriesPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const categoryList = useSelector(categoryListSelector)
+
+  const loading = useAppSelector(categoryLoadingSelector)
+  const filter = useAppSelector(categoryFilterSelector) || defaultFilter
+  const categoryList = useAppSelector(categoryListSelector)
+  const pagination = useAppSelector(categoryPaginationSelector)
+
   const [isCategoryDetailOpen, setIsCategoryDetailOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 
   //pagination
-  const [currentPage, setCurrentPage] = useState(1)
-  const onPageChange = (page: number) => setCurrentPage(page)
+  const onPageChange = (page: number) => {
+    dispatch(
+      getCategory({
+        ...filter,
+        pageNo: page
+      })
+    )
+  }
 
   const hanldeCloseCategoryDetail = () => {
     setIsCategoryDetailOpen(false)
@@ -44,7 +62,7 @@ export default function CategoriesPage() {
       }
 
       toast.success(REMOVE_SUCCESS)
-      dispatch(getCategory())
+      dispatch(getCategory(filter))
     } catch (error: any) {
       console.log(error)
       return toast.error(error)
@@ -52,12 +70,14 @@ export default function CategoriesPage() {
   }
 
   const handleSaveCategory = () => {
-    dispatch(getCategory())
+    dispatch(getCategory(filter))
   }
 
   useEffect(() => {
-    dispatch(getCategory())
-  }, [dispatch])
+    if (!categoryList) {
+      dispatch(getCategory(filter))
+    }
+  }, [dispatch, filter, categoryList])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
@@ -80,10 +100,10 @@ export default function CategoriesPage() {
           <div className='flex items-center justify-center mt-10'>
             <Pagination
               layout='pagination'
-              currentPage={currentPage}
-              totalPages={1000}
+              currentPage={pagination.pageNo}
+              totalPages={pagination.totalPage}
               onPageChange={onPageChange}
-              previousLabel='Previous'
+              previousLabel='Prev'
               nextLabel='Next'
               showIcons
             />

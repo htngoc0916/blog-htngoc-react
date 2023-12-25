@@ -1,12 +1,13 @@
-import { CategoryRequestDTO, Category, ApiResponseDTO } from '~/types'
-import { CATEGORY_URL, CATEGORY_GET_ALL } from './apiConstanst'
+import { CategoryRequestDTO, Category, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
+import { CATEGORY_URL } from './apiConstanst'
 import { getToken } from '~/utils/auth'
 import { axiosPrivate, axiosPublic } from './axios'
 
 const categoryApi = {
-  getAllCategories(): Promise<ApiResponseDTO<Category[]>> {
-    const url = CATEGORY_GET_ALL
-    return axiosPublic.get(url)
+  getAllCategories(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Category[]>>> {
+    const url = CATEGORY_URL
+    console.log('🚀 ~ file: categoryApi.ts:9 ~ getAllCategories ~ CATEGORY_GET_ALL:', CATEGORY_URL)
+    return axiosPublic.get(url, { params })
   },
 
   addCategory(data: CategoryRequestDTO): Promise<ApiResponseDTO<Category>> {

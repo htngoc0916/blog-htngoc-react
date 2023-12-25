@@ -64,7 +64,7 @@ export default function CategoryList({ data, className, onEditCategory, onRemove
         show={openModal}
         onClose={() => setOpenModal(false)}
         onConfirm={handleRemoveConfirm}
-        message='Bạn có thực sự muốn xoá?'
+        message='Bạn có thực sự muốn xoá không?'
       ></ModalDelete>
     </>
   )
