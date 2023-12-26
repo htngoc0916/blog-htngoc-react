@@ -46,7 +46,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
       id: data?.id || 0,
       categoryName: data?.categoryName || '',
       description: data?.description || '',
-      usedYn: data?.usedYn || 'N'
+      usedYn: data?.usedYn || 'Y'
     }
   })
   const navigate = useNavigate()
@@ -56,12 +56,12 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
   useEffect(() => {
     setValue('categoryName', data?.categoryName || '')
     setValue('description', data?.description || '')
-    setValue('usedYn', data?.usedYn || 'N')
+    setValue('usedYn', data?.usedYn || 'Y')
     setValue('id', data?.id || 0)
-    setIsToggleChecked(data?.usedYn === 'Y')
+    setIsToggleChecked(data?.usedYn !== 'N')
   }, [data, setValue, userInfo])
 
-  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn === 'Y')
+  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
 
   const handleToggleChange = (value: boolean) => {
     setIsToggleChecked(value)

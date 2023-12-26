@@ -14,13 +14,12 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
   const dishpatch = useAppDispatch()
   const privateMenus = useAppSelector(privateMenuSelector)
 
+  console.log(privateMenus)
   const [openSideBar, setOpenSideBar] = useState(true)
 
   useEffect(() => {
-    if (!privateMenus) {
-      dishpatch(getPrivateMenu())
-    }
-  }, [dishpatch, privateMenus])
+    dishpatch(getPrivateMenu())
+  }, [dishpatch])
 
   const handleSideBar = () => {
     setOpenSideBar(!openSideBar)

@@ -74,10 +74,8 @@ export default function CategoriesPage() {
   }
 
   useEffect(() => {
-    if (!categoryList) {
-      dispatch(getCategory(filter))
-    }
-  }, [dispatch, filter, categoryList])
+    dispatch(getCategory(filter))
+  }, [dispatch, filter])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
