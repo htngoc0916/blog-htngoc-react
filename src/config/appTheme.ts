@@ -81,5 +81,18 @@ export const customTheme: CustomFlowbiteTheme = {
     root: {
       base: 'fixed top-0 right-0 left-0 z-[9999] h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full'
     }
+  },
+  sidebar: {
+    root: {
+      base: 'h-full',
+      inner: 'h-full overflow-y-auto overflow-x-hidden rounded bg-white py-4 px-3 dark:bg-gray-800 flex flex-col',
+      collapsed: {
+        on: 'w-16',
+        off: 'w-64'
+      }
+    },
+    logo: {
+      img: 'h-9 w-9 mr-3 rounded-lg -ml-1'
+    }
   }
 }
