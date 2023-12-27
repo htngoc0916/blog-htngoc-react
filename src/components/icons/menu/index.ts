@@ -1,21 +1,22 @@
-import IconCategories from './IconCategories'
-import IconDashboard from './IconDashBoard'
-import IconPosts from './IconPosts'
-import IconUsers from './IconUsers'
-import IconTags from './IconTags'
-import IconComments from './IconComments'
-import IconSystem from './IconSystem'
-import IconContacts from './IconContacts'
+import { FC } from 'react'
+import {
+  HiChartPie as IconDashboard,
+  HiUsers as IconUsers,
+  HiTag as IconTags,
+  HiDocumentReport as IconCategories,
+  HiPencilAlt as IconPosts,
+  HiInboxIn as IconContacts,
+  HiChat as IconComments,
+  HiCog as IconSystem
+} from 'react-icons/hi'
 
-export const icons = {
+export const menuIcons: Record<string, FC> = {
   IconDashboard,
   IconUsers,
+  IconTags,
   IconCategories,
   IconPosts,
-  IconTags,
+  IconContacts,
   IconComments,
-  IconSystem,
-  IconContacts
-} as const
-
-export type IconName = keyof typeof icons
+  IconSystem
+}

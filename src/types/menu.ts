@@ -10,4 +10,6 @@ export interface Menu {
   menuOrd: number
   menuUrl: string
   menuIcon: string
+  usedYn: string
+  children?: Menu[]
 }

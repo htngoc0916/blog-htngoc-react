@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { SidebarGroup, SidebarItem } from '~/components/sidebar'
-import { HiArrowRightOnRectangle } from 'react-icons/hi2'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { getPrivateMenu, privateMenuSelector } from '~/app/menu/menuSlice'
-import DynamicIcon from '~/components/icons/menu/DynamicIcon'
-import * as icons from '~/components/icons/menu'
+import { menuIcons } from '~/components/icons/menu'
 import { HiOutlineBars3BottomLeft, HiOutlineBars3BottomRight } from 'react-icons/hi2'
 import { NavLink } from 'react-router-dom'
+import { Sidebar, useTheme } from 'flowbite-react'
+import { twMerge } from 'tailwind-merge'
 
 interface DashboardsidebarProps {}
 
 const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
   const dishpatch = useAppDispatch()
+  const theme = useTheme().theme.sidebar.item
+  console.log('theme', theme)
   const privateMenus = useAppSelector(privateMenuSelector)
 
-  console.log(privateMenus)
   const [openSideBar, setOpenSideBar] = useState(true)
 
   useEffect(() => {
@@ -43,7 +43,28 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
       >
         <div className='w-full h-full px-3 py-2 bg-white border-r shadow-sm border-r-gray-100 dark:border-r-gray-600 dark:bg-darkbg3'>
           <div className='flex flex-col justify-between w-full h-full'>
-            <div className='flex mt-14'>
+            <Sidebar aria-label='Sidebar with call to action button example'>
+              <Sidebar.Items>
+                <Sidebar.ItemGroup>
+                  {privateMenus &&
+                    privateMenus.map((item) => (
+                      <Sidebar.Item
+                        key={item.id}
+                        to={item.menuUrl}
+                        as={NavLink}
+                        icon={menuIcons[item.menuIcon]}
+                        className={({ isActive }: { isActive: boolean }) =>
+                          twMerge(theme.base, isActive && theme.active)
+                        }
+                      >
+                        {openSideBar && item.menuName}
+                      </Sidebar.Item>
+                    ))}
+                </Sidebar.ItemGroup>
+              </Sidebar.Items>
+            </Sidebar>
+
+            {/* <div className='flex mt-14'>
               <NavLink to='/'>
                 <div className='inline-flex items-center justify-center w-10 h-10 rounded-lg'>
                   <img src='/img/logo_htn.png' alt='Blog Logo' className='object-cover w-full rounded-lg' />
@@ -72,7 +93,7 @@ const Dashboardsidebar: React.FC<DashboardsidebarProps> = () => {
               <SidebarItem to='/logout' icon={<HiArrowRightOnRectangle />}>
                 {openSideBar && 'Logout'}
               </SidebarItem>
-            </SidebarGroup>
+            </SidebarGroup> */}
           </div>
         </div>
       </div>
