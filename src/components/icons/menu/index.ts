@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import RenderIcon from './RenderIcon'
 import {
   HiChartPie as IconDashboard,
   HiUsers as IconUsers,
@@ -20,3 +21,5 @@ export const menuIcons: Record<string, FC> = {
   IconComments,
   IconSystem
 }
+
+export { RenderIcon }
