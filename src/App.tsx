@@ -10,18 +10,31 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { themeDarkModeSelector } from './app/darkMode/darkModeSlice'
 import { useSelector } from 'react-redux'
-
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorFallBack from './components/error'
 function App() {
   const theme = useSelector(themeDarkModeSelector)
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [theme])
 
+  // function ErrorFallback({ error, resetErrorBoundary }) {
+  //   return (
+  //     <div role='alert'>
+  //       <p>Something went wrong:</p>
+  //       <pre>{error.message}</pre>
+  //       <button onClick={resetErrorBoundary}>Try again</button>
+  //     </div>
+  //   )
+  // }
+
   return (
     <>
-      <Suspense fallback={<Loader></Loader>}>
-        <RouterProvider router={routers}></RouterProvider>
-      </Suspense>
+      <ErrorBoundary FallbackComponent={ErrorFallBack} onReset={() => {}}>
+        <Suspense fallback={<Loader></Loader>}>
+          <RouterProvider router={routers}></RouterProvider>
+        </Suspense>
+      </ErrorBoundary>
 
       <ToastContainer
         position='top-right'

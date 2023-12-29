@@ -1,5 +1,4 @@
 import { Button, Checkbox, Label } from 'flowbite-react'
-import { Field } from '~/components/field'
 import { HiMail, HiLockClosed } from 'react-icons/hi'
 import InputPassword from '~/components/input/InputPassword'
 import { Link, useNavigate } from 'react-router-dom'
@@ -12,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { LoginRequestDTO } from '~/types'
 import { InputCustom } from '~/components/input'
-import { Form } from '~/components/form'
+import { Form, Field } from '~/components/form'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),

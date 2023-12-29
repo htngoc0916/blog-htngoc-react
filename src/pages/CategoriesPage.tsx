@@ -13,6 +13,7 @@ import {
 } from '~/app/category/categorySlice'
 import { useAppSelector } from '~/app/hooks'
 import { ActionAdd } from '~/components/action'
+import ActionSearch from '~/components/action/ActionSearch'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { CategoryDetail, CategoryList } from '~/modules/category'
 import { API_STATUS, ApiResponseDTO, Category, defaultFilter } from '~/types'
@@ -85,7 +86,8 @@ export default function CategoriesPage() {
           id='categories-list'
           className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'
         >
-          <div className='flex items-center justify-end mb-6'>
+          <div className='flex items-center justify-end gap-3 mb-6'>
+            <ActionSearch />
             <ActionAdd onClick={handleAddCategory}></ActionAdd>
           </div>
           <div className='flex-1 overflow-x-auto'>
