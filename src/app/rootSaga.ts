@@ -3,6 +3,7 @@ import authSaga from '~/app/auth/authSaga'
 import darkModeSaga from './darkMode/darkModeSaga'
 import menuSaga from './menu/menuSaga'
 import categorySaga from './category/categorySaga'
+import tagSaga from './tag/tagSaga'
 export default function* rootSaga() {
-  yield all([authSaga(), darkModeSaga(), menuSaga(), categorySaga()])
+  yield all([authSaga(), darkModeSaga(), menuSaga(), categorySaga(), tagSaga()])
 }

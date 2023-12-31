@@ -4,3 +4,9 @@ export const pageSize = {
 }
 
 export const ITEMS_PER_PAGE = 10
+
+export const activeOptions = [
+  { key: '', value: 'All' },
+  { key: 'Y', value: 'Enable' },
+  { key: 'N', value: 'Disable' }
+]

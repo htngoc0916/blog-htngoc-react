@@ -38,7 +38,6 @@ function* handleGetPublicMenu() {
 function* handleGetPrivateMenu() {
   try {
     const response: ApiResponseDTO<Menu[]> = yield call(menuApi.getAllMenuByCode, MENU_CODE.PRIVATE)
-    console.log('menu api response: ', response.data)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(getPrivateMenuSuccess(response.data))
     }

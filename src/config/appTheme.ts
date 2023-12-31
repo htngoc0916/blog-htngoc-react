@@ -6,7 +6,9 @@ export const customTheme: CustomFlowbiteTheme = {
       primary:
         'text-white bg-primary-600 border border-transparent enabled:hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:enabled:hover:bg-primary-700 dark:focus:ring-primary-900',
       secondary:
-        'text-primary-900 bg-white border border-primary-300 enabled:hover:bg-primary-100 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:text-white dark:border-primary-600 dark:enabled:hover:bg-primary-700 dark:enabled:hover:border-primary-700 dark:focus:ring-primary-700'
+        'text-primary-900 bg-white border border-primary-300 enabled:hover:bg-primary-100 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:text-white dark:border-primary-600 dark:enabled:hover:bg-primary-700 dark:enabled:hover:border-primary-700 dark:focus:ring-primary-700',
+      light:
+        'text-gray-900 bg-white border border-gray-300 enabled:hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-600 dark:text-white dark:border-gray-600 dark:enabled:hover:bg-gray-700 dark:enabled:hover:border-gray-700 dark:focus:ring-gray-700'
     },
 
     gradientDuoTone: {
@@ -80,19 +82,6 @@ export const customTheme: CustomFlowbiteTheme = {
   modal: {
     root: {
       base: 'fixed top-0 right-0 left-0 z-[9999] h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full'
-    }
-  },
-  sidebar: {
-    root: {
-      base: 'h-full',
-      inner: 'h-full overflow-y-auto overflow-x-hidden rounded bg-white py-4 px-3 dark:bg-gray-800 flex flex-col',
-      collapsed: {
-        on: 'w-16',
-        off: 'w-64'
-      }
-    },
-    logo: {
-      img: 'h-9 w-9 mr-3 rounded-lg -ml-1'
     }
   }
 }

@@ -48,6 +48,8 @@ export interface FilterPramsDTO {
   pageSize: number
   sortBy: string
   sortDir: 'ASC' | 'DESC'
+
+  [key: string]: any
 }
 
 export interface BaseDTO {

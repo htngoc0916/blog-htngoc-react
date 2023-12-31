@@ -42,7 +42,8 @@ const categorySlice = createSlice({
       state.loading = false
       state.categoryList = []
     },
-    setFilter(state, action: PayloadAction<FilterPramsDTO>) {
+
+    setCategoryFilter(state, action: PayloadAction<FilterPramsDTO>) {
       state.filter = action.payload
     },
     setSearchWithDebounce(state, action: PayloadAction<FilterPramsDTO>) {
@@ -51,7 +52,7 @@ const categorySlice = createSlice({
   }
 })
 
-export const { getCategory, getCategoryFailed, getCategorySuccess, setFilter, setSearchWithDebounce } =
+export const { getCategory, getCategoryFailed, getCategorySuccess, setCategoryFilter, setSearchWithDebounce } =
   categorySlice.actions
 
 export const categoryLoadingSelector = (state: RootState) => state.categories.loading

@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import { useSidebar } from './sidebar.context'
 
 const classes = {
-  base: 'absolute top-0 left-0 h-screen  duration-300 ease-linear -translate-x-full z-9999 dark:bg-darkbg lg:static lg:translate-x-0 px-2 py-3',
+  base: 'absolute top-0 left-0 h-screen duration-300 ease-linear -translate-x-full z-9999 dark:bg-gray-800 lg:static lg:translate-x-0 px-2 py-3',
   open: {
     on: 'w-64',
     off: 'w-16'

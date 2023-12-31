@@ -1,27 +1,43 @@
 // ~/components/input
 import { TextInput, TextInputProps } from 'flowbite-react'
-import { ReactNode } from 'react'
+import { ChangeEvent, ReactNode } from 'react'
 import { Control, useController } from 'react-hook-form'
+import { withErrorBoundary } from 'react-error-boundary'
+import ErrorFallBack from '../error'
 
 export interface InputCustomProps extends TextInputProps {
   name: string
   message?: ReactNode
   control?: Control<any>
   children?: ReactNode
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-export default function InputCustom(props: InputCustomProps) {
-  const { children, control, name, message, ...rest } = props
+function InputCustomComponent(props: InputCustomProps) {
+  const { children, type = 'text', control, name, message, onChange, ...rest } = props
 
   const { field, fieldState } = useController({
     control,
     name
   })
 
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    field.onChange(e)
+    if (!onChange) return
+    onChange(e)
+  }
+
   return (
-    <div className='relative mb-1'>
+    <div className='relative'>
       <div className='relative'>
-        <TextInput id={name} color={fieldState.invalid ? 'failure' : 'primary'} {...field} {...rest}></TextInput>
+        <TextInput
+          type={type}
+          id={name}
+          color={fieldState.invalid ? 'failure' : 'primary'}
+          {...field}
+          {...rest}
+          onChange={handleOnChange}
+        ></TextInput>
         {children && (
           <div className='absolute right-0 inline-block h-full px-2 -translate-y-1/2 top-1/2'>{children}</div>
         )}
@@ -32,3 +48,9 @@ export default function InputCustom(props: InputCustomProps) {
     </div>
   )
 }
+
+const InputCustom = withErrorBoundary(InputCustomComponent, {
+  FallbackComponent: ErrorFallBack
+})
+
+export default InputCustom

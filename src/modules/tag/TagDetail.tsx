@@ -1,38 +1,37 @@
-import { Form, Field } from '~/components/form'
+import { twMerge } from 'tailwind-merge'
+import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
+import { API_STATUS, ApiResponseDTO, Tag, TagRequestDTO } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { API_STATUS, ApiResponseDTO, Category, CategoryRequestDTO } from '~/types'
-import { InputCustom } from '~/components/input'
-import { Label } from 'flowbite-react'
-import { useEffect, useState } from 'react'
-import { TextareaCustom } from '~/components/textarea'
-import { twMerge } from 'tailwind-merge'
-import { ActionClose, ActionSave } from '~/components/action'
-import { ButtonToggleSwitch } from '~/components/button'
-import categoryApi from '~/apis/categoryApi'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { SAVED_SUCCESS } from '~/utils/message'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
+import { useEffect, useState } from 'react'
+import { Field, Form } from '~/components/form'
+import { ButtonToggleSwitch } from '~/components/button'
+import { toast } from 'react-toastify'
+import TagApi from '~/apis/tagApi'
+import { SAVED_SUCCESS } from '~/utils/message'
+import { Label } from 'flowbite-react'
+import { InputCustom } from '~/components/input'
 
-export interface CategoryDetailProps {
-  data: Category | null
+export interface TagDetailProps {
+  data: Tag | null
   className: string
-  onCloseCategory: () => void
-  onSaveCategory: () => void
+  onCloseTag: () => void
+  onSaveTag: () => void
 }
 
 const schema = yup.object({
   id: yup.number(),
-  categoryName: yup.string().required('Vui lòng nhập tên category'),
-  description: yup.string(),
+  tagName: yup.string().required('Vui lòng nhập tên Tag'),
+  color: yup.string(),
   usedYn: yup.string()
 })
 
-export default function CategoryDetail({ data, className, onCloseCategory, onSaveCategory }: CategoryDetailProps) {
+export default function TagDetail({ data, className, onCloseTag, onSaveTag }: TagDetailProps) {
   const {
     handleSubmit,
     control,
@@ -43,19 +42,20 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     mode: 'onSubmit',
     defaultValues: {
       id: data?.id || 0,
-      categoryName: data?.categoryName || '',
-      description: data?.description || '',
+      color: data?.color || '',
+      tagName: data?.tagName || '',
       usedYn: data?.usedYn || 'Y'
     }
   })
+
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
   const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
 
   useEffect(() => {
-    setValue('categoryName', data?.categoryName || '')
-    setValue('description', data?.description || '')
+    setValue('tagName', data?.tagName || '')
+    setValue('color', data?.color || '')
     setValue('usedYn', data?.usedYn || 'Y')
     setValue('id', data?.id || 0)
     setIsToggleChecked(data?.usedYn !== 'N')
@@ -66,9 +66,11 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const handleSave = async (category: Category) => {
-    const categoryRequest: CategoryRequestDTO = {
-      ...category,
+  const handleSave = async (tag: Tag) => {
+    console.log('🚀 ~ file: TagDetail.tsx:63 ~ TagDetail ~ tag:', tag)
+
+    const tagRequest: TagRequestDTO = {
+      ...tag,
       modId: data ? userInfo?.id : undefined,
       regId: data ? undefined : userInfo?.id,
       navigate
@@ -77,21 +79,21 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     try {
       setLoading(true)
       if (data) {
-        console.log('Editing category:', category)
-        const response: ApiResponseDTO<Category> = await categoryApi.editCategory(categoryRequest)
+        console.log('Editing Tag:', tag)
+        const response: ApiResponseDTO<Tag> = await TagApi.editTag(tagRequest)
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }
       } else {
-        console.log('Creating new category:', category)
-        const response: ApiResponseDTO<Category> = await categoryApi.addCategory(categoryRequest)
+        console.log('Creating new Tag:', tag)
+        const response: ApiResponseDTO<Tag> = await TagApi.addTag(tagRequest)
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }
       }
       setLoading(false)
       toast.success(SAVED_SUCCESS)
-      onSaveCategory()
+      onSaveTag()
     } catch (error: any) {
       console.log(error)
       return toast.error(error)
@@ -101,11 +103,11 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
   return (
     <div className={twMerge(className, 'relative')}>
       <div className='absolute top-2 right-2'>
-        <ActionClose onClick={onCloseCategory}></ActionClose>
+        <ActionClose onClick={onCloseTag}></ActionClose>
       </div>
       <div className='flex mb-10'>
         <TextCustom size='xs' className='text-text2 dark:text-text7'>
-          {data ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
+          {data ? 'Chỉnh sửa' : 'Tạo mới'} 🍬
         </TextCustom>
       </div>
 
@@ -114,25 +116,19 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
           <ButtonToggleSwitch name='usedYn' control={control} checked={isToggleChecked} onChange={handleToggleChange} />
         </Field>
         <Field>
-          <Label htmlFor='categoryName'>Category</Label>
+          <Label htmlFor='tagName'>Tag</Label>
           <InputCustom
-            name='categoryName'
+            name='tagName'
             control={control}
-            message={errors?.categoryName?.message}
+            message={errors?.tagName?.message}
             maxLength={100}
           ></InputCustom>
         </Field>
         <Field>
-          <Label htmlFor='description'>Description</Label>
-          <TextareaCustom
-            id='description'
-            name='description'
-            color='primary'
-            rows={6}
-            control={control}
-            className='resize-none dark:bg-darkbg3'
-          />
+          <Label htmlFor='color'>Color</Label>
+          <InputCustom name='color' control={control} message={errors?.color?.message} maxLength={20}></InputCustom>
         </Field>
+
         <div className='flex items-center justify-center'>
           <ActionSave isProcessing={loading} disabled={loading} className='w-24' />
         </div>

@@ -5,10 +5,11 @@ export const API_VERSION = '/v1'
 export const AUTH_LOGIN_URL = '/auth/login'
 export const AUTH_REGISTER_URL = '/auth/register'
 export const AUTH_REFRESH_TOKEN = '/auth/refresh-token'
+export const USER_CHECK_EMAIL = `${API_VERSION}/users/checkEmail`
 
 export const CATEGORY_URL = `${API_VERSION}/categories`
 
-export const USER_CHECK_EMAIL = `${API_VERSION}/users/checkEmail`
-
-export const MENU_GET_ALL = `${API_VERSION}/menus`
+export const MENU_URL = `${API_VERSION}/menus`
 export const MENU_GET_BY_CODE = `${API_VERSION}/menus/menuCode`
+
+export const TAG_URL = `${API_VERSION}/tags`

@@ -9,14 +9,14 @@ import {
   categoryListSelector,
   categoryLoadingSelector,
   categoryPaginationSelector,
-  getCategory
+  getCategory,
+  setCategoryFilter
 } from '~/app/category/categorySlice'
 import { useAppSelector } from '~/app/hooks'
 import { ActionAdd } from '~/components/action'
-import ActionSearch from '~/components/action/ActionSearch'
 import DashboardTitle from '~/components/common/DashboardTitle'
-import { CategoryDetail, CategoryList } from '~/modules/category'
-import { API_STATUS, ApiResponseDTO, Category, defaultFilter } from '~/types'
+import { CategoryDetail, CategoryList, CategoryFilter } from '~/modules/category'
+import { API_STATUS, ApiResponseDTO, Category, FilterPramsDTO, defaultFilter } from '~/types'
 import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function CategoriesPage() {
@@ -74,20 +74,29 @@ export default function CategoriesPage() {
     dispatch(getCategory(filter))
   }
 
+  const handleSearchCategory = (filter: FilterPramsDTO) => {
+    dispatch(getCategory(filter))
+  }
+
+  const handleSetFilter = (filter: FilterPramsDTO) => {
+    dispatch(setCategoryFilter(filter))
+  }
+
   useEffect(() => {
     dispatch(getCategory(filter))
-  }, [dispatch, filter])
+  }, [dispatch])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
-      <DashboardTitle title='Categories'>Quản lý thông tin category của bạn 🌵</DashboardTitle>
+      <DashboardTitle title='Categories'>Quản lý thông tin categories 🌵</DashboardTitle>
       <div className='grid flex-1 grid-flow-row grid-cols-1 gap-4 xl:grid-flow-col'>
-        <div
-          id='categories-list'
-          className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'
-        >
-          <div className='flex items-center justify-end gap-3 mb-6'>
-            <ActionSearch />
+        <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>
+          <div id='categories-list' className='flex items-center justify-start gap-3 mb-6'>
+            <CategoryFilter
+              filter={filter}
+              onSeach={handleSearchCategory}
+              onSetFilter={handleSetFilter}
+            ></CategoryFilter>
             <ActionAdd onClick={handleAddCategory}></ActionAdd>
           </div>
           <div className='flex-1 overflow-x-auto'>

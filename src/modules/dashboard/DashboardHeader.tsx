@@ -10,7 +10,7 @@ export interface DashboardHeaderProps {
 export default function DashboardHeader(props: DashboardHeaderProps) {
   return (
     <Navbar className={twMerge(props.className)}>
-      <div className='flex-1'>search</div>
+      <div className='flex-1'></div>
       <div className='flex gap-3 avatar'>
         <Notifications />
         <DarkThemeToggle></DarkThemeToggle>

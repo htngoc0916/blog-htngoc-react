@@ -43,7 +43,7 @@ export default function SidebarItem(props: SidebarItemProps) {
             <span className={classes.children}>{children}</span>
           </>
         ) : (
-          <Tooltip content={children} placement='right' className='w-28'>
+          <Tooltip content={children} placement='right' className='text-center w-28'>
             {renderIcon}
           </Tooltip>
         )}
@@ -58,7 +58,7 @@ export default function SidebarItem(props: SidebarItemProps) {
             <span className={classes.children}>{children}</span>
           </>
         ) : (
-          <Tooltip content={children} placement='right' className='w-28'>
+          <Tooltip content={children} placement='right' className='w-28 z-[999] aaa'>
             {renderIcon}
           </Tooltip>
         )}

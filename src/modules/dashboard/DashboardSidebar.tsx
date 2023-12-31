@@ -27,7 +27,7 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
   }
 
   return (
-    <aside className='relative'>
+    <aside className='relative z-[999]'>
       <button
         className='absolute top-3 right-0 translate-x-full z-[100] inline-block cursor-pointer bg-white transition-transform duration-300 dark:bg-gray-800 pr-1 py-1 rounded-r-lg'
         onClick={toggleSidebar}

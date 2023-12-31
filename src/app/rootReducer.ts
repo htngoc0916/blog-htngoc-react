@@ -6,6 +6,7 @@ import authSlice from './auth/authSlice'
 import darkModeSlice from './darkMode/darkModeSlice'
 import menuSlice from './menu/menuSlice'
 import categorySlice from './category/categorySlice'
+import tagSlice from './tag/tagSlice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authSlice),
   darkMode: darkModeSlice,
   menus: menuSlice,
-  categories: categorySlice
+  categories: categorySlice,
+  tags: tagSlice
 })
 
 export default rootReducer
