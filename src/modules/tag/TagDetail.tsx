@@ -15,7 +15,8 @@ import { toast } from 'react-toastify'
 import TagApi from '~/apis/tagApi'
 import { SAVED_SUCCESS } from '~/utils/message'
 import { Label } from 'flowbite-react'
-import { InputCustom } from '~/components/input'
+import { InputCustom, InputSelect } from '~/components/input'
+import { ColourOption } from '~/components/input/input-data'
 
 export interface TagDetailProps {
   data: Tag | null
@@ -64,6 +65,10 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
   const handleToggleChange = (value: boolean) => {
     setIsToggleChecked(value)
     setValue('usedYn', value ? 'Y' : 'N')
+  }
+
+  const handleColorChange = (selectedOption: ColourOption) => {
+    setValue('color', selectedOption ? selectedOption.value : '')
   }
 
   const handleSave = async (tag: Tag) => {
@@ -126,7 +131,7 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
         </Field>
         <Field>
           <Label htmlFor='color'>Color</Label>
-          <InputCustom name='color' control={control} message={errors?.color?.message} maxLength={20}></InputCustom>
+          <InputSelect name='color' control={control} onChange={handleColorChange}></InputSelect>
         </Field>
 
         <div className='flex items-center justify-center'>

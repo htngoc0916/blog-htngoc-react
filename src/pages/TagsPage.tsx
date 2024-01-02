@@ -20,7 +20,7 @@ export default function TagsPage() {
   const tagList = useAppSelector(TagListSelector)
   const pagination = useAppSelector(TagPaginationSelector)
 
-  const [isTagDetailOpen, setIsTagDetailOpen] = useState(false)
+  const [isTagDetailOpen, setIsTagDetailOpen] = useState(true)
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null)
 
   const onPageChange = (page: number) => {
@@ -81,7 +81,7 @@ export default function TagsPage() {
       <DashboardTitle title='Tags'>Quản lý thông tin tags 🔗</DashboardTitle>
       <div className='grid flex-1 grid-flow-row grid-cols-1 gap-4 xl:grid-flow-col'>
         <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>
-          <div id='tags-list' className='flex items-center justify-start gap-3 mb-6'>
+          <div id='tags-list' className='flex flex-wrap items-center justify-start gap-3 mb-6'>
             <TagFilter filter={filter} onSeach={handleSearchTag} onSetFilter={handleSetFilter}></TagFilter>
             <ActionAdd onClick={handleAddTag}></ActionAdd>
           </div>

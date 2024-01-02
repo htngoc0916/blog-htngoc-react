@@ -49,11 +49,26 @@
     @apply border-t border-gray-200 first:mt-0 first:border-t-0 first:pt-0;
   }
 
-  .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+  //react-select
+  .input-select-container .input-select__control {
+    @apply border-gray-200 hover:border-primary-400 dark:border-primary-400 dark:bg-darkbg3 min-h-[42px] rounded-lg text-base;
+  }
+  .input-select-container .input-select__control--is-focused {
+    @apply border-primary-500 hover:border-primary-500 dark:border-primary-400 dark:hover:border-primary-400 shadow-none ring-1 ring-primary-500;
+  }
+
+  .input-select-container .input-select__menu {
+    @apply dark:bg-gray-600 text-sm;
+  }
+
+  .input-select-container .input-select__option {
+    @apply bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-500 text-gray-600 dark:text-white;
+  }
+
+  .input-select-container .input-select__input-container,
+  .input-select-container .input-select__placeholder,
+  .input-select-container .input-select__single-value {
+    @apply text-gray-600 dark:text-white;
   }
 }
 
