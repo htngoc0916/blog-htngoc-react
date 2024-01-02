@@ -46,11 +46,6 @@ export default function TagsPage() {
     setSelectedTag(Tag)
   }
 
-  const handleAddTags = () => {
-    setSelectedTag(null)
-    setIsTagDetailOpen(true)
-  }
-
   const handleSaveTag = () => {
     dispatch(getTag(filter))
   }
@@ -79,7 +74,7 @@ export default function TagsPage() {
 
   useEffect(() => {
     dispatch(getTag(filter))
-  }, [dispatch])
+  }, [])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
@@ -88,7 +83,7 @@ export default function TagsPage() {
         <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>
           <div id='tags-list' className='flex items-center justify-start gap-3 mb-6'>
             <TagFilter filter={filter} onSeach={handleSearchTag} onSetFilter={handleSetFilter}></TagFilter>
-            <ActionAdd onClick={handleAddTags}></ActionAdd>
+            <ActionAdd onClick={handleAddTag}></ActionAdd>
           </div>
 
           <div className='flex-1 overflow-x-auto'>

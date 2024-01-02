@@ -51,7 +51,6 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
-  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
 
   useEffect(() => {
     setValue('categoryName', data?.categoryName || '')
@@ -60,6 +59,8 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     setValue('id', data?.id || 0)
     setIsToggleChecked(data?.usedYn !== 'N')
   }, [data, setValue, userInfo])
+
+  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
 
   const handleToggleChange = (value: boolean) => {
     setIsToggleChecked(value)
