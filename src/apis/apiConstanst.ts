@@ -5,7 +5,9 @@ export const API_VERSION = '/v1'
 export const AUTH_LOGIN_URL = '/auth/login'
 export const AUTH_REGISTER_URL = '/auth/register'
 export const AUTH_REFRESH_TOKEN = '/auth/refresh-token'
+
 export const USER_CHECK_EMAIL = `${API_VERSION}/users/checkEmail`
+export const USER_URL = `${API_VERSION}/users`
 
 export const CATEGORY_URL = `${API_VERSION}/categories`
 

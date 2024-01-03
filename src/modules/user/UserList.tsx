@@ -1,62 +1,81 @@
 import { Avatar, Badge, Table } from 'flowbite-react'
+import { useState } from 'react'
 import { HiCheck } from 'react-icons/hi2'
 import { ActionAdd, ActionDelete, ActionEdit } from '~/components/action'
+import Active from '~/components/active'
 import { BadgeGroup } from '~/components/badge'
-import PaginationCustom from '~/components/pagination/PaginationCustom'
+import ModalDelete from '~/components/modal/ModalDelete'
+import { User } from '~/types'
 
-export interface UserListProps {}
+export interface UserListProps {
+  className?: string
+  data?: User[] | undefined
+  onEditUser?: (user: User) => void
+  onRemoveUser?: (user: User) => void
+}
 
-export default function UserList() {
+export default function UserList({ data, className, onEditUser, onRemoveUser }: UserListProps) {
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const handleRemoveUserClick = (user: User) => {
+    setSelectedUser(user)
+    setOpenModal(true)
+  }
+
+  const handleRemoveConfirm = () => {
+    if (selectedUser) {
+      onRemoveUser?.(selectedUser)
+    }
+    setOpenModal(false)
+  }
+
   return (
-    <div className='p-4 bg-white rounded-xl dark:bg-darkbg3'>
-      <div className='flex items-center justify-end mb-6'>
-        <ActionAdd></ActionAdd>
-      </div>
+    <>
+      <div className={className}>
+        <Table striped className='flex-1'>
+          <Table.Head>
+            <Table.HeadCell>User</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Roles</Table.HeadCell>
+            <Table.HeadCell>Created Time</Table.HeadCell>
+            <Table.HeadCell>
+              <span className='sr-only'>Edit</span>
+            </Table.HeadCell>
+          </Table.Head>
+          <Table.Body className='divide-y text-text1 dark:text-text8'>
+            {data &&
+              data.map((user) => (
+                <Table.Row key={user.id}>
+                  <Table.Cell className='flex items-center justify-start whitespace-nowrap'>
+                    <Avatar img={user?.avatar} rounded>
+                      <div className='space-y-1 font-medium dark:text-white'>
+                        <div className='text-base text-text1 dark:text-text8'>{user?.userName}</div>
+                        <div className='text-sm text-text2 dark:text-text7'>{user?.email}</div>
+                      </div>
+                    </Avatar>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Active active={user.usedYn === 'Y' ? true : false}></Active>
+                  </Table.Cell>
 
-      <Table striped>
-        <Table.Head>
-          <Table.HeadCell>User Info</Table.HeadCell>
-          <Table.HeadCell>Status</Table.HeadCell>
-          <Table.HeadCell>Roles</Table.HeadCell>
-          <Table.HeadCell>Created</Table.HeadCell>
-          <Table.HeadCell>
-            <span className='sr-only'>Edit</span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className='divide-y'>
-          <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-            <Table.Cell className='flex items-center justify-start whitespace-nowrap'>
-              <Avatar img='/img/avatar_people.jpg' rounded>
-                <div className='space-y-1 font-medium dark:text-white'>
-                  <div className='text-base text-text1 dark:text-text8'>Jese Leos</div>
-                  <div className='text-sm text-text2 dark:text-gray-400'>Joined in August 2014</div>
-                </div>
-              </Avatar>
-            </Table.Cell>
-            <Table.Cell>
-              <BadgeGroup>
-                <Badge icon={HiCheck} className='px-2'>
-                  active
-                </Badge>
-              </BadgeGroup>
-            </Table.Cell>
-            <Table.Cell>
-              <span className='text-base'>Admin</span>
-            </Table.Cell>
-            <Table.Cell>
-              <span className='text-base'>2023.12.01 10:00</span>
-            </Table.Cell>
-            <Table.Cell>
-              <ActionEdit></ActionEdit>
-              <ActionDelete></ActionDelete>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+                  <Table.Cell>{user?.roles.map((role) => <span key={role.id}>{role.roleName}</span>)}</Table.Cell>
 
-      <div className='mt-10'>
-        <PaginationCustom></PaginationCustom>
+                  <Table.Cell>{user.regDt?.toString()}</Table.Cell>
+                  <Table.Cell>
+                    <ActionEdit onClick={() => onEditUser?.(user)} />
+                    <ActionDelete onClick={() => handleRemoveUserClick(user)} />
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+          </Table.Body>
+        </Table>
       </div>
-    </div>
+      <ModalDelete
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+        onConfirm={handleRemoveConfirm}
+        message='Bạn có thực sự muốn xoá không?'
+      ></ModalDelete>
+    </>
   )
 }

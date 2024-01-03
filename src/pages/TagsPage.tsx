@@ -20,7 +20,7 @@ export default function TagsPage() {
   const tagList = useAppSelector(TagListSelector)
   const pagination = useAppSelector(TagPaginationSelector)
 
-  const [isTagDetailOpen, setIsTagDetailOpen] = useState(true)
+  const [isTagDetailOpen, setIsTagDetailOpen] = useState(false)
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null)
 
   const onPageChange = (page: number) => {
@@ -41,9 +41,9 @@ export default function TagsPage() {
     setIsTagDetailOpen(true)
   }
 
-  const handleEditTag = (Tag: Tag) => {
+  const handleEditTag = (tag: Tag) => {
     setIsTagDetailOpen(true)
-    setSelectedTag(Tag)
+    setSelectedTag(tag)
   }
 
   const handleSaveTag = () => {

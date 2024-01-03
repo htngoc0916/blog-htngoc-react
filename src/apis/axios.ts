@@ -3,7 +3,7 @@ import { getFreshToken, removeToken, saveToken } from '~/utils/auth'
 import { APP_API_URL_DEV } from './apiConstanst'
 import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
-import { API_STATUS, ApiResponseDTO, AuthResponseDTO, ROLE } from '~/types'
+import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
 import authApi from './authApi'
 
 //public
