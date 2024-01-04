@@ -1,60 +1,67 @@
-import { ReactNode, SVGProps } from 'react'
+import { ReactNode, SVGProps, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { Menu } from '~/types'
 import { useSidebar } from './sidebar.context'
 import { RenderIcon } from '../icons/menu'
 import { Tooltip } from 'flowbite-react'
-
+import { HiPlus, HiMinus } from 'react-icons/hi2'
 const classes = {
-  button:
-    'flex items-center justify-start p-2 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700',
+  base: 'flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700',
   actived: 'bg-gray-100 dark:bg-gray-700',
   icon: 'flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white ml-1',
-  children: 'flex-1 inline-block px-3 whitespace-nowrap text-text1 dark:text-white'
+  children: {
+    base: 'flex-1 inline-block px-3 text-left rtl:text-rightwhitespace-nowrap text-text1 dark:text-white',
+    icon: 'flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'
+  }
 }
 
 export interface SidebarProps {
-  data?: Menu
+  title?: string
   className?: string
   icon?: React.ReactElement<SVGProps<SVGSVGElement>> | React.ComponentType<SVGProps<SVGSVGElement>> | null
+  children?: ReactNode
 }
 
 export default function SidebarCollapse(props: SidebarProps) {
   const { isOpen } = useSidebar()
-  const { className = '', data, icon: Icon } = props
+  const { className = '', title, icon: Icon, children } = props
   const renderIcon = RenderIcon(
     Icon as React.ReactElement<SVGProps<SVGSVGElement>> | React.ComponentType<SVGProps<SVGSVGElement>> | null,
     classes.icon
   )
 
+  const [show, setShow] = useState(false)
+
   const handleOnclick = () => {
-    console.log('asd')
+    setShow(!show)
   }
 
   return (
     <div>
-      <button className={`${twMerge(classes.button, className)}`} onClick={handleOnclick}>
+      <button type='button' className={twMerge(classes.base, className)} onClick={handleOnclick}>
         {isOpen ? (
           <>
             {renderIcon}
-            <span className={classes.children}>{data?.menuName}</span>
+            <span className={twMerge(classes.children.base)}>{title}</span>
+            {show ? (
+              <HiMinus className={classes.children.icon}></HiMinus>
+            ) : (
+              <HiPlus className={classes.children.icon}></HiPlus>
+            )}
           </>
         ) : (
-          <Tooltip content={data?.menuName} placement='right' className='w-28 z-[999] aaa'>
+          <Tooltip content={title} placement='right' className='w-28 z-[999]'>
             {renderIcon}
           </Tooltip>
         )}
       </button>
-      <ul id='dropdown-example' className='hidden py-2 space-y-2'>
-        <li>
-          <a
-            href='#'
-            className='flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-          >
-            Products
-          </a>
-        </li>
-      </ul>
+      <div
+        className={twMerge(
+          'transition-all duration-300 overflow-hidden',
+          show ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+        )}
+      >
+        {children}
+      </div>
     </div>
   )
 }

@@ -16,12 +16,11 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
   const navigate = useNavigate()
   const privateMenus = useAppSelector(privateMenuSelector)
 
-  console.log(privateMenus)
   const { isOpen, toggleSidebar } = useSidebar()
 
   useEffect(() => {
     dispatch(getPrivateMenu())
-  }, [dispatch])
+  }, [])
 
   const handleLogout = () => {
     dispatch(logoutStart({ navigate }))
@@ -43,12 +42,7 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
         <SidebarLogo to='/' img='/img/logo_htn.png' title='htngoc'></SidebarLogo>
         <SidebarGroup className='flex-1 mt-4'>
           {privateMenus &&
-            privateMenus.map((item) => (
-              <DashboardSidebarItem key={item.id} data={item}></DashboardSidebarItem>
-              // <SidebarItem key={item.id} to={item.menuUrl} icon={menuIcons[item.menuIcon]}>
-              //   {item.menuName}
-              // </SidebarItem>
-            ))}
+            privateMenus.map((item) => <DashboardSidebarItem key={item.id} data={item}></DashboardSidebarItem>)}
         </SidebarGroup>
         <SidebarGroup>
           <SidebarItem icon={HiLogout} onClick={handleLogout}>
