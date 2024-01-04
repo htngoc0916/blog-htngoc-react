@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { getPrivateMenu, privateMenuSelector } from '~/app/menu/menuSlice'
-import { menuIcons } from '~/components/icons/menu'
 import { HiOutlineBars3BottomLeft, HiBars3CenterLeft } from 'react-icons/hi2'
 import { useNavigate } from 'react-router-dom'
 import { HiLogout } from 'react-icons/hi'
 import { logoutStart } from '~/app/auth/authSlice'
 import { SidebarCustom, SidebarLogo, SidebarGroup, SidebarItem } from '~/components/sidebar'
 import { useSidebar } from '~/components/sidebar/sidebar.context'
+import DashboardSidebarItem from './DashboardSidebarItem'
 
 interface DashboardsidebarProps {}
 
@@ -16,6 +16,7 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
   const navigate = useNavigate()
   const privateMenus = useAppSelector(privateMenuSelector)
 
+  console.log(privateMenus)
   const { isOpen, toggleSidebar } = useSidebar()
 
   useEffect(() => {
@@ -43,9 +44,10 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
         <SidebarGroup className='flex-1 mt-4'>
           {privateMenus &&
             privateMenus.map((item) => (
-              <SidebarItem key={item.id} to={item.menuUrl} icon={menuIcons[item.menuIcon]}>
-                {item.menuName}
-              </SidebarItem>
+              <DashboardSidebarItem key={item.id} data={item}></DashboardSidebarItem>
+              // <SidebarItem key={item.id} to={item.menuUrl} icon={menuIcons[item.menuIcon]}>
+              //   {item.menuName}
+              // </SidebarItem>
             ))}
         </SidebarGroup>
         <SidebarGroup>
