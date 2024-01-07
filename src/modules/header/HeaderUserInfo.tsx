@@ -4,14 +4,14 @@ import { DefaultProps } from '~/utils/defautProp'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { isAuthenticatedSelector, logoutStart, userInfoSelector } from '~/app/auth/authSlice'
-import checkAdmin from '~/utils/checkAdmin'
+import { checkAdminRole } from '~/utils/checkAdmin'
 
 export default function HeaderUserInfo(props: DefaultProps) {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
-  const isAdmin = checkAdmin(userInfo?.roles)
+  const isAdmin = checkAdminRole(userInfo)
 
   const handleLogout = () => {
     dispatch(logoutStart({ navigate }))

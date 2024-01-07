@@ -2,6 +2,8 @@ import { Pagination } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import userApi from '~/apis/userApi'
 import { useAppSelector } from '~/app/hooks'
 import {
   UserFilterSelector,
@@ -13,8 +15,10 @@ import {
 import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { UserList } from '~/modules/user'
+import UserDetail from '~/modules/user/UserDetail'
 import UserFilter from '~/modules/user/UserFilter'
-import { FilterPramsDTO, User, defaultFilter } from '~/types'
+import { API_STATUS, ApiResponseDTO, FilterPramsDTO, User, defaultFilter } from '~/types'
+import { REMOVE_SUCCESS } from '~/utils/message'
 
 export interface UsersPageProps {}
 
@@ -26,8 +30,8 @@ export default function UsersPage() {
   const userList = useAppSelector(UserListSelector)
   const pagination = useAppSelector(UserPaginationSelector)
 
-  const [isUserDetailOpen, setIsUserDetailOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [isUserDetailOpen, setIsUserDetailOpen] = useState(true)
+  const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined)
 
   const onPageChange = (page: number) => {
     dispatch(
@@ -43,7 +47,7 @@ export default function UsersPage() {
   }
 
   const handleAddUser = () => {
-    setSelectedUser(null)
+    setSelectedUser(undefined)
     setIsUserDetailOpen(true)
   }
 
@@ -60,19 +64,23 @@ export default function UsersPage() {
     dispatch(setUserFilter(filter))
   }
 
+  const handleSaveUser = () => {
+    dispatch(getUser({ filter, navigate }))
+  }
+
   const handleRemoveUser = async (user: User) => {
-    console.log('🚀 ~ file: UsersPage.tsx:65 ~ handleRemoveUser ~ user:', user)
-    // try {
-    //   const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0, navigate)
-    //   if (response?.status.includes(API_STATUS.FAILED)) {
-    //     return toast.error(response.message)
-    //   }
-    //   toast.success(REMOVE_SUCCESS)
-    //   dispatch(getTag(filter))
-    // } catch (error: any) {
-    //   console.log(error)
-    //   return toast.error(error)
-    // }
+    console.log('🚀 ~ file: UsersPage.tsx:67 ~ handleRemoveUser ~ user:', user)
+    try {
+      const response: ApiResponseDTO<null> = await userApi.removeUser(user?.id || 0, navigate)
+      if (response?.status.includes(API_STATUS.FAILED)) {
+        return toast.error(response.message)
+      }
+      toast.success(REMOVE_SUCCESS)
+      dispatch(getUser({ filter, navigate }))
+    } catch (error: any) {
+      console.log(error)
+      return toast.error(error)
+    }
   }
 
   useEffect(() => {
@@ -104,11 +112,14 @@ export default function UsersPage() {
           </div>
         </div>
 
-        {/* {isUserDetailOpen && (
-          <div className='relative order-1 bg-white xl:w-[500px] rounded-xl dark:bg-darkbg3 xl:order-2 w-full px-4 py-6'>
-            asd
-          </div>
-        )} */}
+        {isUserDetailOpen && (
+          <UserDetail
+            data={selectedUser}
+            onCloseUser={hanldeCloseUserDetail}
+            onSaveUser={handleSaveUser}
+            className='relative order-1 bg-white xl:w-[550px] rounded-xl dark:bg-darkbg3 xl:order-2 w-full px-4 py-6'
+          ></UserDetail>
+        )}
       </div>
     </div>
   )

@@ -83,5 +83,10 @@ export const customTheme: CustomFlowbiteTheme = {
     root: {
       base: 'fixed top-0 right-0 left-0 z-[9999] h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full'
     }
+  },
+  radio: {
+    root: {
+      base: 'h-4 w-4 border border-gray-300 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:bg-primary-600 dark:focus:ring-primary-600 text-primary-600'
+    }
   }
 }

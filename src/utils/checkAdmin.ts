@@ -1,5 +1,7 @@
-import { ROLE } from '~/types'
+import { ROLE, User } from '~/types'
 
-export default function checkAdmin(roles: ROLE[] | undefined) {
-  return (roles && roles.includes(ROLE.ROLE_ADMIN)) || false
+function checkAdminRole(user: User | undefined): boolean {
+  return !!user?.roles?.some((role) => role.roleName === ROLE.ROLE_ADMIN.toString())
 }
+
+export { checkAdminRole }

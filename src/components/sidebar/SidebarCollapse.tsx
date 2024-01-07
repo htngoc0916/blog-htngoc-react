@@ -10,7 +10,7 @@ const classes = {
   icon: 'flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white ml-1',
   children: {
     base: 'flex-1 inline-block px-3 text-left rtl:text-rightwhitespace-nowrap text-text1 dark:text-white',
-    icon: 'flex-shrink-0 w-4 h-4 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'
+    icon: 'flex-shrink-0 w-4 h-4 text-gray-700 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'
   }
 }
 

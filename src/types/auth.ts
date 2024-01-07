@@ -1,4 +1,4 @@
-import { ROLE } from '.'
+import { Role } from './role'
 
 export interface AuthResponseDTO {
   accessToken: string
@@ -8,7 +8,7 @@ export interface AuthResponseDTO {
   userName: string
   email: string
   avatar: string
-  roles: ROLE[]
+  roles: Role[]
 }
 
 export interface LoginResponseDTO {

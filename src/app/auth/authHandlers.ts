@@ -15,7 +15,6 @@ function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
       yield put(registerSuccess(response.data))
       return toast.success(REGISTER_SUCCESS)
     }
-    console.log(response.message)
     return toast.error(response.message)
   } catch (error: any) {
     console.log(error?.response?.data.message)

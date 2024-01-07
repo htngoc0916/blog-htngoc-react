@@ -49,7 +49,6 @@ export default function RegisterForm() {
   const handleRegister = async (values: RegisterRequestDTO) => {
     try {
       const response: ApiResponseDTO<boolean> = await userApi.userCheckEmail(values.email)
-      console.log('register form: ', response)
       if (response?.data) {
         setError('email', {
           type: 'manual',

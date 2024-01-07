@@ -36,7 +36,7 @@ export default function CategoryList({ data, className, onEditCategory, onRemove
             <Table.HeadCell>ID</Table.HeadCell>
             <Table.HeadCell>Category Name</Table.HeadCell>
             <Table.HeadCell>Active</Table.HeadCell>
-            <Table.HeadCell>Created Time</Table.HeadCell>
+            <Table.HeadCell className='hidden 2xl:table-cell'>Created Time</Table.HeadCell>
             <Table.HeadCell>
               <span className='sr-only'>Actions</span>
             </Table.HeadCell>
@@ -50,7 +50,7 @@ export default function CategoryList({ data, className, onEditCategory, onRemove
                   <Table.Cell>
                     <Active active={category.usedYn === 'Y' ? true : false}></Active>
                   </Table.Cell>
-                  <Table.Cell>{category.regDt?.toString()}</Table.Cell>
+                  <Table.Cell className='hidden 2xl:table-cell'>{category.regDt?.toString()}</Table.Cell>
                   <Table.Cell>
                     <ActionEdit onClick={() => onEditCategory?.(category)} />
                     <ActionDelete onClick={() => handleRemoveCategoryClick(category)} />

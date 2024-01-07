@@ -84,14 +84,14 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     dispatch(getCategory(filter))
-  }, [dispatch])
+  }, [])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
       <DashboardTitle title='Categories'>Quản lý thông tin categories 🌵</DashboardTitle>
       <div className='grid flex-1 grid-flow-row grid-cols-1 gap-4 xl:grid-flow-col'>
         <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>
-          <div id='categories-list' className='flex items-center justify-start gap-3 mb-6'>
+          <div id='categories-list' className='flex flex-wrap items-center justify-start gap-3 mb-6'>
             <CategoryFilter
               filter={filter}
               onSeach={handleSearchCategory}

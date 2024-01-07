@@ -38,7 +38,7 @@ export default function TagList({ data, className, onEditTag, onRemoveTag }: Tag
             <Table.HeadCell>Tag Name</Table.HeadCell>
             <Table.HeadCell>Color</Table.HeadCell>
             <Table.HeadCell>Active</Table.HeadCell>
-            <Table.HeadCell>Created Time</Table.HeadCell>
+            <Table.HeadCell className='hidden 2xl:table-cell'>Created Time</Table.HeadCell>
             <Table.HeadCell>
               <span className='sr-only'>Actions</span>
             </Table.HeadCell>
@@ -57,7 +57,7 @@ export default function TagList({ data, className, onEditTag, onRemoveTag }: Tag
                   <Table.Cell>
                     <Active active={tag.usedYn === 'Y' ? true : false}></Active>
                   </Table.Cell>
-                  <Table.Cell>{tag.regDt?.toString()}</Table.Cell>
+                  <Table.Cell className='hidden 2xl:table-cell'>{tag.regDt?.toString()}</Table.Cell>
                   <Table.Cell>
                     <ActionEdit onClick={() => onEditTag?.(tag)} />
                     <ActionDelete onClick={() => handleRemoveTagClick(tag)} />

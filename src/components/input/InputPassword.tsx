@@ -2,16 +2,18 @@ import { TextInput, TextInputProps } from 'flowbite-react'
 import { ReactNode, useState, MouseEvent } from 'react'
 import { Control, useController } from 'react-hook-form'
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi'
+import { twMerge } from 'tailwind-merge'
 
 export interface InputPasswordProps extends TextInputProps {
   name: string
   message: ReactNode
   control: Control<any>
   children?: ReactNode
+  disabled?: boolean
 }
 
 export default function InputPassword(props: InputPasswordProps) {
-  const { children, onClick, control, name, message, ...rest } = props
+  const { children, onClick, control, name, message, disabled, ...rest } = props
 
   const { field, fieldState } = useController({
     control,
@@ -32,14 +34,21 @@ export default function InputPassword(props: InputPasswordProps) {
           color={fieldState.invalid ? 'failure' : 'primary'}
           id={name}
           type={showEye ? 'text' : 'password'}
-          {...rest}
           {...field}
+          {...rest}
+          disabled={disabled}
         ></TextInput>
-        <button className='absolute right-0 inline-block h-full px-2 -translate-y-1/2 top-1/2' onClick={handleOnclick}>
+        <button
+          className='absolute right-0 inline-block h-full px-2 -translate-y-1/2 top-1/2'
+          onClick={handleOnclick}
+          disabled={disabled}
+        >
           {showEye ? (
-            <HiOutlineEye className='w-5 h-5 dark:text-text2'></HiOutlineEye>
+            <HiOutlineEye className={twMerge('w-5 h-5 dark:text-text5', disabled ? 'text-text5' : '')}></HiOutlineEye>
           ) : (
-            <HiOutlineEyeOff className='w-5 h-5 dark:text-text2'></HiOutlineEyeOff>
+            <HiOutlineEyeOff
+              className={twMerge('w-5 h-5 dark:text-text5', disabled ? 'text-text5' : '')}
+            ></HiOutlineEyeOff>
           )}
         </button>
       </div>
