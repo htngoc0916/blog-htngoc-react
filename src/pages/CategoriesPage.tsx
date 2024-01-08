@@ -1,5 +1,5 @@
 import { Pagination } from 'flowbite-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -74,13 +74,27 @@ export default function CategoriesPage() {
     dispatch(getCategory(filter))
   }
 
-  const handleSearchCategory = (filter: FilterPramsDTO) => {
-    dispatch(getCategory(filter))
-  }
+  // const handleSearchCategory = (filter: FilterPramsDTO) => {
+  //   dispatch(getCategory(filter))
+  // }
 
-  const handleSetFilter = (filter: FilterPramsDTO) => {
-    dispatch(setCategoryFilter(filter))
-  }
+  // const handleSetFilter = (filter: FilterPramsDTO) => {
+  //   dispatch(setCategoryFilter(filter))
+  // }
+
+  const handleSearchCategory = useCallback(
+    (filter: FilterPramsDTO) => {
+      dispatch(getCategory(filter))
+    },
+    [dispatch]
+  )
+
+  const handleSetFilter = useCallback(
+    (filter: FilterPramsDTO) => {
+      dispatch(setCategoryFilter(filter))
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
     dispatch(getCategory(filter))

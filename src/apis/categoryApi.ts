@@ -6,7 +6,6 @@ import { axiosPrivate, axiosPublic } from './axios'
 const categoryApi = {
   getAllCategories(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Category[]>>> {
     const url = CATEGORY_URL
-    console.log('🚀 ~ file: categoryApi.ts:9 ~ getAllCategories ~ CATEGORY_GET_ALL:', CATEGORY_URL)
     return axiosPublic.get(url, { params })
   },
 

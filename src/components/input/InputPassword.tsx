@@ -13,7 +13,7 @@ export interface InputPasswordProps extends TextInputProps {
 }
 
 export default function InputPassword(props: InputPasswordProps) {
-  const { children, onClick, control, name, message, disabled, ...rest } = props
+  const { children, onClick, control, name, message, disabled = false, ...rest } = props
 
   const { field, fieldState } = useController({
     control,
