@@ -7,8 +7,7 @@ export interface ModalDeleteProps {
   onConfirm: () => void
   message: string
 }
-
-export default function ModalDelete({ show, onClose, onConfirm, message }: ModalDeleteProps) {
+function ModalDelete({ show, onClose, onConfirm, message }: ModalDeleteProps) {
   return (
     <Modal show={show} size='md' onClose={onClose} popup>
       <Modal.Header />
@@ -29,3 +28,4 @@ export default function ModalDelete({ show, onClose, onConfirm, message }: Modal
     </Modal>
   )
 }
+export default ModalDelete

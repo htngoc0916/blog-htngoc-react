@@ -1,5 +1,6 @@
 import { Dropdown } from 'flowbite-react'
 import { useState } from 'react'
+import { Control, useController } from 'react-hook-form'
 
 export interface DropdownOptions {
   key: string
@@ -7,31 +8,34 @@ export interface DropdownOptions {
 }
 
 export interface DropdownCustomProps {
-  className: string
+  name: string
   data: DropdownOptions[]
-  onChangeOption: (data: DropdownOptions) => void
+  control: Control<any>
+  className?: string
+  defaultValue?: string
+  onChangeOption?: (option: DropdownOptions) => void
 }
 
-export default function DropdownCustom({ data, className, onChangeOption }: DropdownCustomProps) {
-  const [selectedValue, setSelectedValue] = useState('All')
+export default function DropdownCustom(props: DropdownCustomProps) {
+  const { name, control, data, className, defaultValue = 'All', onChangeOption } = props
+  const [label, setLabel] = useState(defaultValue)
+  const { field } = useController({
+    control,
+    name
+  })
 
-  const handleSortChange = (data: { key: string; value: string }) => {
-    setSelectedValue(data.value)
-    onChangeOption?.(data)
-
-    // if (onSeach) {
-    //   const newFilter:  FilterPramsDTO = {
-    //     ...filter,
-    //     usedYn: value.key
-    //   }
-    //   onSetFilter?.(newFilter)
-    // }
+  const handleSortChange = (option: DropdownOptions) => {
+    setLabel(option.value)
+    field.onChange(option.key)
+    if (onChangeOption) {
+      onChangeOption?.(option)
+    }
   }
 
   return (
     <div className={className}>
       <Dropdown
-        label={selectedValue}
+        label={label}
         color='light'
         theme={{
           floating: { target: 'w-full flex justify-end items-center' }

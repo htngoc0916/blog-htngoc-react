@@ -1,5 +1,5 @@
 import { Pagination } from 'flowbite-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -9,14 +9,13 @@ import {
   categoryListSelector,
   categoryLoadingSelector,
   categoryPaginationSelector,
-  getCategory,
-  setCategoryFilter
+  getCategory
 } from '~/app/category/categorySlice'
 import { useAppSelector } from '~/app/hooks'
 import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { CategoryDetail, CategoryList, CategoryFilter } from '~/modules/category'
-import { API_STATUS, ApiResponseDTO, Category, FilterPramsDTO, defaultFilter } from '~/types'
+import { API_STATUS, ApiResponseDTO, Category, FilterPramsDTO } from '~/types'
 import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function CategoriesPage() {
@@ -24,7 +23,7 @@ export default function CategoriesPage() {
   const navigate = useNavigate()
 
   const loading = useAppSelector(categoryLoadingSelector)
-  const filter = useAppSelector(categoryFilterSelector) || defaultFilter
+  const filter = useAppSelector(categoryFilterSelector)
   const categoryList = useAppSelector(categoryListSelector)
   const pagination = useAppSelector(categoryPaginationSelector)
 
@@ -41,47 +40,6 @@ export default function CategoriesPage() {
     )
   }
 
-  const hanldeCloseCategoryDetail = () => {
-    setIsCategoryDetailOpen(false)
-  }
-
-  const handleAddCategory = () => {
-    setSelectedCategory(null)
-    setIsCategoryDetailOpen(true)
-  }
-
-  const handleEditCategory = (category: Category) => {
-    setIsCategoryDetailOpen(true)
-    setSelectedCategory(category)
-  }
-
-  const handleRemoveCategory = async (category: Category) => {
-    try {
-      const response: ApiResponseDTO<null> = await categoryApi.removeCategory(category?.id || 0, navigate)
-      if (response?.status.includes(API_STATUS.FAILED)) {
-        return toast.error(response.message)
-      }
-
-      toast.success(REMOVE_SUCCESS)
-      dispatch(getCategory(filter))
-    } catch (error: any) {
-      console.log(error)
-      return toast.error(error)
-    }
-  }
-
-  const handleSaveCategory = () => {
-    dispatch(getCategory(filter))
-  }
-
-  // const handleSearchCategory = (filter: FilterPramsDTO) => {
-  //   dispatch(getCategory(filter))
-  // }
-
-  // const handleSetFilter = (filter: FilterPramsDTO) => {
-  //   dispatch(setCategoryFilter(filter))
-  // }
-
   const handleSearchCategory = useCallback(
     (filter: FilterPramsDTO) => {
       dispatch(getCategory(filter))
@@ -89,16 +47,54 @@ export default function CategoriesPage() {
     [dispatch]
   )
 
-  const handleSetFilter = useCallback(
-    (filter: FilterPramsDTO) => {
-      dispatch(setCategoryFilter(filter))
+  // const handleSetFilter = useCallback(
+  //   (filter: FilterPramsDTO) => {
+  //     dispatch(setCategoryFilter(filter))
+  //   },
+  //   [dispatch]
+  // )
+
+  const handleAddCategory = useCallback(() => {
+    setSelectedCategory(null)
+    setIsCategoryDetailOpen(true)
+  }, [])
+
+  const handleEditCategory = useCallback((category: Category) => {
+    setIsCategoryDetailOpen(true)
+    setSelectedCategory(category)
+  }, [])
+
+  const hanldeCloseCategoryDetail = useCallback(() => {
+    setIsCategoryDetailOpen(false)
+  }, [])
+
+  const handleSaveCategory = useCallback(() => {
+    dispatch(getCategory(filter))
+  }, [dispatch, filter])
+
+  const handleRemoveCategory = useCallback(
+    async (category: Category) => {
+      try {
+        const response: ApiResponseDTO<null> = await categoryApi.removeCategory(category?.id || 0, navigate)
+        if (response?.status.includes(API_STATUS.FAILED)) {
+          return toast.error(response.message)
+        }
+
+        toast.success(REMOVE_SUCCESS)
+        dispatch(getCategory(filter))
+      } catch (error: any) {
+        console.log(error)
+        return toast.error(error)
+      }
     },
-    [dispatch]
+    [dispatch, navigate, filter]
   )
 
   useEffect(() => {
-    dispatch(getCategory(filter))
-  }, [])
+    if (!filter) {
+      dispatch(getCategory(filter))
+    }
+  }, [dispatch, filter])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
@@ -106,16 +102,12 @@ export default function CategoriesPage() {
       <div className='grid flex-1 grid-flow-row grid-cols-1 gap-4 xl:grid-flow-col'>
         <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>
           <div id='categories-list' className='flex flex-wrap items-center justify-start gap-3 mb-6'>
-            <CategoryFilter
-              filter={filter}
-              onSeach={handleSearchCategory}
-              onSetFilter={handleSetFilter}
-            ></CategoryFilter>
+            <CategoryFilter filter={filter} onSeach={handleSearchCategory}></CategoryFilter>
             <ActionAdd onClick={handleAddCategory}></ActionAdd>
           </div>
           <div className='flex-1 overflow-x-auto'>
             <CategoryList
-              data={categoryList || []}
+              data={categoryList}
               onEditCategory={handleEditCategory}
               onRemoveCategory={handleRemoveCategory}
             ></CategoryList>

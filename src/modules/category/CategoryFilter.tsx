@@ -1,5 +1,4 @@
-import { Dropdown } from 'flowbite-react'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ActionSearch } from '~/components/action'
 import { Form } from '~/components/form'
@@ -7,6 +6,7 @@ import { InputCustom } from '~/components/input'
 import { useForm } from 'react-hook-form'
 import { FilterPramsDTO } from '~/types'
 import { activeOptions } from '~/utils/constant'
+import { DropdownCustom } from '~/components/dropdown'
 
 export interface CategoryFilterProps {
   className?: string
@@ -16,9 +16,7 @@ export interface CategoryFilterProps {
 }
 
 const CategoryFilter = memo(function CategoryFilter(props: CategoryFilterProps) {
-  console.log('🚀 ~ file: CategoryFilter.tsx:19 ~ CategoryFilter ~ props:', props)
-  const { className, filter, onSeach, onSetFilter } = props
-  const [selectedValue, setSelectedValue] = useState('All')
+  const { className, filter, onSeach } = props
   const { handleSubmit, control } = useForm({
     mode: 'onSubmit',
     defaultValues: {
@@ -27,28 +25,11 @@ const CategoryFilter = memo(function CategoryFilter(props: CategoryFilterProps) 
     }
   })
 
-  const handleSortChange = (value: { key: string; value: string }) => {
-    setSelectedValue(value.value)
-
-    if (onSeach) {
-      const newFilter: FilterPramsDTO = {
-        ...filter,
-        usedYn: value.key
-      }
-      onSetFilter?.(newFilter)
-    }
-  }
-
-  // const hanleOnchange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   if (!onSeach) return
-  //   handleOnSearch(event.target.value)
-  // }
-
-  const handleOnSearch = (value: { search: string }) => {
-    console.log('🚀 ~ file: CategoryFilter.tsx:48 ~ handleOnSearch ~ value:', value)
+  const handleOnSearch = (value: { search: string; usedYn: string }) => {
     const newFilter: FilterPramsDTO = {
       ...filter,
-      categoryName: value.search
+      categoryName: value.search,
+      usedYn: value.usedYn
     }
     onSeach?.(newFilter)
   }
@@ -56,21 +37,7 @@ const CategoryFilter = memo(function CategoryFilter(props: CategoryFilterProps) 
   return (
     <div className={twMerge(className)}>
       <Form onSubmit={handleSubmit(handleOnSearch)} className='flex w-full gap-2'>
-        <div className='w-28'>
-          <Dropdown
-            label={selectedValue}
-            color='light'
-            theme={{
-              floating: { target: 'w-full flex justify-end items-center' }
-            }}
-          >
-            {activeOptions.map((option) => (
-              <Dropdown.Item key={option.key} onClick={() => handleSortChange(option)}>
-                {option?.value}
-              </Dropdown.Item>
-            ))}
-          </Dropdown>
-        </div>
+        <DropdownCustom name='usedYn' className='w-28' data={activeOptions} control={control}></DropdownCustom>
         <InputCustom
           type='text'
           placeholder='Nhâp từ khoá'

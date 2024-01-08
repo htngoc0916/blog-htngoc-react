@@ -29,7 +29,7 @@ const categorySlice = createSlice({
   reducers: {
     getCategory(state, action: PayloadAction<FilterPramsDTO>) {
       state.loading = true
-      state.categoryList = []
+      // state.categoryList = []
     },
     getCategorySuccess(state, action: PayloadAction<ListResponseDTO<Category[]>>) {
       const { data, ...paginationWithoutData } = action.payload

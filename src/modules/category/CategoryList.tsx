@@ -2,7 +2,7 @@ import { Table } from 'flowbite-react'
 import { ActionDelete, ActionEdit } from '~/components/action'
 import { Category } from '~/types'
 import Active from '~/components/active'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import ModalDelete from '~/components/modal/ModalDelete'
 
 export interface CategoryListProps {
@@ -12,7 +12,12 @@ export interface CategoryListProps {
   onRemoveCategory?: (category: Category) => void
 }
 
-export default function CategoryList({ data, className, onEditCategory, onRemoveCategory }: CategoryListProps) {
+const CategoryList = memo(function CategoryList({
+  data,
+  className,
+  onEditCategory,
+  onRemoveCategory
+}: CategoryListProps) {
   const [openModal, setOpenModal] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 
@@ -68,4 +73,6 @@ export default function CategoryList({ data, className, onEditCategory, onRemove
       ></ModalDelete>
     </>
   )
-}
+})
+
+export default CategoryList
