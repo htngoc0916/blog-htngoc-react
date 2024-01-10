@@ -20,7 +20,7 @@ const tagSlice = createSlice({
   initialState,
   reducers: {
     getTag(state, action: PayloadAction<FilterPramsDTO>) {
-      console.log('🚀 ~ file: tagSlice.ts:23 ~ getTag ~ action:', action)
+      console.log('🚀 ~ file: tagSlice.ts:23 ~ getTag ~ action:', action.type)
       state.loading = true
       // state.tagList = []
     },

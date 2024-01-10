@@ -20,7 +20,7 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
 
   useEffect(() => {
     dispatch(getPrivateMenu())
-  }, [])
+  }, [dispatch])
 
   const handleLogout = () => {
     dispatch(logoutStart({ navigate }))

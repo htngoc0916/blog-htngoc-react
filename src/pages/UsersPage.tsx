@@ -1,23 +1,17 @@
 import { Pagination } from 'flowbite-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import userApi from '~/apis/userApi'
 import { useAppSelector } from '~/app/hooks'
-import {
-  UserFilterSelector,
-  UserListSelector,
-  UserPaginationSelector,
-  getUser,
-  setUserFilter
-} from '~/app/user/userSlice'
+import { UserFilterSelector, UserListSelector, UserPaginationSelector, getUser } from '~/app/user/userSlice'
 import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { UserList } from '~/modules/user'
 import UserDetail from '~/modules/user/UserDetail'
 import UserFilter from '~/modules/user/UserFilter'
-import { API_STATUS, ApiResponseDTO, FilterPramsDTO, User, defaultFilter } from '~/types'
+import { API_STATUS, ApiResponseDTO, FilterPramsDTO, User } from '~/types'
 import { REMOVE_SUCCESS } from '~/utils/message'
 
 export interface UsersPageProps {}
@@ -26,7 +20,7 @@ export default function UsersPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const filter = useAppSelector(UserFilterSelector) || defaultFilter
+  const filter = useAppSelector(UserFilterSelector)
   const userList = useAppSelector(UserListSelector)
   const pagination = useAppSelector(UserPaginationSelector)
 
@@ -42,34 +36,32 @@ export default function UsersPage() {
     )
   }
 
-  const hanldeCloseUserDetail = () => {
-    setIsUserDetailOpen(false)
-  }
-
   const handleAddUser = () => {
     setSelectedUser(undefined)
     setIsUserDetailOpen(true)
   }
 
-  const handleEditUser = (user: User) => {
+  const handleEditUser = useCallback((user: User) => {
     setIsUserDetailOpen(true)
     setSelectedUser(user)
-  }
+  }, [])
 
-  const handleSearchUser = (filter: FilterPramsDTO) => {
+  const handleSearchUser = useCallback(
+    (filter: FilterPramsDTO) => {
+      dispatch(getUser({ filter, navigate }))
+    },
+    [dispatch, navigate]
+  )
+
+  const hanldeCloseUserDetail = useCallback(() => {
+    setIsUserDetailOpen(false)
+  }, [])
+
+  const handleSaveUser = useCallback(() => {
     dispatch(getUser({ filter, navigate }))
-  }
+  }, [])
 
-  const handleSetFilter = (filter: FilterPramsDTO) => {
-    dispatch(setUserFilter(filter))
-  }
-
-  const handleSaveUser = () => {
-    dispatch(getUser({ filter, navigate }))
-  }
-
-  const handleRemoveUser = async (user: User) => {
-    console.log('🚀 ~ file: UsersPage.tsx:67 ~ handleRemoveUser ~ user:', user)
+  const handleRemoveUser = useCallback(async (user: User) => {
     try {
       const response: ApiResponseDTO<null> = await userApi.removeUser(user?.id || 0, navigate)
       if (response?.status.includes(API_STATUS.FAILED)) {
@@ -81,10 +73,12 @@ export default function UsersPage() {
       console.log(error)
       return toast.error(error)
     }
-  }
+  }, [])
 
   useEffect(() => {
-    dispatch(getUser({ filter, navigate }))
+    if (userList.length === 0) {
+      dispatch(getUser({ filter, navigate }))
+    }
   }, [])
 
   return (
@@ -93,11 +87,11 @@ export default function UsersPage() {
       <div className='grid flex-1 grid-flow-row grid-cols-1 gap-4 xl:grid-flow-col'>
         <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>
           <div id='Users-list' className='flex flex-wrap items-center justify-start gap-3 mb-6'>
-            <UserFilter filter={filter} onSeach={handleSearchUser} onSetFilter={handleSetFilter}></UserFilter>
+            <UserFilter filter={filter} onSeach={handleSearchUser}></UserFilter>
             <ActionAdd onClick={handleAddUser}></ActionAdd>
           </div>
           <div className='flex-1 overflow-x-auto'>
-            <UserList data={userList || []} onEditUser={handleEditUser} onRemoveUser={handleRemoveUser}></UserList>
+            <UserList data={userList} onEditUser={handleEditUser} onRemoveUser={handleRemoveUser}></UserList>
           </div>
           <div className='flex items-center justify-center mt-10'>
             <Pagination

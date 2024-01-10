@@ -19,7 +19,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginStart(state, action: PayloadAction<LoginRequestDTO>) {
-      console.log(action)
+      console.log('🚀 ~ loginStart ~ action:', action.type)
       state.loading = true
     },
     loginSuccess(state, action: PayloadAction<User>) {
@@ -31,7 +31,7 @@ const authSlice = createSlice({
       state.loading = false
     },
     logoutStart(state, action: PayloadAction<LogoutRequestDTO>) {
-      console.log(action)
+      console.log('🚀 ~ logoutStart ~ action:', action.type)
       state.loading = true
     },
     logoutSuccess(state) {

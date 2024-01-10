@@ -14,7 +14,6 @@ export interface TagListProps {
 }
 
 const TagList = memo(function TagList({ data, className, onEditTag, onRemoveTag }: TagListProps) {
-  console.log('🚀 ~ TagList ~ data:', data)
   const [openModal, setOpenModal] = useState(false)
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null)
 

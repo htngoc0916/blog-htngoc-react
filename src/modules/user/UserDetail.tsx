@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
@@ -19,7 +19,6 @@ import { InputCustom, InputFile, InputPassword } from '~/components/input'
 import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2'
 import { RadioCustom } from '~/components/radio'
 import { checkAdminRole } from '~/utils/checkAdmin'
-import { HiXMark } from 'react-icons/hi2'
 
 export interface UserDetailProps {
   data: User | undefined
@@ -38,7 +37,7 @@ const schema = yup.object({
   role: yup.string()
 })
 
-export default function UserDetail({ data, className, onCloseUser, onSaveUser }: UserDetailProps) {
+const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSaveUser }: UserDetailProps) {
   const {
     handleSubmit,
     control,
@@ -62,7 +61,6 @@ export default function UserDetail({ data, className, onCloseUser, onSaveUser }:
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
-  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
   const isEdit = data ? true : false
 
   useEffect(() => {
@@ -72,26 +70,23 @@ export default function UserDetail({ data, className, onCloseUser, onSaveUser }:
     setValue('avatar', data?.avatar || '')
     setValue('usedYn', data?.usedYn || 'Y')
     setValue('password', '')
-    setIsToggleChecked(data?.usedYn !== 'N')
-  }, [data, setValue, userInfo])
+  }, [data, setValue])
 
   const handleToggleChange = (value: boolean) => {
-    setIsToggleChecked(value)
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
   const handleSave = async (user: User) => {
-    console.log('🚀 ~ file: UserDetail.tsx:85 ~ handleSave ~ user:', user)
     const userRequest: UserRequestDTO = {
       ...user,
-      modId: data ? userInfo?.id : undefined,
-      regId: data ? undefined : userInfo?.id,
+      modId: isEdit ? userInfo?.id : undefined,
+      regId: isEdit ? undefined : userInfo?.id,
       navigate
     }
 
     try {
       setLoading(true)
-      if (data) {
+      if (isEdit) {
         console.log('Editing User:', user)
         const response: ApiResponseDTO<User> = await userApi.editUser(userRequest)
         if (response?.status.includes(API_STATUS.FAILED)) {
@@ -130,13 +125,19 @@ export default function UserDetail({ data, className, onCloseUser, onSaveUser }:
       </div>
       <div className='flex mb-10'>
         <TextCustom size='xs' className='text-text2 dark:text-text7'>
-          {data ? 'Chỉnh sửa' : 'Tạo mới'} 🦑
+          {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🦑
         </TextCustom>
       </div>
 
       <Form onSubmit={handleSubmit(handleSave)}>
         <Field>
-          <ButtonToggleSwitch name='usedYn' control={control} checked={isToggleChecked} onChange={handleToggleChange} />
+          <ButtonToggleSwitch
+            name='usedYn'
+            label='Active'
+            control={control}
+            checked={data?.usedYn === 'Y'}
+            onChange={handleToggleChange}
+          />
         </Field>
         <Field horizontally className='gap-4'>
           <div className='flex flex-wrap items-center justify-center w-20 h-20 p-2'>
@@ -205,4 +206,6 @@ export default function UserDetail({ data, className, onCloseUser, onSaveUser }:
       </Form>
     </div>
   )
-}
+})
+
+export default UserDetail

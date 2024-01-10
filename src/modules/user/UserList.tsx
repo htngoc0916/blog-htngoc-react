@@ -1,5 +1,5 @@
 import { Avatar, Badge, Table } from 'flowbite-react'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { ActionDelete, ActionEdit } from '~/components/action'
 import Active from '~/components/active'
 import ModalDelete from '~/components/modal/ModalDelete'
@@ -12,9 +12,10 @@ export interface UserListProps {
   onRemoveUser?: (user: User) => void
 }
 
-export default function UserList({ data, className, onEditUser, onRemoveUser }: UserListProps) {
+const UserList = memo(function UserList({ data, className, onEditUser, onRemoveUser }: UserListProps) {
   const [openModal, setOpenModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
+
   const handleRemoveUserClick = (user: User) => {
     setSelectedUser(user)
     setOpenModal(true)
@@ -80,4 +81,6 @@ export default function UserList({ data, className, onEditUser, onRemoveUser }: 
       ></ModalDelete>
     </>
   )
-}
+})
+
+export default UserList

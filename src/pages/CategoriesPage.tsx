@@ -91,10 +91,10 @@ export default function CategoriesPage() {
   )
 
   useEffect(() => {
-    if (!filter) {
+    if (categoryList.length === 0) {
       dispatch(getCategory(filter))
     }
-  }, [dispatch, filter])
+  }, [])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>

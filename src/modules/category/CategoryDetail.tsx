@@ -33,7 +33,6 @@ const schema = yup.object({
 })
 
 export default function CategoryDetail({ data, className, onCloseCategory, onSaveCategory }: CategoryDetailProps) {
-  console.log('🚀 ~ CategoryDetail ~ data:', data)
   const {
     handleSubmit,
     control,
@@ -52,6 +51,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
+  const isEdit = !!data
 
   useEffect(() => {
     setValue('categoryName', data?.categoryName || '')
@@ -60,22 +60,15 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     setValue('id', data?.id || 0)
   }, [data, setValue, userInfo])
 
-  useEffect(() => {
-    setIsToggleChecked(data?.usedYn === 'Y')
-  }, [data?.usedYn])
-
-  const [isToggleChecked, setIsToggleChecked] = useState(false)
-
   const handleToggleChange = (value: boolean) => {
-    setIsToggleChecked(value)
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
   const handleSave = async (category: Category) => {
     const categoryRequest: CategoryRequestDTO = {
       ...category,
-      modId: data ? userInfo?.id : undefined,
-      regId: data ? undefined : userInfo?.id,
+      modId: isEdit ? userInfo?.id : undefined,
+      regId: isEdit ? undefined : userInfo?.id,
       navigate
     }
 
@@ -110,7 +103,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
       </div>
       <div className='flex mb-10'>
         <TextCustom size='xs' className='text-text2 dark:text-text7'>
-          {data ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
+          {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
         </TextCustom>
       </div>
 
@@ -120,7 +113,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
             name='usedYn'
             label='Active'
             control={control}
-            checked={isToggleChecked}
+            checked={data?.usedYn === 'Y'}
             onChange={handleToggleChange}
           />
         </Field>

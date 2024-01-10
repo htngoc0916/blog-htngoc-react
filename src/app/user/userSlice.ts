@@ -29,9 +29,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     getUser(state, action: PayloadAction<FetchUserDTO>) {
-      console.log('🚀 ~ file: UserSlice.ts:23 ~ getUser ~ action:', action)
+      console.log('🚀 ~ getUser ~ action:', action.type)
       state.loading = true
-      state.userList = []
+      // state.userList = []
     },
     getUserSuccess(state, action: PayloadAction<ListResponseDTO<User[]>>) {
       const { data, ...paginationWithoutData } = action.payload

@@ -64,28 +64,25 @@ export default function TagsPage() {
     [dispatch]
   )
 
-  const handleRemoveTag = useCallback(
-    async (tag: Tag) => {
-      try {
-        const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0, navigate)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
-        toast.success(REMOVE_SUCCESS)
-        dispatch(getTag(filter))
-      } catch (error: any) {
-        console.log(error)
-        return toast.error(error)
+  const handleRemoveTag = useCallback(async (tag: Tag) => {
+    try {
+      const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0, navigate)
+      if (response?.status.includes(API_STATUS.FAILED)) {
+        return toast.error(response.message)
       }
-    },
-    [dispatch, navigate]
-  )
+      toast.success(REMOVE_SUCCESS)
+      dispatch(getTag(filter))
+    } catch (error: any) {
+      console.log(error)
+      return toast.error(error)
+    }
+  }, [])
 
   useEffect(() => {
-    if (!filter) {
+    if (tagList.length === 0) {
       dispatch(getTag(filter))
     }
-  }, [dispatch, filter])
+  }, [])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>

@@ -52,18 +52,16 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
-  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
+  const isEdit = !!data
 
   useEffect(() => {
     setValue('tagName', data?.tagName || '')
     setValue('color', data?.color || '')
     setValue('usedYn', data?.usedYn || 'Y')
     setValue('id', data?.id || 0)
-    setIsToggleChecked(data?.usedYn !== 'N')
   }, [data, setValue, userInfo])
 
   const handleToggleChange = (value: boolean) => {
-    setIsToggleChecked(value)
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
@@ -72,12 +70,10 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
   }
 
   const handleSave = async (tag: Tag) => {
-    console.log('🚀 ~ file: TagDetail.tsx:63 ~ TagDetail ~ tag:', tag)
-
     const tagRequest: TagRequestDTO = {
       ...tag,
-      modId: data ? userInfo?.id : undefined,
-      regId: data ? undefined : userInfo?.id,
+      modId: isEdit ? userInfo?.id : undefined,
+      regId: isEdit ? undefined : userInfo?.id,
       navigate
     }
 
@@ -96,12 +92,13 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
           return toast.error(response.message)
         }
       }
-      setLoading(false)
       toast.success(SAVED_SUCCESS)
       onSaveTag()
     } catch (error: any) {
       console.log(error)
       return toast.error(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -112,13 +109,18 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
       </div>
       <div className='flex mb-10'>
         <TextCustom size='xs' className='text-text2 dark:text-text7'>
-          {data ? 'Chỉnh sửa' : 'Tạo mới'} 🍬
+          {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🍬
         </TextCustom>
       </div>
 
       <Form onSubmit={handleSubmit(handleSave)}>
         <Field>
-          <ButtonToggleSwitch name='usedYn' control={control} checked={isToggleChecked} onChange={handleToggleChange} />
+          <ButtonToggleSwitch
+            name='usedYn'
+            control={control}
+            checked={data?.usedYn === 'Y'}
+            onChange={handleToggleChange}
+          />
         </Field>
         <Field>
           <Label htmlFor='tagName'>Tag</Label>

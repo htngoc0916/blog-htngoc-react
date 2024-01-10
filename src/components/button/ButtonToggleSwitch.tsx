@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { ToggleSwitch, ToggleSwitchProps } from 'flowbite-react'
 import { Control, useController } from 'react-hook-form'
 
@@ -19,16 +19,27 @@ const ButtonToggleSwitch = forwardRef<HTMLButtonElement, ButtonToggleSwitchProps
     control,
     name
   })
+  const [toggle, setToggle] = useState(false)
+
+  useEffect(() => {
+    setToggle(checked)
+  }, [checked])
+
+  const handleOnchage = (value: boolean) => {
+    setToggle(value)
+    onChange?.(value)
+  }
 
   return (
     <ToggleSwitch
       className={className}
       label={label}
       color={color}
-      checked={checked}
+      checked={toggle}
       {...field}
-      onChange={onChange}
+      onChange={handleOnchage}
       ref={ref}
+      name={name}
     />
   )
 })
