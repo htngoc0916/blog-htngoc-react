@@ -22,7 +22,7 @@ const tagSlice = createSlice({
     getTag(state, action: PayloadAction<FilterPramsDTO>) {
       console.log('🚀 ~ file: tagSlice.ts:23 ~ getTag ~ action:', action)
       state.loading = true
-      state.tagList = []
+      // state.tagList = []
     },
     getTagSuccess(state, action: PayloadAction<ListResponseDTO<Tag[]>>) {
       const { data, ...paginationWithoutData } = action.payload

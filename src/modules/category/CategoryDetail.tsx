@@ -33,6 +33,7 @@ const schema = yup.object({
 })
 
 export default function CategoryDetail({ data, className, onCloseCategory, onSaveCategory }: CategoryDetailProps) {
+  console.log('🚀 ~ CategoryDetail ~ data:', data)
   const {
     handleSubmit,
     control,
@@ -57,10 +58,13 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
     setValue('description', data?.description || '')
     setValue('usedYn', data?.usedYn || 'Y')
     setValue('id', data?.id || 0)
-    setIsToggleChecked(data?.usedYn !== 'N')
   }, [data, setValue, userInfo])
 
-  const [isToggleChecked, setIsToggleChecked] = useState(data?.usedYn !== 'N')
+  useEffect(() => {
+    setIsToggleChecked(data?.usedYn === 'Y')
+  }, [data?.usedYn])
+
+  const [isToggleChecked, setIsToggleChecked] = useState(false)
 
   const handleToggleChange = (value: boolean) => {
     setIsToggleChecked(value)
@@ -112,7 +116,13 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
 
       <Form onSubmit={handleSubmit(handleSave)}>
         <Field>
-          <ButtonToggleSwitch name='usedYn' control={control} checked={isToggleChecked} onChange={handleToggleChange} />
+          <ButtonToggleSwitch
+            name='usedYn'
+            label='Active'
+            control={control}
+            checked={isToggleChecked}
+            onChange={handleToggleChange}
+          />
         </Field>
         <Field>
           <Label htmlFor='categoryName'>Category</Label>

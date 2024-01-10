@@ -1,17 +1,19 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import { ToggleSwitch, ToggleSwitchProps } from 'flowbite-react'
 import { Control, useController } from 'react-hook-form'
 
 export interface ButtonToggleSwitchProps extends ToggleSwitchProps {
   name: string
+  label?: string
+  color?: string
   className?: string
   control?: Control<any>
   checked: boolean
   onChange: (value: boolean) => void
 }
 
-const ButtonToggleSwitch = React.forwardRef<HTMLButtonElement | null, ButtonToggleSwitchProps>((props, ref) => {
-  const { className, control, name, checked, onChange, ...rest } = props
+const ButtonToggleSwitch = forwardRef<HTMLButtonElement, ButtonToggleSwitchProps>((props, ref) => {
+  const { className, control, name, checked, label = 'Active', onChange, color = 'primary' } = props
 
   const { field } = useController({
     control,
@@ -21,13 +23,12 @@ const ButtonToggleSwitch = React.forwardRef<HTMLButtonElement | null, ButtonTogg
   return (
     <ToggleSwitch
       className={className}
-      label='Active'
-      color={rest.color || 'primary'}
+      label={label}
+      color={color}
       checked={checked}
       {...field}
-      {...rest}
       onChange={onChange}
-      ref={ref as React.RefObject<HTMLButtonElement>}
+      ref={ref}
     />
   )
 })

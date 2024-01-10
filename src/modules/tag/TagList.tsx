@@ -1,5 +1,5 @@
 import { Badge, Table } from 'flowbite-react'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { ActionDelete, ActionEdit } from '~/components/action'
 import Active from '~/components/active'
 import { BadgeGroup } from '~/components/badge'
@@ -13,7 +13,8 @@ export interface TagListProps {
   onRemoveTag?: (tag: Tag) => void
 }
 
-export default function TagList({ data, className, onEditTag, onRemoveTag }: TagListProps) {
+const TagList = memo(function TagList({ data, className, onEditTag, onRemoveTag }: TagListProps) {
+  console.log('🚀 ~ TagList ~ data:', data)
   const [openModal, setOpenModal] = useState(false)
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null)
 
@@ -75,4 +76,6 @@ export default function TagList({ data, className, onEditTag, onRemoveTag }: Tag
       ></ModalDelete>
     </>
   )
-}
+})
+
+export default TagList

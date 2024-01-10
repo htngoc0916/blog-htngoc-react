@@ -8,6 +8,11 @@ import { FilterPramsDTO } from '~/types'
 import { activeOptions } from '~/utils/constant'
 import { DropdownCustom } from '~/components/dropdown'
 
+export interface CategoryFilter {
+  search: string
+  usedYn: string
+}
+
 export interface CategoryFilterProps {
   className?: string
   filter: FilterPramsDTO
@@ -25,7 +30,7 @@ const CategoryFilter = memo(function CategoryFilter(props: CategoryFilterProps) 
     }
   })
 
-  const handleOnSearch = (value: { search: string; usedYn: string }) => {
+  const handleOnSearch = (value: CategoryFilter) => {
     const newFilter: FilterPramsDTO = {
       ...filter,
       categoryName: value.search,
@@ -37,7 +42,13 @@ const CategoryFilter = memo(function CategoryFilter(props: CategoryFilterProps) 
   return (
     <div className={twMerge(className)}>
       <Form onSubmit={handleSubmit(handleOnSearch)} className='flex w-full gap-2'>
-        <DropdownCustom name='usedYn' className='w-28' data={activeOptions} control={control}></DropdownCustom>
+        <DropdownCustom
+          name='usedYn'
+          className='w-28'
+          data={activeOptions}
+          control={control}
+          // onChangeOption={handleOnSearch}
+        ></DropdownCustom>
         <InputCustom
           type='text'
           placeholder='Nhâp từ khoá'

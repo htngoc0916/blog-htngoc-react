@@ -1,5 +1,5 @@
 import { Pagination } from 'flowbite-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -9,14 +9,14 @@ import { TagFilterSelector, TagListSelector, TagPaginationSelector, getTag, setT
 import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { TagDetail, TagFilter, TagList } from '~/modules/tag'
-import { API_STATUS, ApiResponseDTO, FilterPramsDTO, Tag, defaultFilter } from '~/types'
+import { API_STATUS, ApiResponseDTO, FilterPramsDTO, Tag } from '~/types'
 import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function TagsPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const filter = useAppSelector(TagFilterSelector) || defaultFilter
+  const filter = useAppSelector(TagFilterSelector)
   const tagList = useAppSelector(TagListSelector)
   const pagination = useAppSelector(TagPaginationSelector)
 
@@ -36,45 +36,56 @@ export default function TagsPage() {
     setIsTagDetailOpen(false)
   }
 
-  const handleAddTag = () => {
+  const handleAddTag = useCallback(() => {
     setSelectedTag(null)
     setIsTagDetailOpen(true)
-  }
+  }, [])
 
-  const handleEditTag = (tag: Tag) => {
+  const handleEditTag = useCallback((tag: Tag) => {
     setIsTagDetailOpen(true)
     setSelectedTag(tag)
-  }
+  }, [])
 
   const handleSaveTag = () => {
     dispatch(getTag(filter))
   }
 
-  const handleSearchTag = (filter: FilterPramsDTO) => {
-    dispatch(getTag(filter))
-  }
-
-  const handleSetFilter = (filter: FilterPramsDTO) => {
-    dispatch(setTagFilter(filter))
-  }
-
-  const handleRemoveTag = async (tag: Tag) => {
-    try {
-      const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0, navigate)
-      if (response?.status.includes(API_STATUS.FAILED)) {
-        return toast.error(response.message)
-      }
-      toast.success(REMOVE_SUCCESS)
+  const handleSearchTag = useCallback(
+    (filter: FilterPramsDTO) => {
       dispatch(getTag(filter))
-    } catch (error: any) {
-      console.log(error)
-      return toast.error(error)
-    }
-  }
+    },
+    [dispatch]
+  )
+
+  const handleSetFilter = useCallback(
+    (filter: FilterPramsDTO) => {
+      dispatch(setTagFilter(filter))
+    },
+    [dispatch]
+  )
+
+  const handleRemoveTag = useCallback(
+    async (tag: Tag) => {
+      try {
+        const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0, navigate)
+        if (response?.status.includes(API_STATUS.FAILED)) {
+          return toast.error(response.message)
+        }
+        toast.success(REMOVE_SUCCESS)
+        dispatch(getTag(filter))
+      } catch (error: any) {
+        console.log(error)
+        return toast.error(error)
+      }
+    },
+    [dispatch, navigate]
+  )
 
   useEffect(() => {
-    dispatch(getTag(filter))
-  }, [])
+    if (!filter) {
+      dispatch(getTag(filter))
+    }
+  }, [dispatch, filter])
 
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
