@@ -61,7 +61,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
-  const isEdit = data ? true : false
+  const isEdit = Boolean(data)
 
   useEffect(() => {
     setValue('id', data?.id || 0)
@@ -74,6 +74,24 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
 
   const handleToggleChange = (value: boolean) => {
     setValue('usedYn', value ? 'Y' : 'N')
+  }
+
+  const [uploadedImage, setUploadedImage] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    setUploadedImage(data?.avatar || undefined)
+    //cleanup function
+    return () => {
+      if (uploadedImage) {
+        URL.revokeObjectURL(uploadedImage)
+      }
+    }
+  }, [uploadedImage, data?.avatar])
+
+  const handleOnFileUpload = (file: File) => {
+    console.log('🚀 ~ handleOnFileUpload ~ file:', file)
+    const imageUrl = URL.createObjectURL(file)
+    setUploadedImage(imageUrl)
   }
 
   const handleSave = async (user: User) => {
@@ -141,7 +159,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         </Field>
         <Field horizontally className='gap-4'>
           <div className='flex flex-wrap items-center justify-center w-20 h-20 p-2'>
-            <Avatar size='ct' img={data?.avatar} rounded bordered></Avatar>
+            <Avatar size='ct' img={uploadedImage} rounded bordered></Avatar>
           </div>
 
           <Field className='flex-1 mb-0'>
@@ -157,7 +175,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
           </Field>
         </Field>
         <Field>
-          <InputFile></InputFile>
+          <InputFile content='SVG, PNG, JPG or GIF (MAX. 800x400px)' onFileUpload={handleOnFileUpload}></InputFile>
         </Field>
         <Field>
           <Label htmlFor='email'>Email</Label>

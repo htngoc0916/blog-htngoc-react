@@ -1,8 +1,9 @@
 import { FileInput, Label } from 'flowbite-react'
 import { twMerge } from 'tailwind-merge'
 import { HiOutlineCloudArrowUp } from 'react-icons/hi2'
-import { useDropzone } from 'react-dropzone'
+import { FileRejection, useDropzone } from 'react-dropzone'
 import { forwardRef, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const classes = {
   base: 'flex items-center justify-center w-full',
@@ -33,6 +34,8 @@ const classes = {
   }
 }
 
+const maxSize = 1048576
+
 export interface InputFileProps {
   className?: string
   size?: 'sm' | 'md'
@@ -42,28 +45,26 @@ export interface InputFileProps {
 }
 
 const InputFile = forwardRef<HTMLLabelElement, InputFileProps>((props, ref) => {
-  const { className, color = 'primary', size = 'sm', content = 'SVG, PNG, JPG or GIF (MAX. 800x400px)' } = props
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-
-  useEffect(() => {
-    // Cleanup function to be executed when component unmounts
-    return () => {
-      if (uploadedImage) {
-        URL.revokeObjectURL(uploadedImage)
-      }
-    }
-  }, [uploadedImage])
+  const { className, color = 'primary', size = 'sm', content = '', onFileUpload } = props
 
   const onDrop = (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0]
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0]
+      onFileUpload?.(file)
+    }
+  }
 
-    const imageUrl = URL.createObjectURL(file)
-    setUploadedImage(imageUrl)
+  const onDropRejected = (fileRejections: FileRejection[]) => {
+    const file = fileRejections[0]
+    return toast.error(file.errors[0].message)
   }
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: { 'image/*': [] }
+    onDropRejected,
+    accept: { 'image/*': [] },
+    maxSize: maxSize,
+    maxFiles: 1
   })
 
   return (
@@ -83,14 +84,9 @@ const InputFile = forwardRef<HTMLLabelElement, InputFileProps>((props, ref) => {
           <p className='text-xs text-gray-500 dark:text-gray-400'>{content}</p>
         </div>
         <FileInput id='dropzone-file' className='hidden' {...getInputProps()} />
-      </Label>
 
-      {uploadedImage && (
-        <div>
-          <p>Uploaded Image:</p>
-          <img src={uploadedImage} alt='Uploaded' />
-        </div>
-      )}
+        {/* <div id='file-rejection'>{fileRejectionItems}</div> */}
+      </Label>
     </div>
   )
 })
