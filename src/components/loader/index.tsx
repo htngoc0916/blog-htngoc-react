@@ -1,18 +1,15 @@
-import { twMerge } from 'tailwind-merge'
+import { quantum } from 'ldrs'
 
 export interface LoaderProps {
   className?: string
 }
 
-export default function Loader(props: LoaderProps) {
+export default function Loader() {
+  quantum.register()
+
   return (
     <div className='flex items-center justify-center h-screen bg-gray-100'>
-      <div
-        className={twMerge(
-          'w-16 h-16 border-4 border-solid rounded-full animate-spin border-primary-700 border-t-transparen bg-transparent',
-          props.className
-        )}
-      ></div>
+      <l-quantum size='65' speed='3.0' color='#7e22ce'></l-quantum>
     </div>
   )
 }
