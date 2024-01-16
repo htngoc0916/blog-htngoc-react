@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 function IconCode(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg

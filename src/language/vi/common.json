@@ -1,0 +1,18 @@
+{
+  "acctions": {
+    "add": "Thêm mới",
+    "delete": "Xóa",
+    "search": "Tìm kiếm",
+    "edit": "Sửa",
+    "close": "Đóng",
+    "login": "Đăng nhập",
+    "login-with-google": "Đăng nhập với Google",
+    "logout": "Đăng xuất",
+    "register": "Đăng ký",
+    "load-more": "Xem tiếp"
+  },
+  "pages": {
+    "admin": "Trang quản lý",
+    "my-info": "Thông tin của tôi"
+  }
+}

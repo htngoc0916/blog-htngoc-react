@@ -1,0 +1,18 @@
+{
+  "acctions": {
+    "add": "등록",
+    "delete": "삭제",
+    "search": "조회",
+    "edit": "수정",
+    "close": "닫기",
+    "login": "로그인",
+    "login-with-google": "구글로 로그인",
+    "logout": "로그아웃",
+    "register": "회윈가입",
+    "load-more": "더 보기"
+  },
+  "pages": {
+    "admin": "관리자 페이지",
+    "my-info": "나의 정보"
+  }
+}

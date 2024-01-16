@@ -1,0 +1,18 @@
+{
+  "acctions": {
+    "add": "New",
+    "delete": "Delete",
+    "search": "Search",
+    "edit": "Edit",
+    "close": "Close",
+    "login": "Login",
+    "login-with-google": "Login with Google",
+    "logout": "Logout",
+    "register": "Create account",
+    "load-more": "Load more"
+  },
+  "pages": {
+    "admin": "Management page",
+    "my-info": "My information"
+  }
+}

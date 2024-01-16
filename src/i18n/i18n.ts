@@ -1,19 +1,22 @@
-import i18next from 'i18next'
+import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import ns1 from './en/ns1.js'
-import ns2 from './en/ns2.js'
+import * as vi from '~/language/vi'
+import * as en from '~/language/en'
+import * as kr from '~/language/kr'
 
-//https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
-export const defaultNS = 'ns1'
+export const defaultNS = 'vi'
 export const resources = {
-  en: {
-    ns1,
-    ns2
-  }
+  en,
+  vi,
+  kr
 } as const
 
-i18next.use(initReactI18next).init({
-  lng: 'en',
+i18n.use(initReactI18next).init({
+  lng: 'vi',
+  ns: ['vi', 'en', 'kr'],
+  fallbackLng: 'en',
   defaultNS,
   resources
 })
+
+export default i18n

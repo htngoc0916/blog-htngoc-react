@@ -1,0 +1,14 @@
+{
+  "title": "Welcome, bro",
+  "description": "A place to share interesting knowledge",
+  "post": {
+    "hot": {
+      "title": "Featured Posts",
+      "description": ""
+    },
+    "all": {
+      "title": "All Posts",
+      "description": "Search for posts to check out, bro"
+    }
+  }
+}

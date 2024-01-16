@@ -1,0 +1,14 @@
+{
+  "title": "환영합니다",
+  "description": "흥미로운 지식을 공유하는 곳",
+  "post": {
+    "hot": {
+      "title": "주요 게시물",
+      "description": ""
+    },
+    "all": {
+      "title": "모든 게시물",
+      "description": "검색하여 확인하세요"
+    }
+  }
+}

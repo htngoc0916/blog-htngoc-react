@@ -1,0 +1,14 @@
+{
+  "title": "Chào mừng bro",
+  "description": "Nơi chia sẽ những kiến thức thú vị",
+  "post": {
+    "hot": {
+      "title": "Bài viết nổi bật",
+      "description": ""
+    },
+    "all": {
+      "title": "Tất cả bài viết",
+      "description": "Tìm kiếm bài viết để xem nào bro"
+    }
+  }
+}

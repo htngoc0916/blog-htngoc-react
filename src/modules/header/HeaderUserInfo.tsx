@@ -5,8 +5,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { isAuthenticatedSelector, logoutStart, userInfoSelector } from '~/app/auth/authSlice'
 import { checkAdminRole } from '~/utils/checkAdmin'
+import { useTranslation } from 'react-i18next'
 
 export default function HeaderUserInfo(props: DefaultProps) {
+  const { t } = useTranslation(['common'])
+
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
@@ -29,20 +32,20 @@ export default function HeaderUserInfo(props: DefaultProps) {
           {isAdmin && (
             <>
               <Dropdown.Item>
-                <Link to='/auth/dashboard'>Trang Admin</Link>
+                <Link to='/auth/dashboard'>{t('pages.admin')}</Link>
               </Dropdown.Item>
               <Dropdown.Item>
-                <Link to='auth/user'>Thông tin của tôi</Link>
+                <Link to='auth/user'>{t('common:pages.my-info')}</Link>
               </Dropdown.Item>
               <Dropdown.Divider />
             </>
           )}
 
-          <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+          <Dropdown.Item onClick={handleLogout}>{t('acctions.logout')}</Dropdown.Item>
         </Dropdown>
       ) : (
         <Button size='sm' gradientDuoTone='primary' onClick={() => navigate('/login')}>
-          Đăng nhập
+          {t('acctions.logout')}
         </Button>
       )}
     </div>

@@ -10,7 +10,7 @@ export default function ActionSave(props: ActionSaveProps) {
   const { className, children, ...rest } = props
   return (
     <Button type='submit' color='primary' className={className} {...rest}>
-      {children || 'Lưu'}
+      {children}
     </Button>
   )
 }

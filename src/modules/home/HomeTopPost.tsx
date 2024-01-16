@@ -14,12 +14,14 @@ import { TruncateText } from '~/utils/truncateText'
 import slugify from 'slugify'
 import { useNavigate } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
+import { useTranslation } from 'react-i18next'
 
 export interface HomeTopPostProps {
   className?: string
 }
 
 export default function HomeTopPost(props: HomeTopPostProps) {
+  const { t } = useTranslation('home')
   const dataHot = PostList().filter((item) => item.type === 'hot')
   const resutlDt = PostList().filter((item) => item.type === 'new')
   const dataNew = resutlDt.length > 2 ? resutlDt.slice(0, 2) : resutlDt
@@ -31,7 +33,7 @@ export default function HomeTopPost(props: HomeTopPostProps) {
         <img src='/img/home_banner.svg' alt='' />
       </div>
       <div className='relative z-30 container-page'>
-        <FeatureTitle color='secondary'>Bài viết nổi bật</FeatureTitle>
+        <FeatureTitle color='secondary'>{t('post.hot.title')}</FeatureTitle>
         <div className='grid grid-cols-1 gap-6 xl:grid-cols-3'>
           <div className='xl:col-span-2'>
             {dataHot.length > 0 &&
