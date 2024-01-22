@@ -31,6 +31,7 @@ export default function InputPassword(props: InputPasswordProps) {
     <div>
       <div className='relative'>
         <TextInput
+          autoComplete='current-password'
           color={fieldState.invalid ? 'failure' : 'primary'}
           id={name}
           type={showEye ? 'text' : 'password'}

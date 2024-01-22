@@ -41,10 +41,12 @@ export default function HeaderUserInfo(props: DefaultProps) {
             </>
           )}
 
-          <Dropdown.Item onClick={handleLogout}>{t('acctions.logout')}</Dropdown.Item>
+          <Dropdown.Item onClick={handleLogout} className='w-32'>
+            {t('acctions.logout')}
+          </Dropdown.Item>
         </Dropdown>
       ) : (
-        <Button size='sm' gradientDuoTone='primary' onClick={() => navigate('/login')}>
+        <Button size='sm' gradientDuoTone='primary' onClick={() => navigate('/login')} className='w-24'>
           {t('acctions.logout')}
         </Button>
       )}

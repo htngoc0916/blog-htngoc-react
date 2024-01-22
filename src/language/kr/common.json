@@ -14,5 +14,11 @@
   "pages": {
     "admin": "관리자 페이지",
     "my-info": "나의 정보"
+  },
+  "placeholder": {
+    "email": "이메일을 입력",
+    "password": "비밀번호를 입력",
+    "confirm-password": "비밀번호 확인",
+    "username": "이름을 입력"
   }
 }

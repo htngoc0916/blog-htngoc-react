@@ -77,21 +77,25 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   }
 
   const [uploadedImage, setUploadedImage] = useState<string | undefined>(undefined)
+  const [avatarImage, setAvatarImage] = useState<File | undefined>(undefined)
 
   useEffect(() => {
-    setUploadedImage(data?.avatar || undefined)
     //cleanup function
     return () => {
       if (uploadedImage) {
         URL.revokeObjectURL(uploadedImage)
       }
     }
-  }, [uploadedImage, data?.avatar])
+  }, [uploadedImage])
+
+  useEffect(() => {
+    setUploadedImage(data?.avatar)
+  }, [data?.avatar])
 
   const handleOnFileUpload = (file: File) => {
-    console.log('🚀 ~ handleOnFileUpload ~ file:', file)
     const imageUrl = URL.createObjectURL(file)
     setUploadedImage(imageUrl)
+    setAvatarImage(file)
   }
 
   const handleSave = async (user: User) => {
@@ -99,6 +103,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
       ...user,
       modId: isEdit ? userInfo?.id : undefined,
       regId: isEdit ? undefined : userInfo?.id,
+      avatarImage,
       navigate
     }
 
@@ -107,6 +112,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
       if (isEdit) {
         console.log('Editing User:', user)
         const response: ApiResponseDTO<User> = await userApi.editUser(userRequest)
+        console.log('🚀 ~ handleSave ~ response:', response.message)
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }

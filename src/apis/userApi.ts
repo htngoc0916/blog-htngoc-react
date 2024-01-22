@@ -34,9 +34,17 @@ const userApi = {
   editUser(data: UserRequestDTO): Promise<ApiResponseDTO<User>> {
     const accessToken = getToken()
     const url = USER_URL + '/' + data.id
-    return axiosPrivate(data.navigate).put(url, data, {
+
+    const formData = new FormData()
+    const { avatarImage, navigate, ...userDTO } = data
+    formData.append('avatarImage', avatarImage || '')
+    formData.append('userDTO', JSON.stringify(userDTO))
+    console.log('🚀 ~ editUser ~ formData:', formData)
+
+    return axiosPrivate(navigate).put(url, formData, {
       headers: {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       }
     })

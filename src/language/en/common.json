@@ -14,5 +14,11 @@
   "pages": {
     "admin": "Management page",
     "my-info": "My information"
+  },
+  "placeholder": {
+    "email": "Enter your email",
+    "password": "Enter your password",
+    "confirm-password": "Confirm password",
+    "username": "Enter your name"
   }
 }

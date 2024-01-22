@@ -14,5 +14,11 @@
   "pages": {
     "admin": "Trang quản lý",
     "my-info": "Thông tin của tôi"
+  },
+  "placeholder": {
+    "email": "Nhập email của bạn",
+    "password": "Nhập mật khẩu",
+    "confirm-password": "Xác nhận mật khẩu",
+    "username": "Nhập tên của bạn"
   }
 }

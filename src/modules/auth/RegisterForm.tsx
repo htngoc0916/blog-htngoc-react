@@ -13,6 +13,7 @@ import { Form, Field } from '~/components/form'
 import { ApiResponseDTO, RegisterRequestDTO } from '~/types'
 import userApi from '~/apis/userApi'
 import { EMAIL_EXISTS } from '~/utils/message'
+import { useTranslation } from 'react-i18next'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
@@ -29,6 +30,7 @@ export default function RegisterForm() {
   const loading = useAppSelector(loadingSelector)
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
   const navigate = useNavigate()
+  const { t } = useTranslation(['common', 'auth'])
 
   const {
     handleSubmit,
@@ -74,7 +76,7 @@ export default function RegisterForm() {
           type='text'
           name='userName'
           icon={HiUser}
-          placeholder='Nhập tên của bạn'
+          placeholder={t('placeholder.username')}
           control={control}
           message={errors?.userName?.message}
         ></InputCustom>
@@ -87,7 +89,7 @@ export default function RegisterForm() {
           icon={HiMail}
           control={control}
           message={errors?.email?.message}
-          placeholder='Nhập email của bạn'
+          placeholder={t('placeholder.email')}
         ></InputCustom>
       </Field>
 
@@ -98,7 +100,7 @@ export default function RegisterForm() {
           icon={HiLockClosed}
           control={control}
           message={errors?.password?.message}
-          placeholder='Nhập mật khẩu của bạn'
+          placeholder={t('placeholder.password')}
         ></InputCustom>
       </Field>
 
@@ -109,7 +111,7 @@ export default function RegisterForm() {
           icon={HiLockClosed}
           control={control}
           message={errors?.passwordConfirm?.message}
-          placeholder='Xác nhận lại mật khẩu'
+          placeholder={t('placeholder.password')}
         ></InputCustom>
       </Field>
 
@@ -121,7 +123,7 @@ export default function RegisterForm() {
         isProcessing={loading}
         disabled={loading}
       >
-        Tạo mới
+        {t('auth:reg')}
       </Button>
 
       <Button
@@ -130,7 +132,7 @@ export default function RegisterForm() {
         color='gray'
       >
         <IconGoogle className='mr-2 w-7 h-7'></IconGoogle>
-        Tạo mới bằng Google
+        {t('auth:create-account-with-google')}
       </Button>
 
       <div className='flex gap-3 text-sm pt-7 md:text-base'>

@@ -5,14 +5,16 @@ import { PostList } from './data.post'
 import { Button, Card } from 'flowbite-react'
 import { CardTag, CardTitle, CardAuthor, AuthorName, CardPostTime, AuthorAvatar } from '~/components/common'
 import CardImage from '~/components/common/CardImage'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import slugify from 'slugify'
+import { useTranslation } from 'react-i18next'
 
 export interface IHomeAllPostProps extends DefaultProps {}
 
 export default function HomeAllPost(props: IHomeAllPostProps) {
   const data = PostList()
+  const { t } = useTranslation(['home', 'common'])
 
   const handleLoadMore = async () => {
     console.log('')
@@ -23,9 +25,9 @@ export default function HomeAllPost(props: IHomeAllPostProps) {
       <div className='pt-20 pb-10 container-page'>
         <div className='flex flex-col items-center justify-start mb-10'>
           <FeatureTitle color='secondary' className='text-2xl md:text-5xl md:font-bold'>
-            Tất cả bài viết
+            {t('post.all.title')}
           </FeatureTitle>
-          <h3 className='text-lg md:text-xl text-text1 dark:text-text7'>Tìm kiếm bài viết để xem nào bro 🤓</h3>
+          <h3 className='text-lg md:text-xl text-text1 dark:text-text7'>{t('post.all.description')} 🤓</h3>
           <div className='flex flex-row flex-wrap items-end justify-center gap-2 pt-6 md:gap-4'>
             <Button gradientDuoTone='primary'>All</Button>
             <Button gradientDuoTone='primary' outline>
@@ -75,8 +77,8 @@ export default function HomeAllPost(props: IHomeAllPostProps) {
         </div>
 
         <div className='flex items-center justify-center pt-10'>
-          <Button size='sm' gradientDuoTone='primary' isProcessing onClick={handleLoadMore}>
-            Load More
+          <Button size='sm' gradientDuoTone='primary' isProcessing={false} onClick={handleLoadMore}>
+            {t('common:acctions.load-more')}
           </Button>
         </div>
       </div>

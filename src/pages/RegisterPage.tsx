@@ -1,14 +1,12 @@
 import AuthenticationLayout from '~/layout/AuthenticationLayout'
 import { RegisterForm } from '~/modules/auth'
-
-const page = {
-  heading: 'Tạo mới tài khoản',
-  description: 'Mời nhập thông tin của bạn'
-}
+import { useTranslation } from 'react-i18next'
 
 export default function RegisterPage() {
+  const { t } = useTranslation('auth')
+
   return (
-    <AuthenticationLayout heading={page.heading} description={page.description}>
+    <AuthenticationLayout heading={t('heading')} description={t('description')}>
       <RegisterForm />
     </AuthenticationLayout>
   )

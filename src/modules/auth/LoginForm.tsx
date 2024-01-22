@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import { LoginRequestDTO } from '~/types'
 import { InputCustom } from '~/components/input'
 import { Form, Field } from '~/components/form'
+import { useTranslation } from 'react-i18next'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
@@ -23,6 +24,7 @@ export default function LoginForm() {
   const loading = useAppSelector(loadingSelector)
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
   const navigate = useNavigate()
+  const { t } = useTranslation(['common', 'auth'])
 
   const {
     handleSubmit,
@@ -58,7 +60,7 @@ export default function LoginForm() {
           name='email'
           type='email'
           icon={HiMail}
-          placeholder='Nhập email của bạn'
+          placeholder={t('common:placeholder.email')}
           control={control}
           message={errors?.email?.message}
         ></InputCustom>
@@ -68,7 +70,7 @@ export default function LoginForm() {
         <InputPassword
           name='password'
           icon={HiLockClosed}
-          placeholder='Nhập mật khẩu của bạn'
+          placeholder={t('common:placeholder.password')}
           control={control}
           message={errors?.password?.message}
         ></InputPassword>
@@ -77,10 +79,10 @@ export default function LoginForm() {
       <div className='flex items-center justify-between'>
         <Field horizontally className='mb-0'>
           <Checkbox id='remember' color='primary' />
-          <Label htmlFor='remember'>Nhớ tài khoản</Label>
+          <Label htmlFor='remember'>{t('auth:remember-me')}</Label>
         </Field>
         <Link to='forgot-password' className='text-sm font-bold text-primary-800 dark:text-primary-600'>
-          Quên mật khẩu
+          {t('auth:forget-password')}
         </Link>
       </div>
 
@@ -92,7 +94,7 @@ export default function LoginForm() {
         isProcessing={loading}
         disabled={loading}
       >
-        Đăng nhập
+        {t('common:acctions.login')}
       </Button>
 
       <Button
@@ -101,13 +103,13 @@ export default function LoginForm() {
         color='gray'
       >
         <IconGoogle className='mr-2 w-7 h-7'></IconGoogle>
-        Đăng nhập với Google
+        {t('common:acctions.login-with-google')}
       </Button>
 
       <div className='flex gap-3 text-sm pt-7 md:text-base'>
-        Bạn chưa có tài khoản?
+        {t('auth:do-not-have-account')}
         <Link to='/register' className='font-semibold text-primary-800 dark:text-primary-600'>
-          Đăng ký
+          {t('auth:create-account')}
         </Link>
       </div>
     </Form>
