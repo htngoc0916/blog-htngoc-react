@@ -14,7 +14,7 @@ export default function AboutFooter(props: IAboutFooterProps) {
           <div>
             <TextFooter className='pb-5 text-4xl font-bold'>Let's Talk!</TextFooter>
             <TextFooter size='xl'>Thông tin liên hệ</TextFooter>
-            <TextFooter>htngoc0916@gmail.com</TextFooter>
+            <TextFooter>htngoc0916.dev@gmail.com</TextFooter>
             <TextFooter>DongDeaMun, Seoul, Korea</TextFooter>
           </div>
 

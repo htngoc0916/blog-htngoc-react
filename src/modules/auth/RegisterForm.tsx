@@ -14,6 +14,7 @@ import { ApiResponseDTO, RegisterRequestDTO } from '~/types'
 import userApi from '~/apis/userApi'
 import { EMAIL_EXISTS } from '~/utils/message'
 import { useTranslation } from 'react-i18next'
+import { useGoogleLogin } from '@react-oauth/google'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
@@ -69,6 +70,10 @@ export default function RegisterForm() {
     }
   }
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => console.log(codeResponse)
+  })
+
   return (
     <Form onSubmit={handleSubmit(handleRegister)} className='md:max-w-md'>
       <Field>
@@ -111,7 +116,7 @@ export default function RegisterForm() {
           icon={HiLockClosed}
           control={control}
           message={errors?.passwordConfirm?.message}
-          placeholder={t('placeholder.password')}
+          placeholder={t('placeholder.confirm-password')}
         ></InputCustom>
       </Field>
 
@@ -123,22 +128,23 @@ export default function RegisterForm() {
         isProcessing={loading}
         disabled={loading}
       >
-        {t('auth:reg')}
+        {t('auth:register')}
       </Button>
 
       <Button
         fullSized
         className='mt-4 font-bold enabled:hover:text-primary-700 focus:ring-primary-300 focus:text-primary-700 h-11'
         color='gray'
+        onClick={() => login()}
       >
         <IconGoogle className='mr-2 w-7 h-7'></IconGoogle>
-        {t('auth:create-account-with-google')}
+        {t('auth:register-with-google')}
       </Button>
 
       <div className='flex gap-3 text-sm pt-7 md:text-base'>
-        Bạn đã có tài khoản?
+        {t('auth:already-account')}
         <Link to='/login' className='font-semibold text-primary-800 dark:text-primary-600'>
-          Đăng nhập
+          {t('acctions.login')}
         </Link>
       </div>
     </Form>

@@ -13,6 +13,7 @@ import { LoginRequestDTO } from '~/types'
 import { InputCustom } from '~/components/input'
 import { Form, Field } from '~/components/form'
 import { useTranslation } from 'react-i18next'
+import { useGoogleLogin } from '@react-oauth/google'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
@@ -53,6 +54,10 @@ export default function LoginForm() {
     )
   }
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => console.log(codeResponse)
+  })
+
   return (
     <Form onSubmit={handleSubmit(handleLogin)} className='md:max-w-md'>
       <Field>
@@ -87,6 +92,7 @@ export default function LoginForm() {
       </div>
 
       <Button
+        id='login'
         type='submit'
         fullSized
         gradientDuoTone='primary'
@@ -98,9 +104,11 @@ export default function LoginForm() {
       </Button>
 
       <Button
+        id='login-with-google'
         fullSized
         className='mt-4 font-bold enabled:hover:text-primary-700 focus:ring-primary-300 focus:text-primary-700 h-11'
         color='gray'
+        onClick={() => login()}
       >
         <IconGoogle className='mr-2 w-7 h-7'></IconGoogle>
         {t('common:acctions.login-with-google')}
@@ -109,7 +117,7 @@ export default function LoginForm() {
       <div className='flex gap-3 text-sm pt-7 md:text-base'>
         {t('auth:do-not-have-account')}
         <Link to='/register' className='font-semibold text-primary-800 dark:text-primary-600'>
-          {t('auth:create-account')}
+          {t('auth:register')}
         </Link>
       </div>
     </Form>

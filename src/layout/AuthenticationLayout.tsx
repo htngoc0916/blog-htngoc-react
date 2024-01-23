@@ -1,5 +1,7 @@
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Link } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
+import { GOOGLE_CLIENT_ID } from '~/utils/constant'
 import { DefaultProps } from '~/utils/defautProp'
 
 const classess = {
@@ -16,18 +18,20 @@ export interface IAuthenticationLayoutProps extends DefaultProps {
 export default function AuthenticationLayout(props: IAuthenticationLayoutProps) {
   const { className, heading, description, children } = props
   return (
-    <section className='h-screen dark:bg-darkbg bg-primary-50'>
-      <div className={twMerge(classess.base, className)}>
-        <div className={classess.child}>
-          <Link to='/' className='px-1 mb-4 rounded-lg w-14 md:mb-7'>
-            <img src='/img/logo_htn.png' className='object-cover w-full rounded-lg' alt='logo' />
-          </Link>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <section className='h-screen dark:bg-darkbg bg-primary-50'>
+        <div className={twMerge(classess.base, className)}>
+          <div className={classess.child}>
+            <Link to='/' className='px-1 mb-4 rounded-lg w-14 md:mb-7'>
+              <img src='/img/logo_htn.png' className='object-cover w-full rounded-lg' alt='logo' />
+            </Link>
 
-          <div className={twMerge(classess.heading)}>{heading}</div>
-          <div className='mb-8 md:text-lg dark:text-white text-text2'>{description}</div>
-          <>{children}</>
+            <div className={twMerge(classess.heading)}>{heading}</div>
+            <div className='mb-8 md:text-lg dark:text-white text-text2'>{description}</div>
+            <>{children}</>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </GoogleOAuthProvider>
   )
 }
