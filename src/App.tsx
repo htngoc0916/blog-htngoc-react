@@ -13,21 +13,12 @@ import { useSelector } from 'react-redux'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorFallBack from './components/error'
 import './i18n/i18n'
+
 function App() {
   const theme = useSelector(themeDarkModeSelector)
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [theme])
-
-  // function ErrorFallback({ error, resetErrorBoundary }) {
-  //   return (
-  //     <div role='alert'>
-  //       <p>Something went wrong:</p>
-  //       <pre>{error.message}</pre>
-  //       <button onClick={resetErrorBoundary}>Try again</button>
-  //     </div>
-  //   )
-  // }
 
   return (
     <>

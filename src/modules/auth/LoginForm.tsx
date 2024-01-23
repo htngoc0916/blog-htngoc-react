@@ -13,7 +13,7 @@ import { LoginRequestDTO } from '~/types'
 import { InputCustom } from '~/components/input'
 import { Form, Field } from '~/components/form'
 import { useTranslation } from 'react-i18next'
-import { useGoogleLogin } from '@react-oauth/google'
+import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
@@ -70,7 +70,6 @@ export default function LoginForm() {
           message={errors?.email?.message}
         ></InputCustom>
       </Field>
-
       <Field>
         <InputPassword
           name='password'
@@ -80,7 +79,6 @@ export default function LoginForm() {
           message={errors?.password?.message}
         ></InputPassword>
       </Field>
-
       <div className='flex items-center justify-between'>
         <Field horizontally className='mb-0'>
           <Checkbox id='remember' color='primary' />
@@ -90,7 +88,6 @@ export default function LoginForm() {
           {t('auth:forget-password')}
         </Link>
       </div>
-
       <Button
         id='login'
         type='submit'
@@ -102,7 +99,6 @@ export default function LoginForm() {
       >
         {t('common:acctions.login')}
       </Button>
-
       <Button
         id='login-with-google'
         fullSized

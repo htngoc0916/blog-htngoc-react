@@ -86,7 +86,6 @@ export default function RegisterForm() {
           message={errors?.userName?.message}
         ></InputCustom>
       </Field>
-
       <Field>
         <InputCustom
           type='email'
@@ -97,7 +96,6 @@ export default function RegisterForm() {
           placeholder={t('placeholder.email')}
         ></InputCustom>
       </Field>
-
       <Field>
         <InputCustom
           type='password'
@@ -108,7 +106,6 @@ export default function RegisterForm() {
           placeholder={t('placeholder.password')}
         ></InputCustom>
       </Field>
-
       <Field>
         <InputCustom
           type='password'
@@ -119,7 +116,6 @@ export default function RegisterForm() {
           placeholder={t('placeholder.confirm-password')}
         ></InputCustom>
       </Field>
-
       <Button
         type='submit'
         fullSized
@@ -130,7 +126,6 @@ export default function RegisterForm() {
       >
         {t('auth:register')}
       </Button>
-
       <Button
         fullSized
         className='mt-4 font-bold enabled:hover:text-primary-700 focus:ring-primary-300 focus:text-primary-700 h-11'
@@ -140,7 +135,6 @@ export default function RegisterForm() {
         <IconGoogle className='mr-2 w-7 h-7'></IconGoogle>
         {t('auth:register-with-google')}
       </Button>
-
       <div className='flex gap-3 text-sm pt-7 md:text-base'>
         {t('auth:already-account')}
         <Link to='/login' className='font-semibold text-primary-800 dark:text-primary-600'>
