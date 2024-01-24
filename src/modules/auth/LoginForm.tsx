@@ -13,7 +13,7 @@ import { LoginRequestDTO } from '~/types'
 import { InputCustom } from '~/components/input'
 import { Form, Field } from '~/components/form'
 import { useTranslation } from 'react-i18next'
-import { GoogleLogin, GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google'
+import { useGoogleLogin } from '@react-oauth/google'
 
 const schema = yup.object({
   email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
@@ -54,8 +54,18 @@ export default function LoginForm() {
     )
   }
 
+  const googleLoginOnSuccess = (token: string) => {
+    console.log('🚀 ~ googleLoginOnSuccess ~ token:', token)
+  }
+
   const login = useGoogleLogin({
-    onSuccess: (codeResponse) => console.log(codeResponse)
+    onSuccess: async (response) => {
+      console.log('🚀 ~ onSuccess: ~ response:', response)
+      await googleLoginOnSuccess(response.access_token)
+    },
+    onError: (error) => {
+      console.log(error)
+    }
   })
 
   return (
@@ -99,6 +109,7 @@ export default function LoginForm() {
       >
         {t('common:acctions.login')}
       </Button>
+
       <Button
         id='login-with-google'
         fullSized

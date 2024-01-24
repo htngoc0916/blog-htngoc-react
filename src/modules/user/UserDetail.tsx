@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
@@ -92,11 +92,12 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     setUploadedImage(data?.avatar)
   }, [data?.avatar])
 
-  const handleOnFileUpload = (file: File) => {
+  const handleOnFileUpload = useCallback((file: File) => {
+    console.log('🚀 ~ handleOnFileUpload ~ file:', file)
     const imageUrl = URL.createObjectURL(file)
     setUploadedImage(imageUrl)
     setAvatarImage(file)
-  }
+  }, [])
 
   const handleSave = async (user: User) => {
     const userRequest: UserRequestDTO = {
@@ -180,9 +181,11 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
             ></InputCustom>
           </Field>
         </Field>
+
         <Field>
           <InputFile content='SVG, PNG, JPG or GIF (MAX. 800x400px)' onFileUpload={handleOnFileUpload}></InputFile>
         </Field>
+
         <Field>
           <Label htmlFor='email'>Email</Label>
           <InputCustom

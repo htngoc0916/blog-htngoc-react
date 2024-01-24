@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { lazy } from 'react'
+import { Suspense, lazy } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { PrivateRoute } from './PrivateRouter'
 
@@ -22,25 +22,123 @@ const SystemPage = lazy(() => import('~/pages/SystemPage'))
 const routers = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path='/' element={<HomeLayout></HomeLayout>}>
-        <Route index element={<HomePage></HomePage>}></Route>
-        <Route path='/about' element={<AboutPage></AboutPage>}></Route>
-        <Route path='/post/:slug' element={<PostDetailPage></PostDetailPage>}></Route>
+      <Route
+        path='/'
+        element={
+          <Suspense>
+            <HomeLayout></HomeLayout>
+          </Suspense>
+        }
+      >
+        <Route
+          index
+          element={
+            <Suspense>
+              <HomePage></HomePage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='/about'
+          element={
+            <Suspense>
+              <AboutPage></AboutPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='/post/:slug'
+          element={
+            <Suspense>
+              <PostDetailPage></PostDetailPage>
+            </Suspense>
+          }
+        ></Route>
       </Route>
 
-      <Route path='/login' element={<LoginPage></LoginPage>}></Route>
-      <Route path='/register' element={<SignupPage></SignupPage>}></Route>
+      <Route
+        path='/login'
+        element={
+          <Suspense>
+            <LoginPage></LoginPage>
+          </Suspense>
+        }
+      ></Route>
+      <Route
+        path='/register'
+        element={
+          <Suspense>
+            <SignupPage></SignupPage>
+          </Suspense>
+        }
+      ></Route>
       <Route path='/404' element={<NotFoundPage></NotFoundPage>}></Route>
       <Route path='*' element={<NotFoundPage></NotFoundPage>}></Route>
 
-      <Route path='/auth' element={<PrivateRoute component={DashboardLayout} />}>
-        <Route path='dashboard' element={<DashboardPage></DashboardPage>}></Route>
-        <Route path='categories' element={<CategoriesPage></CategoriesPage>}></Route>
-        <Route path='posts' element={<PostsPage></PostsPage>}></Route>
-        <Route path='tags' element={<TagsPage></TagsPage>}></Route>
-        <Route path='users' element={<UsersPage></UsersPage>}></Route>
-        <Route path='contacts' element={<ContactsPage></ContactsPage>}></Route>
-        <Route path='system' element={<SystemPage></SystemPage>}></Route>
+      <Route
+        path='/auth'
+        element={
+          <Suspense>
+            <PrivateRoute component={DashboardLayout} />
+          </Suspense>
+        }
+      >
+        <Route
+          path='dashboard'
+          element={
+            <Suspense>
+              <DashboardPage></DashboardPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='categories'
+          element={
+            <Suspense>
+              <CategoriesPage></CategoriesPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='posts'
+          element={
+            <Suspense>
+              <PostsPage></PostsPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='tags'
+          element={
+            <Suspense>
+              <TagsPage></TagsPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='users'
+          element={
+            <Suspense>
+              <UsersPage></UsersPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='contacts'
+          element={
+            <Suspense>
+              <ContactsPage></ContactsPage>
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path='system'
+          element={
+            <Suspense>
+              <SystemPage></SystemPage>
+            </Suspense>
+          }
+        ></Route>
       </Route>
     </>
   )

@@ -1,7 +1,6 @@
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Link } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
-import { GOOGLE_CLIENT_ID } from '~/utils/constant'
 import { DefaultProps } from '~/utils/defautProp'
 
 const classess = {
@@ -17,8 +16,9 @@ export interface IAuthenticationLayoutProps extends DefaultProps {
 
 export default function AuthenticationLayout(props: IAuthenticationLayoutProps) {
   const { className, heading, description, children } = props
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={clientId}>
       <section className='h-screen dark:bg-darkbg bg-primary-50'>
         <div className={twMerge(classess.base, className)}>
           <div className={classess.child}>

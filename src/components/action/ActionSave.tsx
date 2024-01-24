@@ -1,16 +1,16 @@
 import { Button, ButtonProps } from 'flowbite-react'
-import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface ActionSaveProps extends ButtonProps {
   className?: string
-  children?: ReactNode
 }
 
 export default function ActionSave(props: ActionSaveProps) {
-  const { className, children, ...rest } = props
+  const { className, ...rest } = props
+  const { t } = useTranslation('common')
   return (
     <Button type='submit' color='primary' className={className} {...rest}>
-      {children}
+      {t('acctions.save')}
     </Button>
   )
 }

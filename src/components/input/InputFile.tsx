@@ -1,8 +1,7 @@
-import { FileInput, Label } from 'flowbite-react'
 import { twMerge } from 'tailwind-merge'
 import { HiOutlineCloudArrowUp } from 'react-icons/hi2'
 import { FileRejection, useDropzone } from 'react-dropzone'
-import { forwardRef, useEffect, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { toast } from 'react-toastify'
 
 const classes = {
@@ -44,19 +43,22 @@ export interface InputFileProps {
   onFileUpload?: (file: File) => void
 }
 
-const InputFile = forwardRef<HTMLLabelElement, InputFileProps>((props, ref) => {
+const InputFile = memo(function InputFile(props: InputFileProps) {
   const { className, color = 'primary', size = 'sm', content = '', onFileUpload } = props
 
-  const onDrop = (acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    // Do something with the files
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0]
       onFileUpload?.(file)
     }
-  }
+  }, [])
+
+  // const onDrop = (acceptedFiles: File[]) => {
 
   const onDropRejected = (fileRejections: FileRejection[]) => {
     const file = fileRejections[0]
-    return toast.error(file.errors[0].message)
+    toast.error(file.errors[0].message)
   }
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -69,11 +71,9 @@ const InputFile = forwardRef<HTMLLabelElement, InputFileProps>((props, ref) => {
 
   return (
     <div className={twMerge(classes.base, className)}>
-      <Label
-        htmlFor='dropzone-file'
+      <div
         className={twMerge(classes.label.base, classes.label.color[color], classes.label.size[size])}
         {...getRootProps()}
-        ref={ref}
       >
         <div className={twMerge(classes.children.base)}>
           <HiOutlineCloudArrowUp className={classes.children.color[color]}></HiOutlineCloudArrowUp>
@@ -83,10 +83,10 @@ const InputFile = forwardRef<HTMLLabelElement, InputFileProps>((props, ref) => {
           </p>
           <p className='text-xs text-gray-500 dark:text-gray-400'>{content}</p>
         </div>
-        <FileInput id='dropzone-file' className='hidden' {...getInputProps()} />
 
+        <input id='dropzone-file' className='hidden' {...getInputProps()} />
         {/* <div id='file-rejection'>{fileRejectionItems}</div> */}
-      </Label>
+      </div>
     </div>
   )
 })

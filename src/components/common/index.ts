@@ -8,3 +8,5 @@ export { default as CardAuthor } from './CardAuthor'
 export { default as AuthorAvatar } from './AuthorAvatar'
 export { default as AuthorName } from './AuthorName'
 export { default as CardCustom } from './CardCustom'
+
+export { default as Internationalization } from './Internationalization'
