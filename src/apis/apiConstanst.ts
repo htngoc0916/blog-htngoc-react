@@ -15,3 +15,5 @@ export const MENU_URL = `${API_VERSION}/menus`
 export const MENU_GET_BY_CODE = `${API_VERSION}/menus/menuCode`
 
 export const TAG_URL = `${API_VERSION}/tags`
+
+export const CLOUDINARY_UPLOAD = `${API_VERSION}/cloudinary`

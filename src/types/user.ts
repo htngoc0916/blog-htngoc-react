@@ -21,6 +21,6 @@ export interface FetchUserDTO {
 }
 
 export interface UserRequestDTO extends User {
+  imageId: number
   navigate: (to: string) => void
-  avatarImage?: File
 }

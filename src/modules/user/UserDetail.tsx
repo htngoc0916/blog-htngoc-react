@@ -1,4 +1,4 @@
-import { API_STATUS, ApiResponseDTO, ROLE, User, UserRequestDTO } from '~/types'
+import { API_STATUS, ApiResponseDTO, FileMaster, ROLE, UploadRequest, User, UserRequestDTO } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -19,6 +19,7 @@ import { InputCustom, InputFile, InputPassword } from '~/components/input'
 import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2'
 import { RadioCustom } from '~/components/radio'
 import { checkAdminRole } from '~/utils/checkAdmin'
+import fileUpload from '~/apis/fileUploadApi'
 
 export interface UserDetailProps {
   data: User | undefined
@@ -76,27 +77,36 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const [uploadedImage, setUploadedImage] = useState<string | undefined>(undefined)
-  const [avatarImage, setAvatarImage] = useState<File | undefined>(undefined)
+  const roles = checkAdminRole(data)
+  console.log('🚀 ~ UserDetail ~ roles:', roles)
+
+  const [uploadedImage, setUploadedImage] = useState<{ imageId?: number; imageUrl?: string }>({})
+
+  // useEffect(() => {
+  //   //cleanup function
+  //   return () => {
+  //     if (uploadedImage) {
+  //       URL.revokeObjectURL(uploadedImage)
+  //     }
+  //   }
+  // }, [uploadedImage])
 
   useEffect(() => {
-    //cleanup function
-    return () => {
-      if (uploadedImage) {
-        URL.revokeObjectURL(uploadedImage)
-      }
-    }
-  }, [uploadedImage])
-
-  useEffect(() => {
-    setUploadedImage(data?.avatar)
+    setUploadedImage({ imageId: 0, imageUrl: data?.avatar })
   }, [data?.avatar])
 
-  const handleOnFileUpload = useCallback((file: File) => {
-    console.log('🚀 ~ handleOnFileUpload ~ file:', file)
-    const imageUrl = URL.createObjectURL(file)
-    setUploadedImage(imageUrl)
-    setAvatarImage(file)
+  const handleOnFileUpload = useCallback(async (file: File) => {
+    const uploadRequest: UploadRequest = {
+      id: userInfo?.id || 0,
+      file,
+      navigate
+    }
+
+    const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadAvatar(uploadRequest)
+    if (response?.status.includes(API_STATUS.SUCCESS)) {
+      setUploadedImage({ imageId: response.data.id, imageUrl: response.data.fileUrl })
+      setValue('avatar', response.data.fileUrl)
+    }
   }, [])
 
   const handleSave = async (user: User) => {
@@ -104,9 +114,11 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
       ...user,
       modId: isEdit ? userInfo?.id : undefined,
       regId: isEdit ? undefined : userInfo?.id,
-      avatarImage,
+      imageId: uploadedImage?.imageId || 0,
       navigate
     }
+
+    console.log('🚀 ~ handleSave ~ userRequest:', userRequest)
 
     try {
       setLoading(true)
@@ -166,7 +178,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         </Field>
         <Field horizontally className='gap-4'>
           <div className='flex flex-wrap items-center justify-center w-20 h-20 p-2'>
-            <Avatar size='ct' img={uploadedImage} rounded bordered></Avatar>
+            <Avatar size='ct' img={uploadedImage.imageUrl} rounded bordered></Avatar>
           </div>
 
           <Field className='flex-1 mb-0'>
@@ -215,7 +227,14 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         <Field>
           <Label>Roles</Label>
           <div className='flex items-center gap-10'>
-            <RadioCustom id='admin' name='role' value={ROLE.ROLE_ADMIN} title='Admin' control={control}></RadioCustom>
+            <RadioCustom
+              id='admin'
+              name='role'
+              value={ROLE.ROLE_ADMIN}
+              defaultChecked={true}
+              title='Admin'
+              control={control}
+            ></RadioCustom>
             <RadioCustom
               id='user'
               name='role'
