@@ -19,7 +19,7 @@ const ButtonToggleSwitch = forwardRef<HTMLButtonElement, ButtonToggleSwitchProps
     control,
     name
   })
-  const [toggle, setToggle] = useState(false)
+  const [toggle, setToggle] = useState(checked)
 
   useEffect(() => {
     setToggle(checked)
@@ -35,11 +35,11 @@ const ButtonToggleSwitch = forwardRef<HTMLButtonElement, ButtonToggleSwitchProps
       className={className}
       label={label}
       color={color}
-      checked={toggle}
       {...field}
       onChange={handleOnchage}
       ref={ref}
       name={name}
+      checked={toggle}
     />
   )
 })

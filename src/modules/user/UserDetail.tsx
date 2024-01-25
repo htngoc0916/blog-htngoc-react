@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
@@ -28,6 +28,12 @@ export interface UserDetailProps {
   onSaveUser: () => void
 }
 
+export interface UploadedImage {
+  imageId: number
+  imageType: 'new' | 'edit' | ''
+  imageUrl: string
+}
+
 const schema = yup.object({
   id: yup.number(),
   userName: yup.string().required('Vui lòng nhập tên'),
@@ -37,6 +43,11 @@ const schema = yup.object({
   password: yup.string(),
   role: yup.string()
 })
+
+const rolesData = [
+  { id: 'admin', value: ROLE.ROLE_ADMIN, title: 'Admin' },
+  { id: 'user', value: ROLE.ROLE_USER, title: 'User' }
+]
 
 const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSaveUser }: UserDetailProps) {
   const {
@@ -49,13 +60,13 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     resolver: yupResolver(schema),
     mode: 'onSubmit',
     defaultValues: {
-      id: data?.id || 0,
-      userName: data?.userName || '',
-      email: data?.email || '',
-      avatar: data?.avatar || '',
+      id: 0,
+      userName: '',
+      email: '',
+      avatar: '',
       password: '',
-      usedYn: data?.usedYn || 'Y',
-      role: checkAdminRole(data) ? ROLE.ROLE_ADMIN : ROLE.ROLE_USER
+      usedYn: 'Y',
+      role: ROLE.ROLE_USER
     }
   })
 
@@ -64,37 +75,54 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   const [loading, setLoading] = useState(false)
   const isEdit = Boolean(data)
 
-  useEffect(() => {
-    setValue('id', data?.id || 0)
-    setValue('userName', data?.userName || '')
-    setValue('email', data?.email || '')
-    setValue('avatar', data?.avatar || '')
-    setValue('usedYn', data?.usedYn || 'Y')
-    setValue('password', '')
-  }, [data, setValue])
-
   const handleToggleChange = (value: boolean) => {
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const roles = checkAdminRole(data)
-  console.log('🚀 ~ UserDetail ~ roles:', roles)
-
-  const [uploadedImage, setUploadedImage] = useState<{ imageId?: number; imageUrl?: string }>({})
-
-  // useEffect(() => {
-  //   //cleanup function
-  //   return () => {
-  //     if (uploadedImage) {
-  //       URL.revokeObjectURL(uploadedImage)
-  //     }
-  //   }
-  // }, [uploadedImage])
+  const [uploadedImage, setUploadedImage] = useState<UploadedImage>({
+    imageId: 0,
+    imageType: '',
+    imageUrl: ''
+  })
 
   useEffect(() => {
-    setUploadedImage({ imageId: 0, imageUrl: data?.avatar })
+    if (data && Boolean(data)) {
+      setValue('id', data?.id || 0)
+      setValue('userName', data?.userName || '')
+      setValue('email', data?.email || '')
+      setValue('avatar', data?.avatar || '')
+      setValue('usedYn', data?.usedYn || 'Y')
+      setValue('password', '')
+      setValue('role', checkAdminRole(data) ? ROLE.ROLE_ADMIN : ROLE.ROLE_USER)
+    }
+  }, [data, setValue])
+
+  const prevImageUrlRef = useRef(uploadedImage.imageUrl)
+
+  useEffect(() => {
+    return () => {
+      if (prevImageUrlRef.current !== uploadedImage.imageUrl && uploadedImage.imageType === 'new') {
+        console.log('clear function')
+
+        console.log('🚀 ~ useEffect ~ prevImageUrlRef.curren:', prevImageUrlRef.current)
+        //delete image not save
+        console.log('🚀 ~ return ~ uploadedImage:', uploadedImage)
+      }
+    }
+  }, [uploadedImage])
+
+  useEffect(() => {
+    if (data?.avatar) {
+      setUploadedImage(() => ({
+        imageId: 0,
+        imageType: '',
+        imageUrl: data.avatar || ''
+      }))
+    }
+    prevImageUrlRef.current = data?.avatar || ''
   }, [data?.avatar])
 
+  //upload file
   const handleOnFileUpload = useCallback(async (file: File) => {
     const uploadRequest: UploadRequest = {
       id: userInfo?.id || 0,
@@ -104,7 +132,11 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
 
     const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadAvatar(uploadRequest)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
-      setUploadedImage({ imageId: response.data.id, imageUrl: response.data.fileUrl })
+      setUploadedImage({
+        imageId: response.data.id,
+        imageUrl: response.data.fileUrl,
+        imageType: 'new'
+      })
       setValue('avatar', response.data.fileUrl)
     }
   }, [])
@@ -118,7 +150,9 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
       navigate
     }
 
-    console.log('🚀 ~ handleSave ~ userRequest:', userRequest)
+    console.log('Editing User:', user)
+
+    return
 
     try {
       setLoading(true)
@@ -146,7 +180,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         }
       }
       toast.success(SAVED_SUCCESS)
-      onSaveUser()
+      onSaveUser?.()
     } catch (error: any) {
       console.log(error)
       return toast.error(error)
@@ -227,22 +261,17 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         <Field>
           <Label>Roles</Label>
           <div className='flex items-center gap-10'>
-            <RadioCustom
-              id='admin'
-              name='role'
-              value={ROLE.ROLE_ADMIN}
-              defaultChecked={true}
-              title='Admin'
-              control={control}
-            ></RadioCustom>
-            <RadioCustom
-              id='user'
-              name='role'
-              value={ROLE.ROLE_USER}
-              title='User'
-              defaultChecked
-              control={control}
-            ></RadioCustom>
+            {rolesData.map((role) => (
+              <RadioCustom
+                key={role.id}
+                id={role.id}
+                name='role'
+                value={role.value}
+                title={role.title}
+                control={control}
+                defaultChecked={checkAdminRole(data) === (role.value === ROLE.ROLE_ADMIN)}
+              />
+            ))}
           </div>
         </Field>
 
