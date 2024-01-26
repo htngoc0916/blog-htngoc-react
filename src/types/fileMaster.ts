@@ -19,3 +19,8 @@ export interface UploadRequest {
   file: File
   navigate: (to: string) => void
 }
+
+export interface DeleteUploadRequest {
+  url: string
+  navigate: (to: string) => void
+}

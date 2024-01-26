@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { EMAIL_EXISTS, SAVED_SUCCESS } from '~/utils/message'
 import { Field, Form } from '~/components/form'
 import { ButtonToggleSwitch } from '~/components/button'
-import { Avatar, Label } from 'flowbite-react'
+import { Label } from 'flowbite-react'
 import { InputCustom, InputFile, InputPassword } from '~/components/input'
 import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2'
 import { RadioCustom } from '~/components/radio'
@@ -34,6 +34,10 @@ export interface UploadedImage {
   imageUrl: string
 }
 
+export interface DelelteImage {
+  imageUrl: string
+}
+
 const schema = yup.object({
   id: yup.number(),
   userName: yup.string().required('Vui lòng nhập tên'),
@@ -44,17 +48,13 @@ const schema = yup.object({
   role: yup.string()
 })
 
-const rolesData = [
-  { id: 'admin', value: ROLE.ROLE_ADMIN, title: 'Admin' },
-  { id: 'user', value: ROLE.ROLE_USER, title: 'User' }
-]
-
 const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSaveUser }: UserDetailProps) {
   const {
     handleSubmit,
     control,
     setValue,
     setError,
+    watch,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
@@ -75,15 +75,11 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   const [loading, setLoading] = useState(false)
   const isEdit = Boolean(data)
 
+  const watchRole = watch('role')
+
   const handleToggleChange = (value: boolean) => {
     setValue('usedYn', value ? 'Y' : 'N')
   }
-
-  const [uploadedImage, setUploadedImage] = useState<UploadedImage>({
-    imageId: 0,
-    imageType: '',
-    imageUrl: ''
-  })
 
   useEffect(() => {
     if (data && Boolean(data)) {
@@ -97,19 +93,34 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     }
   }, [data, setValue])
 
-  const prevImageUrlRef = useRef(uploadedImage.imageUrl)
+  const [uploadedImage, setUploadedImage] = useState<UploadedImage>({
+    imageId: 0,
+    imageType: '',
+    imageUrl: ''
+  })
 
-  useEffect(() => {
-    return () => {
-      if (prevImageUrlRef.current !== uploadedImage.imageUrl && uploadedImage.imageType === 'new') {
-        console.log('clear function')
+  // const prevImageUrlRef = useRef(uploadedImage.imageUrl)
+  // useEffect(() => {
+  //   const cleanupFunction = async () => {
+  //     if (prevImageUrlRef.current !== uploadedImage.imageUrl && uploadedImage.imageType === 'new') {
+  //       const deleteUploadRequest: DeleteUploadRequest = {
+  //         url: uploadedImage.imageUrl,
+  //         navigate
+  //       }
+  //       console.log('🚀 ~ cleanupFunction ~ deleteUploadRequest:', deleteUploadRequest)
 
-        console.log('🚀 ~ useEffect ~ prevImageUrlRef.curren:', prevImageUrlRef.current)
-        //delete image not save
-        console.log('🚀 ~ return ~ uploadedImage:', uploadedImage)
-      }
-    }
-  }, [uploadedImage])
+  //       // delete image not saved
+  //       // try {
+  //       //   const response: ApiResponseDTO<string> = await fileUpload.deleteAvatar(deleteUploadRequest)
+  //       //   console.log('cleanup function', response)
+  //       // } catch (error) {
+  //       //   console.error('Error during cleanup:', error)
+  //       // }
+  //     }
+  //   }
+
+  //   cleanupFunction()
+  // }, [uploadedImage, navigate])
 
   useEffect(() => {
     if (data?.avatar) {
@@ -119,8 +130,11 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         imageUrl: data.avatar || ''
       }))
     }
-    prevImageUrlRef.current = data?.avatar || ''
   }, [data?.avatar])
+
+  const handleOnFileDelete = () => {
+    console.log('delete')
+  }
 
   //upload file
   const handleOnFileUpload = useCallback(async (file: File) => {
@@ -151,7 +165,6 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     }
 
     console.log('Editing User:', user)
-
     return
 
     try {
@@ -210,27 +223,40 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
             onChange={handleToggleChange}
           />
         </Field>
-        <Field horizontally className='gap-4'>
-          <div className='flex flex-wrap items-center justify-center w-20 h-20 p-2'>
-            <Avatar size='ct' img={uploadedImage.imageUrl} rounded bordered></Avatar>
+        <div className='flex items-center justify-center gap-4 mb-8'>
+          <div className='w-32 mx-auto'>
+            <InputFile
+              onFileUpload={handleOnFileUpload}
+              uploadUrl={uploadedImage.imageUrl}
+              onFileDelete={handleOnFileDelete}
+            ></InputFile>
           </div>
-
-          <Field className='flex-1 mb-0'>
-            <Label htmlFor='userName'>Name</Label>
-            <InputCustom
-              type='text'
-              name='userName'
-              rightIcon={HiOutlineUser}
-              control={control}
-              message={errors?.userName?.message}
-              maxLength={100}
-            ></InputCustom>
-          </Field>
-        </Field>
+          <div className='flex-1 text-sm'>
+            <p>
+              <span className='text-primary-700 dark:text-primary-400'>Click to upload</span> or drag and drop
+            </p>
+            <p className='text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+          </div>
+          {/* <div className='flex flex-wrap items-center justify-center p-2 mx-auto'>
+            <Avatar size='lg' img={uploadedImage.imageUrl} rounded bordered></Avatar>
+          </div> */}
+        </div>
 
         <Field>
-          <InputFile content='SVG, PNG, JPG or GIF (MAX. 800x400px)' onFileUpload={handleOnFileUpload}></InputFile>
+          <Label htmlFor='userName'>Name</Label>
+          <InputCustom
+            type='text'
+            name='userName'
+            icon={HiOutlineUser}
+            control={control}
+            message={errors?.userName?.message}
+            maxLength={100}
+          ></InputCustom>
         </Field>
+
+        {/* <Field>
+          <InputFile content='SVG, PNG, JPG or GIF (MAX. 800x400px)' onFileUpload={handleOnFileUpload}></InputFile>
+        </Field> */}
 
         <Field>
           <Label htmlFor='email'>Email</Label>
@@ -261,17 +287,22 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         <Field>
           <Label>Roles</Label>
           <div className='flex items-center gap-10'>
-            {rolesData.map((role) => (
-              <RadioCustom
-                key={role.id}
-                id={role.id}
-                name='role'
-                value={role.value}
-                title={role.title}
-                control={control}
-                defaultChecked={checkAdminRole(data) === (role.value === ROLE.ROLE_ADMIN)}
-              />
-            ))}
+            <RadioCustom
+              id='admin'
+              name='role'
+              value={ROLE.ROLE_ADMIN}
+              title='Admin'
+              control={control}
+              checked={watchRole === ROLE.ROLE_ADMIN}
+            />
+            <RadioCustom
+              id='user'
+              name='role'
+              value={ROLE.ROLE_USER}
+              title='User'
+              control={control}
+              checked={watchRole === ROLE.ROLE_USER}
+            />
           </div>
         </Field>
 

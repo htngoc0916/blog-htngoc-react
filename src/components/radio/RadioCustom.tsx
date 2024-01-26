@@ -1,32 +1,24 @@
-import { Label, Radio } from 'flowbite-react'
+import { Label, Radio, RadioProps } from 'flowbite-react'
 import { Control, useController } from 'react-hook-form'
-import { useEffect } from 'react'
 
-export interface RadioCustomProps {
+export interface RadioCustomProps extends RadioProps {
   id: string
   name: string
   value: string
   control?: Control<any>
-  defaultChecked?: boolean
   title: string
+  checked: boolean
 }
 
-export default function RadioCustom({ id, title, name, value, control, defaultChecked = false }: RadioCustomProps) {
+export default function RadioCustom({ id, title, name, value, control, checked }: RadioCustomProps) {
   const { field } = useController({
     control,
-    name,
-    defaultValue: value
+    name
   })
-
-  useEffect(() => {
-    if (defaultChecked !== undefined && field.value !== defaultChecked) {
-      control.setValue(name, defaultChecked)
-    }
-  }, [defaultChecked, field.value, name, control])
 
   return (
     <div className='flex items-center justify-center gap-3'>
-      <Radio id={id} {...field} value={value} defaultChecked={defaultChecked} />
+      <Radio id={id} {...field} value={value} checked={checked} />
       <Label htmlFor={id}>{title}</Label>
     </div>
   )

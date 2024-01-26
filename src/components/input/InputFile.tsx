@@ -1,13 +1,14 @@
 import { twMerge } from 'tailwind-merge'
 import { HiOutlineCloudArrowUp } from 'react-icons/hi2'
 import { FileRejection, useDropzone } from 'react-dropzone'
-import { memo, useCallback } from 'react'
+import { ReactNode, memo, useCallback } from 'react'
 import { toast } from 'react-toastify'
+import { ActionClose } from '../action'
 
 const classes = {
   base: 'flex items-center justify-center w-full',
   label: {
-    base: 'flex flex-col items-center justify-center w-full border-2 border-dashed rounded-lg cursor-pointer ',
+    base: 'flex flex-col items-center justify-center w-full border-2 border-dashed rounded-lg cursor-pointer relative overflow-hidden',
     color: {
       primary:
         'border-primary-300 dark:hover:bg-bray-800 bg-gray-50 hover:bg-gray-100 dark:border-primary-600 dark:bg-gray-700 dark:hover:border-primary-500 dark:hover:bg-gray-600',
@@ -15,7 +16,7 @@ const classes = {
         'border-gray-300 dark:hover:bg-bray-800 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600'
     },
     size: {
-      sm: '',
+      sm: 'h-32',
       md: 'h-64'
     }
   },
@@ -39,20 +40,24 @@ export interface InputFileProps {
   className?: string
   size?: 'sm' | 'md'
   color?: 'default' | 'primary'
-  content?: string
+  children?: ReactNode
+  uploadUrl?: string
   onFileUpload?: (file: File) => void
+  onFileDelete?: () => void
 }
 
 const InputFile = memo(function InputFile(props: InputFileProps) {
-  const { className, color = 'primary', size = 'sm', content = '', onFileUpload } = props
+  const { className, color = 'primary', size = 'sm', children, onFileUpload, onFileDelete, uploadUrl } = props
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Do something with the files
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0]
-      onFileUpload?.(file)
-    }
-  }, [])
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0]
+        onFileUpload?.(file)
+      }
+    },
+    [onFileUpload]
+  )
 
   // const onDrop = (acceptedFiles: File[]) => {
 
@@ -70,23 +75,31 @@ const InputFile = memo(function InputFile(props: InputFileProps) {
   })
 
   return (
-    <div className={twMerge(classes.base, className)}>
-      <div
-        className={twMerge(classes.label.base, classes.label.color[color], classes.label.size[size])}
-        {...getRootProps()}
-      >
-        <div className={twMerge(classes.children.base)}>
-          <HiOutlineCloudArrowUp className={classes.children.color[color]}></HiOutlineCloudArrowUp>
-          <p>
-            <span className={twMerge(classes.content.base, classes.content[color])}>Click to upload</span> or drag and
-            drop
-          </p>
-          <p className='text-xs text-gray-500 dark:text-gray-400'>{content}</p>
+    <div className={twMerge(classes.label.base, classes.label.color[color], classes.label.size[size], className)}>
+      {uploadUrl && (
+        <div className='absolute top-0 left-0 z-10 w-full h-full rounded-lg'>
+          <div className='relative bg-white rounded-lg'>
+            <div className={twMerge(classes.label.size[size])}>
+              <img
+                src={uploadUrl}
+                alt='upload image'
+                className='object-cover w-full h-full border-inherit'
+                loading='lazy'
+              />
+            </div>
+            <ActionClose
+              className='absolute p-1 bg-gray-100 rounded-sm top-1 right-1'
+              onClick={onFileDelete}
+            ></ActionClose>
+          </div>
         </div>
+      )}
 
-        <input id='dropzone-file' className='hidden' {...getInputProps()} />
-        {/* <div id='file-rejection'>{fileRejectionItems}</div> */}
+      <div className={twMerge(classes.children.base)} {...getRootProps()}>
+        <HiOutlineCloudArrowUp className={classes.children.color[color]}></HiOutlineCloudArrowUp>
+        {children}
       </div>
+      <input id='dropzone-file' className='hidden' {...getInputProps()} />
     </div>
   )
 })
