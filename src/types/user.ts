@@ -13,6 +13,7 @@ export interface User extends BaseDTO {
   avatar?: string
   usedYn?: string
   roles?: Role[]
+  imageId?: number
 }
 
 export interface FetchUserDTO {
@@ -21,6 +22,6 @@ export interface FetchUserDTO {
 }
 
 export interface UserRequestDTO extends User {
-  imageId: number
+  // imageId: number
   navigate: (to: string) => void
 }

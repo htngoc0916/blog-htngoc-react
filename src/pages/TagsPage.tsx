@@ -79,9 +79,7 @@ export default function TagsPage() {
   }, [])
 
   useEffect(() => {
-    if (tagList.length === 0) {
-      dispatch(getTag(filter))
-    }
+    dispatch(getTag(filter))
   }, [])
 
   return (

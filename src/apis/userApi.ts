@@ -7,6 +7,7 @@ const userApi = {
     const url = USER_CHECK_EMAIL + '/' + email
     return axiosPublic.get(url)
   },
+
   getAllUsers(data: FetchUserDTO): Promise<ApiResponseDTO<ListResponseDTO<User[]>>> {
     const accessToken = getToken()
     return axiosPrivate(data.navigate).get(USER_URL, {
@@ -20,8 +21,18 @@ const userApi = {
     })
   },
 
+  getUserInfo(id: number, navigate: (to: string) => void): Promise<ApiResponseDTO<User>> {
+    const accessToken = getToken()
+    const url = USER_URL + '/' + id
+    return axiosPrivate(navigate).get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+  },
+
   addUser(data: UserRequestDTO): Promise<ApiResponseDTO<User>> {
-    console.log('🚀 ~ file: userApi.ts:24 ~ addUser ~ data:', data)
     const accessToken = getToken()
     return axiosPrivate(data.navigate).post(USER_URL, data, {
       headers: {

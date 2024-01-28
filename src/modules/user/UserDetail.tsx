@@ -1,4 +1,13 @@
-import { API_STATUS, ApiResponseDTO, FileMaster, ROLE, UploadRequest, User, UserRequestDTO } from '~/types'
+import {
+  API_STATUS,
+  ApiResponseDTO,
+  DeleteUploadByIdRequest,
+  FileMaster,
+  ROLE,
+  UploadRequest,
+  User,
+  UserRequestDTO
+} from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -82,15 +91,13 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   }
 
   useEffect(() => {
-    if (data && Boolean(data)) {
-      setValue('id', data?.id || 0)
-      setValue('userName', data?.userName || '')
-      setValue('email', data?.email || '')
-      setValue('avatar', data?.avatar || '')
-      setValue('usedYn', data?.usedYn || 'Y')
-      setValue('password', '')
-      setValue('role', checkAdminRole(data) ? ROLE.ROLE_ADMIN : ROLE.ROLE_USER)
-    }
+    setValue('id', data?.id || 0)
+    setValue('userName', data?.userName || '')
+    setValue('email', data?.email || '')
+    setValue('avatar', data?.avatar || '')
+    setValue('usedYn', data?.usedYn || 'Y')
+    setValue('password', '')
+    setValue('role', checkAdminRole(data) ? ROLE.ROLE_ADMIN : ROLE.ROLE_USER)
   }, [data, setValue])
 
   const [uploadedImage, setUploadedImage] = useState<UploadedImage>({
@@ -98,6 +105,14 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     imageType: '',
     imageUrl: ''
   })
+
+  useEffect(() => {
+    setUploadedImage(() => ({
+      imageId: data?.imageId || 0,
+      imageType: '',
+      imageUrl: data?.avatar || ''
+    }))
+  }, [data])
 
   // const prevImageUrlRef = useRef(uploadedImage.imageUrl)
   // useEffect(() => {
@@ -118,42 +133,43 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   //       // }
   //     }
   //   }
-
   //   cleanupFunction()
   // }, [uploadedImage, navigate])
 
-  useEffect(() => {
-    if (data?.avatar) {
-      setUploadedImage(() => ({
-        imageId: 0,
-        imageType: '',
-        imageUrl: data.avatar || ''
-      }))
+  const handleOnFileDelete = async () => {
+    try {
+      const deleteUploadRequest: DeleteUploadByIdRequest = {
+        id: uploadedImage.imageId,
+        navigate
+      }
+      const response: ApiResponseDTO<string> = await fileUpload.deleteAvatarById(deleteUploadRequest)
+      console.log('🚀 ~ handleOnFileDelete ~ response:', response)
+    } catch (error) {
+      console.log('🚀 ~ handleOnFileDelete ~ error:', error)
     }
-  }, [data?.avatar])
-
-  const handleOnFileDelete = () => {
-    console.log('delete')
   }
 
   //upload file
-  const handleOnFileUpload = useCallback(async (file: File) => {
-    const uploadRequest: UploadRequest = {
-      id: userInfo?.id || 0,
-      file,
-      navigate
-    }
+  const handleOnFileUpload = useCallback(
+    async (file: File) => {
+      const uploadRequest: UploadRequest = {
+        id: userInfo?.id || 0,
+        file,
+        navigate
+      }
 
-    const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadAvatar(uploadRequest)
-    if (response?.status.includes(API_STATUS.SUCCESS)) {
-      setUploadedImage({
-        imageId: response.data.id,
-        imageUrl: response.data.fileUrl,
-        imageType: 'new'
-      })
-      setValue('avatar', response.data.fileUrl)
-    }
-  }, [])
+      const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadAvatar(uploadRequest)
+      if (response?.status.includes(API_STATUS.SUCCESS)) {
+        setUploadedImage({
+          imageId: response.data.id,
+          imageUrl: response.data.fileUrl,
+          imageType: 'new'
+        })
+        setValue('avatar', response.data.fileUrl)
+      }
+    },
+    [navigate, setValue, userInfo?.id]
+  )
 
   const handleSave = async (user: User) => {
     const userRequest: UserRequestDTO = {
@@ -164,20 +180,15 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
       navigate
     }
 
-    console.log('Editing User:', user)
-    return
-
     try {
       setLoading(true)
       if (isEdit) {
-        console.log('Editing User:', user)
         const response: ApiResponseDTO<User> = await userApi.editUser(userRequest)
         console.log('🚀 ~ handleSave ~ response:', response.message)
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }
       } else {
-        console.log('Creating new User:', user)
         const emailResponse: ApiResponseDTO<boolean> = await userApi.userCheckEmail(user?.email || '')
         if (emailResponse?.data) {
           setError('email', {
@@ -237,13 +248,10 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
             </p>
             <p className='text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
           </div>
-          {/* <div className='flex flex-wrap items-center justify-center p-2 mx-auto'>
-            <Avatar size='lg' img={uploadedImage.imageUrl} rounded bordered></Avatar>
-          </div> */}
         </div>
 
         <Field>
-          <Label htmlFor='userName'>Name</Label>
+          <Label htmlFor='userName'>Full Name</Label>
           <InputCustom
             type='text'
             name='userName'
@@ -254,12 +262,8 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
           ></InputCustom>
         </Field>
 
-        {/* <Field>
-          <InputFile content='SVG, PNG, JPG or GIF (MAX. 800x400px)' onFileUpload={handleOnFileUpload}></InputFile>
-        </Field> */}
-
         <Field>
-          <Label htmlFor='email'>Email</Label>
+          <Label htmlFor='email'>Email Address</Label>
           <InputCustom
             type='email'
             name='email'

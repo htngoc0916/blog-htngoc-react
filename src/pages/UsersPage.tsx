@@ -24,7 +24,7 @@ export default function UsersPage() {
   const userList = useAppSelector(UserListSelector)
   const pagination = useAppSelector(UserPaginationSelector)
 
-  const [isUserDetailOpen, setIsUserDetailOpen] = useState(true)
+  const [isUserDetailOpen, setIsUserDetailOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined)
 
   const onPageChange = (page: number) => {
@@ -41,9 +41,17 @@ export default function UsersPage() {
     setIsUserDetailOpen(true)
   }
 
-  const handleEditUser = useCallback((user: User) => {
+  const handleEditUser = useCallback(async (user: User) => {
     setIsUserDetailOpen(true)
-    setSelectedUser(user)
+    try {
+      const response: ApiResponseDTO<User> = await userApi.getUserInfo(user?.id || 0, navigate)
+      if (response?.status.includes(API_STATUS.SUCCESS)) {
+        setSelectedUser(response.data)
+      }
+    } catch (error: any) {
+      console.log(error)
+      return toast.error(error)
+    }
   }, [])
 
   const handleSearchUser = useCallback(
@@ -76,9 +84,7 @@ export default function UsersPage() {
   }, [])
 
   useEffect(() => {
-    if (userList.length === 0) {
-      dispatch(getUser({ filter, navigate }))
-    }
+    dispatch(getUser({ filter, navigate }))
   }, [])
 
   return (
