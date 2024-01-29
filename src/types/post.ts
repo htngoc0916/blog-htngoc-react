@@ -1,5 +1,4 @@
-import { BaseDTO, User } from '.'
-import { Tag } from './tag'
+import { BaseDTO, FilterPramsDTO, User, Tag } from '.'
 
 export interface Post extends BaseDTO {
   id: number
@@ -11,5 +10,11 @@ export interface Post extends BaseDTO {
   viewCnt: number
   categoryId: number
   tags: Set<Tag>
+  usedYn: 'Y' | 'N' | ''
   user: User
+}
+
+export interface FetchPostDTO {
+  navigate: (to: string) => void
+  filter: FilterPramsDTO
 }

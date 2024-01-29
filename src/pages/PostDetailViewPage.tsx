@@ -1,9 +1,7 @@
 import { PostContent, PostImage, PostMeta } from '~/modules/post'
 import PostRelated from '~/modules/post/PostRelated'
 
-export interface PostDeailtPageProps {}
-
-export default function PostDeailtPage() {
+export default function PostDeailtViewPage() {
   return (
     <section className='dark:bg-darkbg2 pt-page'>
       <div className='container-page'>

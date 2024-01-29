@@ -11,7 +11,7 @@ const DashboardPage = lazy(() => import('~/pages/DashboardPage'))
 const HomePage = lazy(() => import('~/pages/HomePage'))
 const LoginPage = lazy(() => import('~/pages/LoginPage'))
 const SignupPage = lazy(() => import('~/pages/RegisterPage'))
-const PostDetailPage = lazy(() => import('~/pages/PostDetailPage'))
+const PostDetailViewPage = lazy(() => import('~/pages/PostDetailViewPage'))
 const CategoriesPage = lazy(() => import('~/pages/CategoriesPage'))
 const PostsPage = lazy(() => import('~/pages/PostsPage'))
 const UsersPage = lazy(() => import('~/pages/UsersPage'))
@@ -50,7 +50,7 @@ const routers = createBrowserRouter(
           path='/post/:slug'
           element={
             <Suspense>
-              <PostDetailPage></PostDetailPage>
+              <PostDetailViewPage></PostDetailViewPage>
             </Suspense>
           }
         ></Route>

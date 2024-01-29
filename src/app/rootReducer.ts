@@ -8,6 +8,7 @@ import menuSlice from './menu/menuSlice'
 import categorySlice from './category/categorySlice'
 import tagSlice from './tag/tagSlice'
 import userSlice from './user/userSlice'
+import postSlice from './post/postSlice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   menus: menuSlice,
   categories: categorySlice,
   tags: tagSlice,
-  users: userSlice
+  users: userSlice,
+  posts: postSlice
 })
 
 export default rootReducer

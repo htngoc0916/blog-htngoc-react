@@ -14,8 +14,6 @@ import UserFilter from '~/modules/user/UserFilter'
 import { API_STATUS, ApiResponseDTO, FilterPramsDTO, User } from '~/types'
 import { REMOVE_SUCCESS } from '~/utils/message'
 
-export interface UsersPageProps {}
-
 export default function UsersPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()

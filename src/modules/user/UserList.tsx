@@ -1,4 +1,4 @@
-import { Avatar, Badge, Table } from 'flowbite-react'
+import { Avatar, Table } from 'flowbite-react'
 import { memo, useState } from 'react'
 import { ActionDelete, ActionEdit } from '~/components/action'
 import Active from '~/components/active'

@@ -1,4 +1,4 @@
-import { ApiResponseDTO, FileMaster, UploadRequest, DeleteUploadRequest, DeleteUploadByIdRequest } from '~/types'
+import { ApiResponseDTO, FileMaster, UploadRequest, DeleteUploadRequest } from '~/types'
 import { getToken } from '~/utils/auth'
 import { axiosPrivate } from './axios'
 import { CLOUDINARY_UPLOAD } from './apiConstanst'
