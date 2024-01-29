@@ -59,7 +59,7 @@ const InputFile = memo(function InputFile(props: InputFileProps) {
     [onFileUpload]
   )
 
-  // const onDrop = (acceptedFiles: File[]) => {
+  // const onDrop = (acceptedFiles: File[]) => {})
 
   const onDropRejected = (fileRejections: FileRejection[]) => {
     const file = fileRejections[0]

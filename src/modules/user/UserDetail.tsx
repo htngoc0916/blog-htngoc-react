@@ -1,10 +1,10 @@
 import {
   API_STATUS,
   ApiResponseDTO,
-  DeleteUploadByIdRequest,
+  DeleteAvatarDTO,
   FileMaster,
   ROLE,
-  UploadRequest,
+  UploadAvatarDTO,
   User,
   UserRequestDTO
 } from '~/types'
@@ -28,19 +28,12 @@ import { InputCustom, InputFile, InputPassword } from '~/components/input'
 import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2'
 import { RadioCustom } from '~/components/radio'
 import { checkAdminRole } from '~/utils/checkAdmin'
-import fileUpload from '~/apis/fileUploadApi'
 
 export interface UserDetailProps {
   data: User | undefined
   className: string
   onCloseUser: () => void
   onSaveUser: () => void
-}
-
-export interface UploadedImage {
-  imageId: number
-  imageType: 'new' | 'edit' | ''
-  imageUrl: string
 }
 
 export interface DelelteImage {
@@ -100,83 +93,51 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     setValue('role', checkAdminRole(data) ? ROLE.ROLE_ADMIN : ROLE.ROLE_USER)
   }, [data, setValue])
 
-  const [uploadedImage, setUploadedImage] = useState<UploadedImage>({
-    imageId: 0,
-    imageType: '',
-    imageUrl: ''
-  })
+  const [uploadedImage, setUploadedImage] = useState<string>('')
 
   useEffect(() => {
-    setUploadedImage(() => ({
-      imageId: data?.imageId || 0,
-      imageType: '',
-      imageUrl: data?.avatar || ''
-    }))
-  }, [data])
+    setUploadedImage(() => data?.avatar || '')
+  }, [data?.avatar])
 
-  // const prevImageUrlRef = useRef(uploadedImage.imageUrl)
-  // useEffect(() => {
-  //   const cleanupFunction = async () => {
-  //     if (prevImageUrlRef.current !== uploadedImage.imageUrl && uploadedImage.imageType === 'new') {
-  //       const deleteUploadRequest: DeleteUploadRequest = {
-  //         url: uploadedImage.imageUrl,
-  //         navigate
-  //       }
-  //       console.log('🚀 ~ cleanupFunction ~ deleteUploadRequest:', deleteUploadRequest)
-
-  //       // delete image not saved
-  //       // try {
-  //       //   const response: ApiResponseDTO<string> = await fileUpload.deleteAvatar(deleteUploadRequest)
-  //       //   console.log('cleanup function', response)
-  //       // } catch (error) {
-  //       //   console.error('Error during cleanup:', error)
-  //       // }
-  //     }
-  //   }
-  //   cleanupFunction()
-  // }, [uploadedImage, navigate])
-
+  //avatar delete
   const handleOnFileDelete = async () => {
     try {
-      const deleteUploadRequest: DeleteUploadByIdRequest = {
-        id: uploadedImage.imageId,
+      const deleteAvartar: DeleteAvatarDTO = {
+        userId: data?.id as number,
         navigate
       }
-      const response: ApiResponseDTO<string> = await fileUpload.deleteAvatarById(deleteUploadRequest)
-      console.log('🚀 ~ handleOnFileDelete ~ response:', response)
+      await userApi.deleteAvatar(deleteAvartar)
+      setUploadedImage('')
+      setValue('avatar', '')
     } catch (error) {
       console.log('🚀 ~ handleOnFileDelete ~ error:', error)
     }
   }
 
-  //upload file
+  //avatar upload
   const handleOnFileUpload = useCallback(
     async (file: File) => {
-      const uploadRequest: UploadRequest = {
-        id: userInfo?.id || 0,
+      const uploadAvatar: UploadAvatarDTO = {
+        email: data?.email || '',
         file,
         navigate
       }
 
-      const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadAvatar(uploadRequest)
+      const response: ApiResponseDTO<FileMaster> = await userApi.uploadAvatar(uploadAvatar)
       if (response?.status.includes(API_STATUS.SUCCESS)) {
-        setUploadedImage({
-          imageId: response.data.id,
-          imageUrl: response.data.fileUrl,
-          imageType: 'new'
-        })
+        setUploadedImage(response.data.fileUrl)
         setValue('avatar', response.data.fileUrl)
       }
     },
-    [navigate, setValue, userInfo?.id]
+    [navigate, setValue, data?.email]
   )
 
+  //save
   const handleSave = async (user: User) => {
     const userRequest: UserRequestDTO = {
       ...user,
       modId: isEdit ? userInfo?.id : undefined,
       regId: isEdit ? undefined : userInfo?.id,
-      imageId: uploadedImage?.imageId || 0,
       navigate
     }
 
@@ -238,7 +199,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
           <div className='w-32 mx-auto'>
             <InputFile
               onFileUpload={handleOnFileUpload}
-              uploadUrl={uploadedImage.imageUrl}
+              uploadUrl={uploadedImage}
               onFileDelete={handleOnFileDelete}
             ></InputFile>
           </div>

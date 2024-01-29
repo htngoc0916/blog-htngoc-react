@@ -18,21 +18,11 @@ const fileUpload = {
       }
     })
   },
+
   deleteAvatar(data: DeleteUploadRequest): Promise<ApiResponseDTO<string>> {
     const accessToken = getToken()
     const url = CLOUDINARY_UPLOAD + '/delete/' + data.url
 
-    return axiosPrivate(data.navigate).delete(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-  },
-  deleteAvatarById(data: DeleteUploadByIdRequest): Promise<ApiResponseDTO<string>> {
-    const accessToken = getToken()
-    const url = CLOUDINARY_UPLOAD + '/delete/' + data.id
-    console.log('🚀 ~ deleteAvatarById ~ url:', url)
     return axiosPrivate(data.navigate).delete(url, {
       headers: {
         'Content-Type': 'application/json',

@@ -8,6 +8,7 @@ export const AUTH_REFRESH_TOKEN = '/auth/refresh-token'
 
 export const USER_CHECK_EMAIL = `${API_VERSION}/users/checkEmail`
 export const USER_URL = `${API_VERSION}/users`
+export const USER_URL_AVATAR = `${API_VERSION}/users/avatar`
 
 export const CATEGORY_URL = `${API_VERSION}/categories`
 
