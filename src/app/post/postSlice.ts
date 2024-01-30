@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {
-  defaultPagination,
-  defaultFilter,
-  FilterPramsDTO,
-  PaginationResponseDTO,
-  ListResponseDTO,
-  FetchPostDTO,
-  Post
-} from '~/types'
+import { defaultPagination, defaultFilter, FilterPramsDTO, PaginationResponseDTO, ListResponseDTO, Post } from '~/types'
 import { RootState } from '../store'
 
 export interface PostState {
@@ -28,7 +20,7 @@ const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    getPost(state, action: PayloadAction<FetchPostDTO>) {
+    getPost(state, action: PayloadAction<FilterPramsDTO>) {
       console.log('🚀 ~ getPost ~ action:', action.type)
       state.loading = true
     },

@@ -13,8 +13,3 @@ export interface Post extends BaseDTO {
   usedYn: 'Y' | 'N' | ''
   user: User
 }
-
-export interface FetchPostDTO {
-  navigate: (to: string) => void
-  filter: FilterPramsDTO
-}

@@ -1,11 +1,10 @@
-import { CategoryRequestDTO, Post, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
-import { CATEGORY_URL } from './apiConstanst'
-import { getToken } from '~/utils/auth'
-import { axiosPrivate, axiosPublic } from './axios'
+import { Post, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
+import { POST_URL } from './apiConstanst'
+import { axiosPublic } from './axios'
 
 const postApi = {
   getAllPosts(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Post[]>>> {
-    const url = CATEGORY_URL
+    const url = POST_URL
     return axiosPublic.get(url, { params })
   }
 }

@@ -4,6 +4,8 @@ import { Post } from '~/types'
 import { Table } from 'flowbite-react'
 import { ActionDelete, ActionEdit } from '~/components/action'
 import Active from '~/components/active'
+import { HiOutlineEye } from 'react-icons/hi2'
+import { numberWithCommas } from '~/utils/numberWithCommas'
 
 export interface PostListProps {
   className?: string
@@ -35,8 +37,10 @@ const PostList = memo(function PostList({ data, className, onEditPost, onRemoveP
           <Table.Head>
             <Table.HeadCell>Id</Table.HeadCell>
             <Table.HeadCell>Title</Table.HeadCell>
-            <Table.HeadCell>Roles</Table.HeadCell>
-            <Table.HeadCell className='hidden 2xl:table-cell'>Created Time</Table.HeadCell>
+            <Table.HeadCell>View</Table.HeadCell>
+            <Table.HeadCell>Author</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Created Time</Table.HeadCell>
             <Table.HeadCell>
               <span className='sr-only'>Edit</span>
             </Table.HeadCell>
@@ -45,16 +49,23 @@ const PostList = memo(function PostList({ data, className, onEditPost, onRemoveP
             {data &&
               data.map((post) => (
                 <Table.Row key={post.id}>
-                  <Table.Cell className='flex items-center justify-start whitespace-nowrap'>
-                    <img src={post?.thumbnail} alt='post image' />
-                    <div className='text-base text-text1 dark:text-text8'>{post?.title}</div>
+                  <Table.Cell>{post?.id}</Table.Cell>
+                  <Table.Cell className='flex items-center justify-start max-w-xl'>
+                    <img src={post?.thumbnail} alt='' className='object-cover w-24 h-16 mr-2 rounded' />
+                    <h3 className='flex-1 text-base whitespace-pre-wrap text-text1 dark:text-text8'>{post?.title}</h3>
                   </Table.Cell>
+                  <Table.Cell>
+                    <div className='flex items-center justify-start gap-1'>
+                      <HiOutlineEye className='w-4 h-4'></HiOutlineEye>
+                      {numberWithCommas(post?.viewCnt)}
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>{post.user.userName}</Table.Cell>
                   <Table.Cell>
                     <Active active={post?.usedYn === 'Y' ? true : false}></Active>
                   </Table.Cell>
-                  <Table.Cell>{}</Table.Cell>
-                  <Table.Cell className='hidden 2xl:table-cell'>{post.regDt?.toString()}</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell>{post.regDt?.toString()}</Table.Cell>
+                  <Table.Cell className='w-32'>
                     <ActionEdit onClick={() => onEditPost?.(post)} />
                     <ActionDelete onClick={() => handleRemovePostClick(post)} />
                   </Table.Cell>
