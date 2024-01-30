@@ -33,6 +33,7 @@ const UserList = memo(function UserList({ data, className, onEditUser, onRemoveU
       <div className={className}>
         <Table striped className='flex-1'>
           <Table.Head>
+            <Table.HeadCell>Id</Table.HeadCell>
             <Table.HeadCell>User</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
             <Table.HeadCell>Roles</Table.HeadCell>
@@ -45,6 +46,7 @@ const UserList = memo(function UserList({ data, className, onEditUser, onRemoveU
             {data &&
               data.map((user) => (
                 <Table.Row key={user.id}>
+                  <Table.Cell>{user.id}</Table.Cell>
                   <Table.Cell className='flex items-center justify-start whitespace-nowrap'>
                     <Avatar img={user?.avatar} rounded>
                       <div className='space-y-1 font-medium dark:text-white'>

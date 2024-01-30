@@ -33,8 +33,8 @@ const PostList = memo(function PostList({ data, className, onEditPost, onRemoveP
       <div className={className}>
         <Table striped className='flex-1'>
           <Table.Head>
-            <Table.HeadCell>User</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Id</Table.HeadCell>
+            <Table.HeadCell>Title</Table.HeadCell>
             <Table.HeadCell>Roles</Table.HeadCell>
             <Table.HeadCell className='hidden 2xl:table-cell'>Created Time</Table.HeadCell>
             <Table.HeadCell>

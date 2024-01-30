@@ -82,7 +82,7 @@ export default function UsersPage() {
   }, [])
 
   useEffect(() => {
-    dispatch(getUser({ filter, navigate }))
+    dispatch(getUser({ filter: { ...filter, sortDir: 'ASC' }, navigate }))
   }, [])
 
   return (

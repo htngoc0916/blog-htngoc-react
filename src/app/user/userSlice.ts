@@ -21,7 +21,7 @@ const initialState: UserSate = {
   loading: false,
   userList: [],
   pagination: { ...defaultPagination },
-  filter: { ...defaultFilter }
+  filter: { ...defaultFilter, sortDir: 'ASC' }
 }
 
 const userSlice = createSlice({

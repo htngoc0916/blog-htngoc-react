@@ -117,6 +117,8 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   //avatar upload
   const handleOnFileUpload = useCallback(
     async (file: File) => {
+      if (!isEdit) return toast.warning('Hãy tạo user trước khi upload avatar!')
+
       const uploadAvatar: UploadAvatarDTO = {
         email: data?.email || '',
         file,
@@ -129,7 +131,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         setValue('avatar', response.data.fileUrl)
       }
     },
-    [navigate, setValue, data?.email]
+    [navigate, setValue, data?.email, isEdit]
   )
 
   //save
