@@ -34,9 +34,13 @@ export default function PostsPage() {
     console.log('🚀 ~ handleAddPost ~ handleAddPost:', handleAddPost)
   }, [])
 
-  const handleEditPost = useCallback((post: Post) => {}, [])
+  const handleEditPost = useCallback((post: Post) => {
+    console.log('🚀 ~ PostsPage ~ post:', post)
+  }, [])
 
-  const handleRemovePost = useCallback(async (post: Post) => {}, [])
+  const handleRemovePost = useCallback(async (post: Post) => {
+    console.log('🚀 ~ PostsPage ~ post:', post)
+  }, [])
 
   useEffect(() => {
     dispatch(getPost(filter))

@@ -28,6 +28,7 @@ const categorySlice = createSlice({
   initialState,
   reducers: {
     getCategory(state, action: PayloadAction<FilterPramsDTO>) {
+      console.log('🚀 ~ getCategory ~ action:', action.payload)
       state.loading = true
       // state.categoryList = []
     },

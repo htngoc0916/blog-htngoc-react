@@ -7,7 +7,6 @@ import categoryApi from '~/apis/categoryApi'
 import {
   categoryFilterSelector,
   categoryListSelector,
-  categoryLoadingSelector,
   categoryPaginationSelector,
   getCategory
 } from '~/app/category/categorySlice'
@@ -22,7 +21,7 @@ export default function CategoriesPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const loading = useAppSelector(categoryLoadingSelector)
+  // const loading = useAppSelector(categoryLoadingSelector)
   const filter = useAppSelector(categoryFilterSelector)
   const categoryList = useAppSelector(categoryListSelector)
   const pagination = useAppSelector(categoryPaginationSelector)

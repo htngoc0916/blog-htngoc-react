@@ -1,4 +1,4 @@
-import { BaseDTO, FilterPramsDTO, User, Tag } from '.'
+import { BaseDTO, User, Tag } from '.'
 
 export interface Post extends BaseDTO {
   id: number
