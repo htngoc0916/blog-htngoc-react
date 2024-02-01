@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import { getFreshToken, removeToken, saveToken } from '~/utils/auth'
-import { APP_API_URL_DEV } from './apiConstanst'
+import { APP_API_URL_PROD } from './apiConstanst'
 import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
@@ -8,7 +8,7 @@ import authApi from './authApi'
 
 //public
 const axiosPublic = axios.create({
-  baseURL: APP_API_URL_DEV,
+  baseURL: APP_API_URL_PROD,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
@@ -32,7 +32,7 @@ axiosPublic.interceptors.response.use(
 //private
 const axiosPrivate = (navigate: (to: string) => void): AxiosInstance => {
   const axiosClient = axios.create({
-    baseURL: APP_API_URL_DEV,
+    baseURL: APP_API_URL_PROD,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json'
