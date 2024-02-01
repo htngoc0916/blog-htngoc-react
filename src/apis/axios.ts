@@ -5,6 +5,7 @@ import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
 import authApi from './authApi'
+import globalRouter from '~/utils/globalRouter'
 
 //public
 const axiosPublic = axios.create({
@@ -77,10 +78,14 @@ const axiosPrivate = (navigate: (to: string) => void): AxiosInstance => {
             }
           }
         }
-        if (error.response.status === 404 || error.response.status === 403) {
+        if (error.response.status === 404 || error.response.status === 403 || error.response.status == 401) {
+          console.log('🚀 ~ error.response.status:', error.response.status)
           await store?.dispatch(refreshTokenFailed())
           await removeToken()
-          navigate('/login')
+          // navigate('/login')
+          if (globalRouter.navigate) {
+            globalRouter.navigate('/login')
+          }
         }
       }
       return Promise.reject(error)

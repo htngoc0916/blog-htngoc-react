@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Suspense, lazy } from 'react'
+import { lazy } from 'react'
 import { Route, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { PrivateRoute } from './PrivateRouter'
 
@@ -11,9 +11,12 @@ const DashboardPage = lazy(() => import('~/pages/DashboardPage'))
 const HomePage = lazy(() => import('~/pages/HomePage'))
 const LoginPage = lazy(() => import('~/pages/LoginPage'))
 const SignupPage = lazy(() => import('~/pages/RegisterPage'))
-const PostDetailViewPage = lazy(() => import('~/pages/PostDetailViewPage'))
 const CategoriesPage = lazy(() => import('~/pages/CategoriesPage'))
+
 const PostsPage = lazy(() => import('~/pages/PostsPage'))
+const PostDetailViewPage = lazy(() => import('~/pages/PostDetailViewPage'))
+const PostAdd = lazy(() => import('~/modules/post/PostAdd'))
+
 const UsersPage = lazy(() => import('~/pages/UsersPage'))
 const TagsPage = lazy(() => import('~/pages/TagsPage'))
 const ContactsPage = lazy(() => import('~/pages/ContactsPage'))
@@ -22,123 +25,30 @@ const SystemPage = lazy(() => import('~/pages/SystemPage'))
 const routers = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route
-        path='/'
-        element={
-          <Suspense>
-            <HomeLayout></HomeLayout>
-          </Suspense>
-        }
-      >
-        <Route
-          index
-          element={
-            <Suspense>
-              <HomePage></HomePage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='/about'
-          element={
-            <Suspense>
-              <AboutPage></AboutPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='/post/:slug'
-          element={
-            <Suspense>
-              <PostDetailViewPage></PostDetailViewPage>
-            </Suspense>
-          }
-        ></Route>
+      <Route path='/' element={<HomeLayout></HomeLayout>}>
+        <Route index element={<HomePage></HomePage>}></Route>
+        <Route path='/about' element={<AboutPage></AboutPage>}></Route>
+        <Route path='/post/:slug' element={<PostDetailViewPage></PostDetailViewPage>}></Route>
       </Route>
 
-      <Route
-        path='/login'
-        element={
-          <Suspense>
-            <LoginPage></LoginPage>
-          </Suspense>
-        }
-      ></Route>
-      <Route
-        path='/register'
-        element={
-          <Suspense>
-            <SignupPage></SignupPage>
-          </Suspense>
-        }
-      ></Route>
+      <Route path='/login' element={<LoginPage></LoginPage>}></Route>
+      <Route path='/register' element={<SignupPage></SignupPage>}></Route>
       <Route path='/404' element={<NotFoundPage></NotFoundPage>}></Route>
       <Route path='*' element={<NotFoundPage></NotFoundPage>}></Route>
 
-      <Route
-        path='/auth'
-        element={
-          <Suspense>
-            <PrivateRoute component={DashboardLayout} />
-          </Suspense>
-        }
-      >
-        <Route
-          path='dashboard'
-          element={
-            <Suspense>
-              <DashboardPage></DashboardPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='categories'
-          element={
-            <Suspense>
-              <CategoriesPage></CategoriesPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='posts'
-          element={
-            <Suspense>
-              <PostsPage></PostsPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='tags'
-          element={
-            <Suspense>
-              <TagsPage></TagsPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='users'
-          element={
-            <Suspense>
-              <UsersPage></UsersPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='contacts'
-          element={
-            <Suspense>
-              <ContactsPage></ContactsPage>
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path='system'
-          element={
-            <Suspense>
-              <SystemPage></SystemPage>
-            </Suspense>
-          }
-        ></Route>
+      <Route path='/auth' element={<PrivateRoute component={DashboardLayout} />}>
+        <Route path='dashboard' element={<DashboardPage></DashboardPage>}></Route>
+        <Route path='categories' element={<CategoriesPage></CategoriesPage>}></Route>
+
+        <Route path='posts'>
+          <Route index element={<PostsPage></PostsPage>}></Route>
+          <Route path=':postId' element={<PostAdd></PostAdd>}></Route>
+        </Route>
+
+        <Route path='tags' element={<TagsPage></TagsPage>}></Route>
+        <Route path='users' element={<UsersPage></UsersPage>}></Route>
+        <Route path='contacts' element={<ContactsPage></ContactsPage>}></Route>
+        <Route path='system' element={<SystemPage></SystemPage>}></Route>
       </Route>
     </>
   )

@@ -1,6 +1,7 @@
 import { Pagination } from 'flowbite-react'
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { getPost, postFilterSelector, postListSelector, postPaginationSelector } from '~/app/post/postSlice'
 import { ActionAdd } from '~/components/action'
@@ -9,10 +10,14 @@ import { PostFilter, PostList } from '~/modules/post'
 import { FilterPramsDTO, Post } from '~/types'
 
 export default function PostsPage() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const filter = useAppSelector(postFilterSelector)
   const postList = useAppSelector(postListSelector)
   const pagination = useAppSelector(postPaginationSelector)
+
+  const { pathname } = useLocation()
+  console.log('🚀 ~ PostsPage ~ pathname:', pathname)
 
   const handleSearchPost = useCallback(
     (filter: FilterPramsDTO) => {
@@ -36,6 +41,7 @@ export default function PostsPage() {
 
   const handleEditPost = useCallback((post: Post) => {
     console.log('🚀 ~ PostsPage ~ post:', post)
+    navigate(`${pathname}/${post.id}`)
   }, [])
 
   const handleRemovePost = useCallback(async (post: Post) => {
