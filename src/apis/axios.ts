@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import { getFreshToken, removeToken, saveToken } from '~/utils/auth'
-import { APP_API_URL_PROD } from './apiConstanst'
+import { APP_API_URL_DEV } from './apiConstanst'
 import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
@@ -9,7 +9,7 @@ import globalRouter from '~/utils/globalRouter'
 
 //public
 const axiosPublic = axios.create({
-  baseURL: APP_API_URL_PROD,
+  baseURL: APP_API_URL_DEV,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
@@ -33,7 +33,7 @@ axiosPublic.interceptors.response.use(
 //private
 const axiosPrivate = (navigate: (to: string) => void): AxiosInstance => {
   const axiosClient = axios.create({
-    baseURL: APP_API_URL_PROD,
+    baseURL: APP_API_URL_DEV,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json'
@@ -82,10 +82,11 @@ const axiosPrivate = (navigate: (to: string) => void): AxiosInstance => {
           console.log('🚀 ~ error.response.status:', error.response.status)
           await store?.dispatch(refreshTokenFailed())
           await removeToken()
-          // navigate('/login')
-          if (globalRouter.navigate) {
-            globalRouter.navigate('/login')
-          }
+          navigate('/login')
+          // if (globalRouter.navigate) {
+          //   console.log('🚀 ~ globalRouter.navigate:', globalRouter.navigate)
+          //   await globalRouter.navigate('/login')
+          // }
         }
       }
       return Promise.reject(error)

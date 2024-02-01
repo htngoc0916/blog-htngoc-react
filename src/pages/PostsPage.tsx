@@ -17,7 +17,6 @@ export default function PostsPage() {
   const pagination = useAppSelector(postPaginationSelector)
 
   const { pathname } = useLocation()
-  console.log('🚀 ~ PostsPage ~ pathname:', pathname)
 
   const handleSearchPost = useCallback(
     (filter: FilterPramsDTO) => {
@@ -36,7 +35,7 @@ export default function PostsPage() {
   }
 
   const handleAddPost = useCallback(() => {
-    console.log('🚀 ~ handleAddPost ~ handleAddPost:', handleAddPost)
+    navigate(`${pathname}/0`)
   }, [])
 
   const handleEditPost = useCallback((post: Post) => {

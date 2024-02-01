@@ -1,4 +1,4 @@
-import { CustomFlowbiteTheme } from 'flowbite-react'
+import { Breadcrumb, CustomFlowbiteTheme } from 'flowbite-react'
 
 export const customTheme: CustomFlowbiteTheme = {
   button: {
