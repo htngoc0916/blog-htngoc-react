@@ -60,11 +60,11 @@ const PostList = memo(function PostList({ data, className, onEditPost, onRemoveP
                       {numberWithCommas(post?.viewCnt)}
                     </div>
                   </Table.Cell>
-                  <Table.Cell>{post.user.userName}</Table.Cell>
+                  <Table.Cell>{post?.user?.userName}</Table.Cell>
                   <Table.Cell>
                     <Active active={post?.usedYn === 'Y' ? true : false}></Active>
                   </Table.Cell>
-                  <Table.Cell>{post.regDt?.toString()}</Table.Cell>
+                  <Table.Cell>{post?.regDt?.toString()}</Table.Cell>
                   <Table.Cell className='w-32'>
                     <ActionEdit onClick={() => onEditPost?.(post)} />
                     <ActionDelete onClick={() => handleRemovePostClick(post)} />

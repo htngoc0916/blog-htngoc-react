@@ -1,4 +1,5 @@
 function numberWithCommas(pram: number) {
+  if (!pram) return 0
   // Chuyển đổi số thành chuỗi
   const numberString = pram.toString()
 
