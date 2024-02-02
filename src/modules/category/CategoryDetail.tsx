@@ -13,7 +13,6 @@ import { ActionClose, ActionSave } from '~/components/action'
 import { ButtonToggleSwitch } from '~/components/button'
 import categoryApi from '~/apis/categoryApi'
 import { toast } from 'react-toastify'
-import { SAVED_SUCCESS } from '~/utils/message'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
 
@@ -49,7 +48,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
   })
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
-  const isEdit = !!data
+  const isEdit = Boolean(data)
 
   useEffect(() => {
     setValue('categoryName', data?.categoryName || '')
@@ -71,25 +70,24 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
 
     try {
       setLoading(true)
-      if (data) {
-        console.log('Editing category:', category)
-        const response: ApiResponseDTO<Category> = await categoryApi.editCategory(categoryRequest)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
+
+      const action = isEdit ? categoryApi.editCategory : categoryApi.addCategory
+      const actionType = isEdit ? 'Editing' : 'Creating new'
+      console.log(`${actionType} category:`, category)
+
+      const response: ApiResponseDTO<Category> = await action(categoryRequest)
+
+      if (response?.status.includes(API_STATUS.FAILED)) {
+        toast.error(response.message)
       } else {
-        console.log('Creating new category:', category)
-        const response: ApiResponseDTO<Category> = await categoryApi.addCategory(categoryRequest)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
+        toast.success(response?.message)
+        onSaveCategory()
       }
-      setLoading(false)
-      toast.success(SAVED_SUCCESS)
-      onSaveCategory()
     } catch (error: any) {
-      console.log(error)
-      return toast.error(error)
+      console.error(error)
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
     }
   }
 

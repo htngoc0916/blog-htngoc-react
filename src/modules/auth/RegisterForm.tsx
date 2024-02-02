@@ -12,7 +12,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Field } from '~/components/form'
 import { ApiResponseDTO, RegisterRequestDTO } from '~/types'
 import userApi from '~/apis/userApi'
-import { EMAIL_EXISTS } from '~/utils/message'
 import { useTranslation } from 'react-i18next'
 import { useGoogleLogin } from '@react-oauth/google'
 
@@ -40,7 +39,13 @@ export default function RegisterForm() {
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'onSubmit'
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      userName: ''
+    }
   })
 
   useEffect(() => {
@@ -55,7 +60,7 @@ export default function RegisterForm() {
       if (response?.data) {
         setError('email', {
           type: 'manual',
-          message: EMAIL_EXISTS
+          message: response?.message
         })
         return
       }

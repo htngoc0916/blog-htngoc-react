@@ -20,7 +20,6 @@ import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
 import userApi from '~/apis/userApi'
 import { toast } from 'react-toastify'
-import { EMAIL_EXISTS, SAVED_SUCCESS } from '~/utils/message'
 import { Field, Form } from '~/components/form'
 import { ButtonToggleSwitch } from '~/components/button'
 import { Label } from 'flowbite-react'
@@ -151,12 +150,15 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }
+
+        toast.success(response?.message)
+        onSaveUser?.()
       } else {
         const emailResponse: ApiResponseDTO<boolean> = await userApi.userCheckEmail(user?.email || '')
         if (emailResponse?.data) {
           setError('email', {
             type: 'manual',
-            message: EMAIL_EXISTS
+            message: emailResponse?.message
           })
           return
         }
@@ -165,9 +167,9 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }
+        toast.success(response?.message)
+        onSaveUser?.()
       }
-      toast.success(SAVED_SUCCESS)
-      onSaveUser?.()
     } catch (error: any) {
       console.log(error)
       return toast.error(error)

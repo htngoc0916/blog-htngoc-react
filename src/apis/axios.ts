@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getFreshToken, removeToken, saveToken } from '~/utils/auth'
+import { getFreshToken, getToken, removeToken, saveToken } from '~/utils/auth'
 import { APP_API_URL_DEV } from './apiConstanst'
 import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
@@ -11,8 +11,7 @@ import globalRouter from '~/utils/globalRouter'
 const axiosPublic = axios.create({
   baseURL: APP_API_URL_DEV,
   headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json'
+    'Content-Type': 'application/json'
   }
 })
 
@@ -34,8 +33,7 @@ axiosPublic.interceptors.response.use(
 const axiosPrivate = axios.create({
   baseURL: APP_API_URL_DEV,
   headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json'
+    'Content-Type': 'application/json'
   }
 })
 
@@ -65,21 +63,19 @@ axiosPrivate.interceptors.response.use(
 
             if (response && response.status.includes(API_STATUS.SUCCESS)) {
               if (originalRequest.headers) {
-                console.log('set Header')
                 originalRequest.headers['Authorization'] = `Bearer ${response.data.accessToken}`
               }
               store?.dispatch(refreshTokenSuccess({ ...response.data }))
               return axiosPrivate(originalRequest)
             }
-          } catch (refreshError) {
-            console.log('Error refreshing token', refreshError)
+          } catch (refreshError: any) {
+            console.log('Error refreshing token', refreshError?.response?.data)
           }
         }
       }
       if (error.response.status === 404 || error.response.status === 403) {
         await store?.dispatch(refreshTokenFailed())
         await removeToken()
-        // navigate('/login')
         if (globalRouter.navigate) {
           await globalRouter?.navigate('/login')
         }

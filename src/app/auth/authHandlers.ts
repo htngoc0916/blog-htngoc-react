@@ -6,7 +6,6 @@ import { call, put } from 'redux-saga/effects'
 import { removeToken, saveToken } from '~/utils/auth'
 import authApi from '~/apis/authApi'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
-import { LOGIN_SUCCESS, REGISTER_SUCCESS } from '~/utils/message'
 import globalRouter from '~/utils/globalRouter'
 
 function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
@@ -14,7 +13,7 @@ function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
     const response: ApiResponseDTO<User> = yield call(authApi.authRegister, action.payload)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(registerSuccess(response.data))
-      return toast.success(REGISTER_SUCCESS)
+      return toast.success(response?.message)
     }
     return toast.error(response.message)
   } catch (error: any) {
@@ -33,7 +32,7 @@ function* handleAuthLogin(action: PayloadAction<LoginRequestDTO>) {
       saveToken(accessToken, refreshToken)
       const userInfo: User = { ...response.data }
       yield put(loginSuccess(userInfo))
-      return toast.success(LOGIN_SUCCESS)
+      return toast.success(response?.message)
     }
     return toast.error(response.message)
   } catch (error: any) {

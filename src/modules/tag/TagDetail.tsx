@@ -12,7 +12,6 @@ import { Field, Form } from '~/components/form'
 import { ButtonToggleSwitch } from '~/components/button'
 import { toast } from 'react-toastify'
 import TagApi from '~/apis/tagApi'
-import { SAVED_SUCCESS } from '~/utils/message'
 import { Label } from 'flowbite-react'
 import { InputCustom, InputSelect } from '~/components/input'
 import { ColourOption } from '~/components/input/input-data'
@@ -76,24 +75,22 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
 
     try {
       setLoading(true)
-      if (data) {
-        console.log('Editing Tag:', tag)
-        const response: ApiResponseDTO<Tag> = await TagApi.editTag(tagRequest)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
+
+      const action = data ? TagApi.editTag : TagApi.addTag
+      const actionType = data ? 'Editing' : 'Creating new'
+      console.log(`${actionType} Tag:`, tag)
+
+      const response: ApiResponseDTO<Tag> = await action(tagRequest)
+
+      if (response?.status.includes(API_STATUS.FAILED)) {
+        toast.error(response.message)
       } else {
-        console.log('Creating new Tag:', tag)
-        const response: ApiResponseDTO<Tag> = await TagApi.addTag(tagRequest)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
+        toast.success(response?.message)
+        onSaveTag()
       }
-      toast.success(SAVED_SUCCESS)
-      onSaveTag()
     } catch (error: any) {
-      console.log(error)
-      return toast.error(error)
+      console.error(error)
+      toast.error(error.message)
     } finally {
       setLoading(false)
     }

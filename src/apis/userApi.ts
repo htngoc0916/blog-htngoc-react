@@ -10,6 +10,7 @@ import {
 import { axiosPrivate, axiosPublic } from './axios'
 import { USER_CHECK_EMAIL, USER_URL, USER_URL_AVATAR } from './apiConstanst'
 import { getToken } from '~/utils/auth'
+
 const userApi = {
   userCheckEmail(email: string): Promise<ApiResponseDTO<boolean>> {
     const url = USER_CHECK_EMAIL + '/' + email
@@ -18,6 +19,7 @@ const userApi = {
 
   getAllUsers(data: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<User[]>>> {
     const accessToken = getToken()
+
     return axiosPrivate.get(USER_URL, {
       headers: {
         'Content-Type': 'application/json',
