@@ -9,7 +9,6 @@ import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { TagDetail, TagFilter, TagList } from '~/modules/tag'
 import { API_STATUS, ApiResponseDTO, FilterPramsDTO, Tag } from '~/types'
-import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function TagsPage() {
   const dispatch = useDispatch()
@@ -68,7 +67,7 @@ export default function TagsPage() {
       if (response?.status.includes(API_STATUS.FAILED)) {
         return toast.error(response.message)
       }
-      toast.success(REMOVE_SUCCESS)
+      toast.success(response.message)
       dispatch(getTag(filter))
     } catch (error: any) {
       console.log(error)

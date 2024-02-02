@@ -68,6 +68,7 @@ const TagFilter = memo(function TagFilter(props: TagFilterProps) {
           control={control}
           className='w-72'
           name='search'
+          autoComplete='off'
         ></InputCustom>
         <ActionSearch type='submit'></ActionSearch>
       </Form>

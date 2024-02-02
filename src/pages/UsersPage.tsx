@@ -11,7 +11,6 @@ import { UserList } from '~/modules/user'
 import UserDetail from '~/modules/user/UserDetail'
 import UserFilter from '~/modules/user/UserFilter'
 import { API_STATUS, ApiResponseDTO, FilterPramsDTO, User } from '~/types'
-import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function UsersPage() {
   const dispatch = useDispatch()
@@ -66,7 +65,7 @@ export default function UsersPage() {
       if (response?.status.includes(API_STATUS.FAILED)) {
         return toast.error(response.message)
       }
-      toast.success(REMOVE_SUCCESS)
+      toast.success(response?.message)
       dispatch(getUser(filter))
     } catch (error: any) {
       console.log(error)

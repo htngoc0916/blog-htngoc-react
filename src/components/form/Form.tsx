@@ -15,10 +15,10 @@ export default function Form(props: FormProps) {
   const { className, children, onSubmit } = props
   return (
     <form
-      autoComplete='on'
       onSubmit={onSubmit}
       className={twMerge(classes.base, className)}
       encType='multipart/form-data'
+      autoComplete='off'
     >
       {children}
     </form>

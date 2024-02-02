@@ -15,22 +15,25 @@ import userApi from '~/apis/userApi'
 import { useTranslation } from 'react-i18next'
 import { useGoogleLogin } from '@react-oauth/google'
 
-const schema = yup.object({
-  email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
-  password: yup.string().required('Vui lòng nhập mật khẩu').min(6, 'Mật khẩu phải ít nhất 6 ký tự'),
-  passwordConfirm: yup
-    .string()
-    .oneOf([yup.ref('password'), undefined], 'Mật khẩu không khớp')
-    .required('Vui lòng xác nhận mật khẩu'),
-  userName: yup.string().required('Vui lòng nhập tên của bạn').min(3, 'Tên phải ít nhất 3 ký tự')
-})
-
 export default function RegisterForm() {
   const dispatch = useAppDispatch()
   const loading = useAppSelector(loadingSelector)
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
   const navigate = useNavigate()
   const { t } = useTranslation(['common', 'auth'])
+
+  const schema = yup.object({
+    email: yup.string().email(t('auth:form.invalid-email')).required(t('auth:form.email-required')),
+    password: yup
+      .string()
+      .required(t('auth:form.password-required'))
+      .min(6, t('auth:form.password-must-be-characters')),
+    passwordConfirm: yup
+      .string()
+      .oneOf([yup.ref('password'), undefined], t('auth:form.confirm-password-not-match'))
+      .required(t('auth:form.confirm-password-required')),
+    userName: yup.string().required(t('auth:form.username-required')).min(2, t('auth:form.username-must-be-characters'))
+  })
 
   const {
     handleSubmit,
@@ -89,6 +92,7 @@ export default function RegisterForm() {
           placeholder={t('placeholder.username')}
           control={control}
           message={errors?.userName?.message}
+          autoComplete='off'
         ></InputCustom>
       </Field>
       <Field>
@@ -99,6 +103,7 @@ export default function RegisterForm() {
           control={control}
           message={errors?.email?.message}
           placeholder={t('placeholder.email')}
+          autoComplete='off'
         ></InputCustom>
       </Field>
       <Field>
@@ -109,6 +114,7 @@ export default function RegisterForm() {
           control={control}
           message={errors?.password?.message}
           placeholder={t('placeholder.password')}
+          autoComplete='off'
         ></InputCustom>
       </Field>
       <Field>
@@ -119,6 +125,7 @@ export default function RegisterForm() {
           control={control}
           message={errors?.passwordConfirm?.message}
           placeholder={t('placeholder.confirm-password')}
+          autoComplete='off'
         ></InputCustom>
       </Field>
       <Button

@@ -15,7 +15,7 @@ const languages = [
     icon: IconVietNam
   },
   {
-    key: 'kr',
+    key: 'ko',
     value: '한국어',
     icon: IconKorea
   },

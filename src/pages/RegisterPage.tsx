@@ -6,7 +6,7 @@ export default function RegisterPage() {
   const { t } = useTranslation('auth')
 
   return (
-    <AuthenticationLayout heading={t('heading')} description={t('description')}>
+    <AuthenticationLayout heading={t('heading')} description={t('description-register')}>
       <RegisterForm />
     </AuthenticationLayout>
   )

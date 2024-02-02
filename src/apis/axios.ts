@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getFreshToken, getToken, removeToken, saveToken } from '~/utils/auth'
+import { getFreshToken, removeToken, saveToken } from '~/utils/auth'
 import { APP_API_URL_DEV } from './apiConstanst'
 import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
@@ -69,7 +69,7 @@ axiosPrivate.interceptors.response.use(
               return axiosPrivate(originalRequest)
             }
           } catch (refreshError: any) {
-            console.log('Error refreshing token', refreshError?.response?.data)
+            console.log('Error refreshing token')
           }
         }
       }

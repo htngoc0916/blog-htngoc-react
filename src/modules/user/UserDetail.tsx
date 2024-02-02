@@ -1,13 +1,4 @@
-import {
-  API_STATUS,
-  ApiResponseDTO,
-  DeleteAvatarDTO,
-  FileMaster,
-  ROLE,
-  UploadAvatarDTO,
-  User,
-  UserRequestDTO
-} from '~/types'
+import { API_STATUS, ApiResponseDTO, DeleteAvatarDTO, FileMaster, ROLE, UploadAvatarDTO, User } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -27,6 +18,7 @@ import { InputCustom, InputFile, InputPassword } from '~/components/input'
 import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2'
 import { RadioCustom } from '~/components/radio'
 import { checkAdminRole } from '~/utils/checkAdmin'
+import categoryApi from '~/apis/categoryApi'
 
 export interface UserDetailProps {
   data: User | undefined
@@ -133,27 +125,14 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     [navigate, setValue, data?.email, isEdit]
   )
 
-  //save
   const handleSave = async (user: User) => {
-    const userRequest: UserRequestDTO = {
-      ...user,
-      modId: isEdit ? userInfo?.id : undefined,
-      regId: isEdit ? undefined : userInfo?.id,
-      navigate
-    }
-
     try {
       setLoading(true)
-      if (isEdit) {
-        const response: ApiResponseDTO<User> = await userApi.editUser(userRequest)
-        console.log('🚀 ~ handleSave ~ response:', response.message)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
 
-        toast.success(response?.message)
-        onSaveUser?.()
-      } else {
+      const action = isEdit ? userApi.editUser : userApi.addUser
+
+      //check email
+      if (!isEdit) {
         const emailResponse: ApiResponseDTO<boolean> = await userApi.userCheckEmail(user?.email || '')
         if (emailResponse?.data) {
           setError('email', {
@@ -162,17 +141,22 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
           })
           return
         }
+      }
 
-        const response: ApiResponseDTO<User> = await userApi.addUser(userRequest)
-        if (response?.status.includes(API_STATUS.FAILED)) {
-          return toast.error(response.message)
-        }
+      const userRequest: User = {
+        ...user,
+        modId: isEdit ? userInfo?.id : undefined,
+        regId: isEdit ? undefined : userInfo?.id
+      }
+      const response: ApiResponseDTO<User> = await action(userRequest)
+      if (response?.status.includes(API_STATUS.FAILED)) {
+        toast.error(response.message)
+      } else {
         toast.success(response?.message)
         onSaveUser?.()
       }
-    } catch (error: any) {
-      console.log(error)
-      return toast.error(error)
+    } catch (error) {
+      console.error(error)
     } finally {
       setLoading(false)
     }

@@ -15,17 +15,17 @@ import { Form, Field } from '~/components/form'
 import { useTranslation } from 'react-i18next'
 import { useGoogleLogin } from '@react-oauth/google'
 
-const schema = yup.object({
-  email: yup.string().email('Kiểm tra lại định dạng email').required('Vui lòng nhập email của bạn'),
-  password: yup.string().required('Vui lòng nhập mật khẩu').min(6, 'Mật khẩu phải ít nhất 6 ký tự')
-})
-
 export default function LoginForm() {
   const dispatch = useAppDispatch()
   const loading = useAppSelector(loadingSelector)
   const isAuthenticated = useAppSelector(isAuthenticatedSelector)
   const navigate = useNavigate()
   const { t } = useTranslation(['common', 'auth'])
+
+  const schema = yup.object({
+    email: yup.string().email(t('auth:form.invalid-email')).required(t('auth:form.email-required')),
+    password: yup.string().required(t('auth:form.password-required')).min(6, t('auth:form.password-must-be-characters'))
+  })
 
   const {
     handleSubmit,
@@ -78,6 +78,7 @@ export default function LoginForm() {
           placeholder={t('common:placeholder.email')}
           control={control}
           message={errors?.email?.message}
+          autoComplete='on'
         ></InputCustom>
       </Field>
       <Field>
@@ -87,6 +88,7 @@ export default function LoginForm() {
           placeholder={t('common:placeholder.password')}
           control={control}
           message={errors?.password?.message}
+          autoComplete='on'
         ></InputPassword>
       </Field>
       <div className='flex items-center justify-between'>

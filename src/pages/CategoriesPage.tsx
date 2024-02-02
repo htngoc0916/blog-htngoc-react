@@ -14,7 +14,6 @@ import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { CategoryDetail, CategoryList, CategoryFilter } from '~/modules/category'
 import { API_STATUS, ApiResponseDTO, Category, FilterPramsDTO } from '~/types'
-import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function CategoriesPage() {
   const dispatch = useDispatch()
@@ -77,7 +76,7 @@ export default function CategoriesPage() {
           return toast.error(response.message)
         }
 
-        toast.success(REMOVE_SUCCESS)
+        toast.success(response?.message)
         dispatch(getCategory(filter))
       } catch (error: any) {
         console.log(error)
