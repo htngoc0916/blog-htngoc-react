@@ -11,7 +11,7 @@ const fileUpload = {
     const formData = new FormData()
     formData.append('file', data.file)
 
-    return axiosPrivate(data.navigate).post(url, formData, {
+    return axiosPrivate.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
@@ -23,7 +23,7 @@ const fileUpload = {
     const accessToken = getToken()
     const url = CLOUDINARY_UPLOAD + '/delete/' + data.url
 
-    return axiosPrivate(data.navigate).delete(url, {
+    return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`

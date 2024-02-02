@@ -2,11 +2,17 @@ import { Category, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/typ
 import { CATEGORY_URL } from './apiConstanst'
 import { getToken } from '~/utils/auth'
 import { axiosPrivate, axiosPublic } from './axios'
+import i18n from '~/i18n/i18n'
 
 const categoryApi = {
   getAllCategories(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Category[]>>> {
     const url = CATEGORY_URL
-    return axiosPublic.get(url, { params })
+    return axiosPublic.get(url, {
+      headers: {
+        'Accept-Language': i18n.language
+      },
+      params
+    })
   },
 
   addCategory(data: Category): Promise<ApiResponseDTO<Category>> {
@@ -14,7 +20,8 @@ const categoryApi = {
     return axiosPrivate.post(CATEGORY_URL, data, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -25,7 +32,8 @@ const categoryApi = {
     return axiosPrivate.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -36,7 +44,8 @@ const categoryApi = {
     return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   }

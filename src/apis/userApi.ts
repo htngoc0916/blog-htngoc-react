@@ -10,11 +10,12 @@ import {
 import { axiosPrivate, axiosPublic } from './axios'
 import { USER_CHECK_EMAIL, USER_URL, USER_URL_AVATAR } from './apiConstanst'
 import { getToken } from '~/utils/auth'
+import i18n from '~/i18n/i18n'
 
 const userApi = {
   userCheckEmail(email: string): Promise<ApiResponseDTO<boolean>> {
     const url = USER_CHECK_EMAIL + '/' + email
-    return axiosPublic.get(url)
+    return axiosPublic.get(url, { headers: { 'Accept-Language': i18n.language } })
   },
 
   getAllUsers(data: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<User[]>>> {
@@ -23,7 +24,8 @@ const userApi = {
     return axiosPrivate.get(USER_URL, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       },
       params: {
         ...data.filter
@@ -37,7 +39,8 @@ const userApi = {
     return axiosPrivate.get(url, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -47,7 +50,8 @@ const userApi = {
     return axiosPrivate.post(USER_URL, data, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -59,8 +63,8 @@ const userApi = {
     return axiosPrivate.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -71,7 +75,8 @@ const userApi = {
     return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -86,7 +91,8 @@ const userApi = {
     return axiosPrivate.post(USER_URL_AVATAR, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   },
@@ -97,7 +103,8 @@ const userApi = {
     return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
       }
     })
   }
