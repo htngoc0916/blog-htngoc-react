@@ -1,4 +1,4 @@
-import { CategoryRequestDTO, Category, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
+import { Category, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
 import { CATEGORY_URL } from './apiConstanst'
 import { getToken } from '~/utils/auth'
 import { axiosPrivate, axiosPublic } from './axios'
@@ -9,9 +9,9 @@ const categoryApi = {
     return axiosPublic.get(url, { params })
   },
 
-  addCategory(data: CategoryRequestDTO): Promise<ApiResponseDTO<Category>> {
+  addCategory(data: Category): Promise<ApiResponseDTO<Category>> {
     const accessToken = getToken()
-    return axiosPrivate(data.navigate).post(CATEGORY_URL, data, {
+    return axiosPrivate.post(CATEGORY_URL, data, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -19,10 +19,10 @@ const categoryApi = {
     })
   },
 
-  editCategory(data: CategoryRequestDTO): Promise<ApiResponseDTO<Category>> {
+  editCategory(data: Category): Promise<ApiResponseDTO<Category>> {
     const accessToken = getToken()
     const url = CATEGORY_URL + '/' + data.id
-    return axiosPrivate(data.navigate).put(url, data, {
+    return axiosPrivate.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -30,10 +30,10 @@ const categoryApi = {
     })
   },
 
-  removeCategory(id: number, navigate: (to: string) => void): Promise<ApiResponseDTO<null>> {
+  removeCategory(id: number): Promise<ApiResponseDTO<null>> {
     const accessToken = getToken()
     const url = CATEGORY_URL + '/' + id
-    return axiosPrivate(navigate).delete(url, {
+    return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`

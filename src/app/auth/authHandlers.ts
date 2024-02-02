@@ -1,12 +1,13 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
-import { LoginRequestDTO, LogoutRequestDTO, RegisterRequestDTO, User } from '~/types'
+import { LoginRequestDTO, RegisterRequestDTO, User } from '~/types'
 import { loginFailed, loginSuccess, logoutSuccess, registerSuccess, registerFailed } from './authSlice'
 import { call, put } from 'redux-saga/effects'
 import { removeToken, saveToken } from '~/utils/auth'
 import authApi from '~/apis/authApi'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
 import { LOGIN_SUCCESS, REGISTER_SUCCESS } from '~/utils/message'
+import globalRouter from '~/utils/globalRouter'
 
 function* handleAuthRegister(action: PayloadAction<RegisterRequestDTO>) {
   try {
@@ -42,11 +43,12 @@ function* handleAuthLogin(action: PayloadAction<LoginRequestDTO>) {
   }
 }
 
-function* handleAuthLogOut(action: PayloadAction<LogoutRequestDTO>) {
-  const { payload } = action
+function* handleAuthLogOut() {
   yield put(logoutSuccess())
   removeToken()
-  payload.navigate('/login')
+  if (globalRouter.navigate) {
+    globalRouter.navigate('/login')
+  }
 }
 
 export { handleAuthLogin, handleAuthRegister, handleAuthLogOut }

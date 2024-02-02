@@ -1,7 +1,6 @@
 import { Pagination } from 'flowbite-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import userApi from '~/apis/userApi'
 import { useAppSelector } from '~/app/hooks'
@@ -16,7 +15,6 @@ import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function UsersPage() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const filter = useAppSelector(UserFilterSelector)
   const userList = useAppSelector(UserListSelector)
@@ -26,12 +24,7 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined)
 
   const onPageChange = (page: number) => {
-    dispatch(
-      getUser({
-        filter: { ...filter, pageNo: page },
-        navigate
-      })
-    )
+    dispatch(getUser({ ...filter, pageNo: page }))
   }
 
   const handleAddUser = () => {
@@ -42,7 +35,7 @@ export default function UsersPage() {
   const handleEditUser = useCallback(async (user: User) => {
     setIsUserDetailOpen(true)
     try {
-      const response: ApiResponseDTO<User> = await userApi.getUserInfo(user?.id || 0, navigate)
+      const response: ApiResponseDTO<User> = await userApi.getUserInfo(user?.id || 0)
       if (response?.status.includes(API_STATUS.SUCCESS)) {
         setSelectedUser(response.data)
       }
@@ -54,9 +47,9 @@ export default function UsersPage() {
 
   const handleSearchUser = useCallback(
     (filter: FilterPramsDTO) => {
-      dispatch(getUser({ filter, navigate }))
+      dispatch(getUser(filter))
     },
-    [dispatch, navigate]
+    [dispatch]
   )
 
   const hanldeCloseUserDetail = useCallback(() => {
@@ -64,17 +57,17 @@ export default function UsersPage() {
   }, [])
 
   const handleSaveUser = useCallback(() => {
-    dispatch(getUser({ filter, navigate }))
+    dispatch(getUser(filter))
   }, [])
 
   const handleRemoveUser = useCallback(async (user: User) => {
     try {
-      const response: ApiResponseDTO<null> = await userApi.removeUser(user?.id || 0, navigate)
+      const response: ApiResponseDTO<null> = await userApi.removeUser(user?.id || 0)
       if (response?.status.includes(API_STATUS.FAILED)) {
         return toast.error(response.message)
       }
       toast.success(REMOVE_SUCCESS)
-      dispatch(getUser({ filter, navigate }))
+      dispatch(getUser(filter))
     } catch (error: any) {
       console.log(error)
       return toast.error(error)
@@ -82,7 +75,7 @@ export default function UsersPage() {
   }, [])
 
   useEffect(() => {
-    dispatch(getUser({ filter: { ...filter, sortDir: 'ASC' }, navigate }))
+    dispatch(getUser({ ...filter, sortDir: 'ASC' }))
   }, [])
 
   return (

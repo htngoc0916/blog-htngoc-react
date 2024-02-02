@@ -1,13 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {
-  defaultPagination,
-  defaultFilter,
-  FilterPramsDTO,
-  PaginationResponseDTO,
-  ListResponseDTO,
-  User,
-  FetchUserDTO
-} from '~/types'
+import { defaultPagination, defaultFilter, FilterPramsDTO, PaginationResponseDTO, ListResponseDTO, User } from '~/types'
 import { RootState } from '../store'
 
 export interface UserSate {
@@ -28,7 +20,7 @@ const userSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    getUser(state, action: PayloadAction<FetchUserDTO>) {
+    getUser(state, action: PayloadAction<FilterPramsDTO>) {
       console.log('🚀 ~ getUser ~ action:', action.type)
       state.loading = true
       // state.userList = []

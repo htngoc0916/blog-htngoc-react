@@ -3,7 +3,7 @@ import { TextCustom } from '~/components/text'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { API_STATUS, ApiResponseDTO, Category, CategoryRequestDTO } from '~/types'
+import { API_STATUS, ApiResponseDTO, Category } from '~/types'
 import { InputCustom } from '~/components/input'
 import { Label } from 'flowbite-react'
 import { useEffect, useState } from 'react'
@@ -12,7 +12,6 @@ import { twMerge } from 'tailwind-merge'
 import { ActionClose, ActionSave } from '~/components/action'
 import { ButtonToggleSwitch } from '~/components/button'
 import categoryApi from '~/apis/categoryApi'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { SAVED_SUCCESS } from '~/utils/message'
 import { useAppSelector } from '~/app/hooks'
@@ -48,7 +47,6 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
       usedYn: data?.usedYn || 'Y'
     }
   })
-  const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
   const isEdit = !!data
@@ -65,11 +63,10 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
   }
 
   const handleSave = async (category: Category) => {
-    const categoryRequest: CategoryRequestDTO = {
+    const categoryRequest: Category = {
       ...category,
       modId: isEdit ? userInfo?.id : undefined,
-      regId: isEdit ? undefined : userInfo?.id,
-      navigate
+      regId: isEdit ? undefined : userInfo?.id
     }
 
     try {

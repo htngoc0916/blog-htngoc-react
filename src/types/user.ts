@@ -1,4 +1,4 @@
-import { BaseDTO, FilterPramsDTO } from '.'
+import { BaseDTO } from '.'
 import { Role } from './role'
 
 export enum ROLE {
@@ -13,15 +13,6 @@ export interface User extends BaseDTO {
   avatar?: string
   usedYn?: string
   roles?: Role[]
-}
-
-export interface FetchUserDTO {
-  navigate: (to: string) => void
-  filter: FilterPramsDTO
-}
-
-export interface UserRequestDTO extends User {
-  navigate: (to: string) => void
 }
 
 export interface UploadAvatarDTO {

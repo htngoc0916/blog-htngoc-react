@@ -1,12 +1,11 @@
 import {
   ApiResponseDTO,
   ListResponseDTO,
-  FetchUserDTO,
   User,
-  UserRequestDTO,
   UploadAvatarDTO,
   DeleteAvatarDTO,
-  FileMaster
+  FileMaster,
+  FilterPramsDTO
 } from '~/types'
 import { axiosPrivate, axiosPublic } from './axios'
 import { USER_CHECK_EMAIL, USER_URL, USER_URL_AVATAR } from './apiConstanst'
@@ -17,9 +16,9 @@ const userApi = {
     return axiosPublic.get(url)
   },
 
-  getAllUsers(data: FetchUserDTO): Promise<ApiResponseDTO<ListResponseDTO<User[]>>> {
+  getAllUsers(data: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<User[]>>> {
     const accessToken = getToken()
-    return axiosPrivate(data.navigate).get(USER_URL, {
+    return axiosPrivate.get(USER_URL, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -30,10 +29,10 @@ const userApi = {
     })
   },
 
-  getUserInfo(id: number, navigate: (to: string) => void): Promise<ApiResponseDTO<User>> {
+  getUserInfo(id: number): Promise<ApiResponseDTO<User>> {
     const accessToken = getToken()
     const url = USER_URL + '/' + id
-    return axiosPrivate(navigate).get(url, {
+    return axiosPrivate.get(url, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -41,9 +40,9 @@ const userApi = {
     })
   },
 
-  addUser(data: UserRequestDTO): Promise<ApiResponseDTO<User>> {
+  addUser(data: User): Promise<ApiResponseDTO<User>> {
     const accessToken = getToken()
-    return axiosPrivate(data.navigate).post(USER_URL, data, {
+    return axiosPrivate.post(USER_URL, data, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -51,11 +50,11 @@ const userApi = {
     })
   },
 
-  editUser(data: UserRequestDTO): Promise<ApiResponseDTO<User>> {
+  editUser(data: User): Promise<ApiResponseDTO<User>> {
     const accessToken = getToken()
     const url = USER_URL + '/' + data.id
 
-    return axiosPrivate(data.navigate).put(url, data, {
+    return axiosPrivate.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
         // 'Content-Type': 'multipart/form-data',
@@ -64,10 +63,10 @@ const userApi = {
     })
   },
 
-  removeUser(id: number, navigate: (to: string) => void): Promise<ApiResponseDTO<null>> {
+  removeUser(id: number): Promise<ApiResponseDTO<null>> {
     const accessToken = getToken()
     const url = USER_URL + '/' + id
-    return axiosPrivate(navigate).delete(url, {
+    return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -82,7 +81,7 @@ const userApi = {
     formData.append('file', data.file)
     formData.append('email', data.email)
 
-    return axiosPrivate(data.navigate).post(USER_URL_AVATAR, formData, {
+    return axiosPrivate.post(USER_URL_AVATAR, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
@@ -93,7 +92,7 @@ const userApi = {
   deleteAvatar(data: DeleteAvatarDTO): Promise<ApiResponseDTO<string>> {
     const accessToken = getToken()
     const url = USER_URL_AVATAR + '/' + data.userId
-    return axiosPrivate(data.navigate).delete(url, {
+    return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`

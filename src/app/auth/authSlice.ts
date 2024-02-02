@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '~/app/store'
-import { LoginRequestDTO, LogoutRequestDTO, RefreshTokenDTO, RegisterRequestDTO, User } from '~/types'
+import { LoginRequestDTO, RefreshTokenDTO, RegisterRequestDTO, User } from '~/types'
 
 export interface AuthState {
   loading: boolean
@@ -30,8 +30,7 @@ const authSlice = createSlice({
     loginFailed(state) {
       state.loading = false
     },
-    logoutStart(state, action: PayloadAction<LogoutRequestDTO>) {
-      console.log('🚀 ~ logoutStart ~ action:', action.type)
+    logoutStart(state) {
       state.loading = true
     },
     logoutSuccess(state) {

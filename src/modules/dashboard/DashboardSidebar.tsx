@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { getPrivateMenu, privateMenuSelector } from '~/app/menu/menuSlice'
 import { HiOutlineBars3BottomLeft, HiBars3CenterLeft } from 'react-icons/hi2'
-import { useNavigate } from 'react-router-dom'
 import { HiLogout } from 'react-icons/hi'
 import { logoutStart } from '~/app/auth/authSlice'
 import { SidebarCustom, SidebarLogo, SidebarGroup, SidebarItem } from '~/components/sidebar'
@@ -13,7 +12,6 @@ interface DashboardsidebarProps {}
 
 const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const privateMenus = useAppSelector(privateMenuSelector)
 
   const { isOpen, toggleSidebar } = useSidebar()
@@ -23,7 +21,7 @@ const DashboardSidebar: React.FC<DashboardsidebarProps> = () => {
   }, [dispatch])
 
   const handleLogout = () => {
-    dispatch(logoutStart({ navigate }))
+    dispatch(logoutStart())
   }
 
   return (

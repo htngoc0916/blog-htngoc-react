@@ -1,7 +1,6 @@
 import { Pagination } from 'flowbite-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import categoryApi from '~/apis/categoryApi'
 import {
@@ -19,7 +18,6 @@ import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function CategoriesPage() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   // const loading = useAppSelector(categoryLoadingSelector)
   const filter = useAppSelector(categoryFilterSelector)
@@ -74,7 +72,7 @@ export default function CategoriesPage() {
   const handleRemoveCategory = useCallback(
     async (category: Category) => {
       try {
-        const response: ApiResponseDTO<null> = await categoryApi.removeCategory(category?.id || 0, navigate)
+        const response: ApiResponseDTO<null> = await categoryApi.removeCategory(category?.id || 0)
         if (response?.status.includes(API_STATUS.FAILED)) {
           return toast.error(response.message)
         }
@@ -86,7 +84,7 @@ export default function CategoriesPage() {
         return toast.error(error)
       }
     },
-    [dispatch, navigate, filter]
+    [dispatch, filter]
   )
 
   useEffect(() => {

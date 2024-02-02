@@ -1,4 +1,4 @@
-import { TagRequestDTO, ApiResponseDTO, ListResponseDTO, FilterPramsDTO, Tag } from '~/types'
+import { ApiResponseDTO, ListResponseDTO, FilterPramsDTO, Tag } from '~/types'
 import { TAG_URL } from './apiConstanst'
 import { getToken } from '~/utils/auth'
 import { axiosPrivate, axiosPublic } from './axios'
@@ -8,9 +8,9 @@ const TagApi = {
     return axiosPublic.get(TAG_URL, { params })
   },
 
-  addTag(data: TagRequestDTO): Promise<ApiResponseDTO<Tag>> {
+  addTag(data: Tag): Promise<ApiResponseDTO<Tag>> {
     const accessToken = getToken()
-    return axiosPrivate(data.navigate).post(TAG_URL, data, {
+    return axiosPrivate.post(TAG_URL, data, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -18,10 +18,10 @@ const TagApi = {
     })
   },
 
-  editTag(data: TagRequestDTO): Promise<ApiResponseDTO<Tag>> {
+  editTag(data: Tag): Promise<ApiResponseDTO<Tag>> {
     const accessToken = getToken()
     const url = TAG_URL + '/' + data.id
-    return axiosPrivate(data.navigate).put(url, data, {
+    return axiosPrivate.put(url, data, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
@@ -29,10 +29,10 @@ const TagApi = {
     })
   },
 
-  removeTag(id: number, navigate: (to: string) => void): Promise<ApiResponseDTO<null>> {
+  removeTag(id: number): Promise<ApiResponseDTO<null>> {
     const accessToken = getToken()
     const url = TAG_URL + '/' + id
-    return axiosPrivate(navigate).delete(url, {
+    return axiosPrivate.delete(url, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`

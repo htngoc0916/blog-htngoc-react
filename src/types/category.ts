@@ -1,8 +1,6 @@
 import { BaseDTO } from '.'
 
-export interface CategoryRequestDTO extends Category {
-  navigate: (to: string) => void
-}
+export interface CategoryRequestDTO extends Category {}
 
 export interface Category extends BaseDTO {
   id?: number

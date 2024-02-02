@@ -1,7 +1,6 @@
 import { Pagination } from 'flowbite-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import TagApi from '~/apis/tagApi'
 import { useAppSelector } from '~/app/hooks'
@@ -14,7 +13,6 @@ import { REMOVE_SUCCESS } from '~/utils/message'
 
 export default function TagsPage() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const filter = useAppSelector(TagFilterSelector)
   const tagList = useAppSelector(TagListSelector)
@@ -66,7 +64,7 @@ export default function TagsPage() {
 
   const handleRemoveTag = useCallback(async (tag: Tag) => {
     try {
-      const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0, navigate)
+      const response: ApiResponseDTO<null> = await TagApi.removeTag(tag?.id || 0)
       if (response?.status.includes(API_STATUS.FAILED)) {
         return toast.error(response.message)
       }

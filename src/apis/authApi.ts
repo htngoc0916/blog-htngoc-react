@@ -14,8 +14,7 @@ const authApi = {
   },
 
   authRefreshToken(data: RefreshTokenDTO): Promise<ApiResponseDTO<AuthResponseDTO>> {
-    console.log('🚀 ~ authRefreshToken ~ data:', data.refreshToken)
-    return axiosPrivate(data.navigate).post(AUTH_REFRESH_TOKEN, { ...data })
+    return axiosPrivate.post(AUTH_REFRESH_TOKEN, { ...data })
   }
 }
 

@@ -17,7 +17,7 @@ export default function HeaderUserInfo(props: DefaultProps) {
   const isAdmin = checkAdminRole(userInfo)
 
   const handleLogout = () => {
-    dispatch(logoutStart({ navigate }))
+    dispatch(logoutStart())
   }
 
   return (

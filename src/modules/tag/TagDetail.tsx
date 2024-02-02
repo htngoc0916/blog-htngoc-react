@@ -1,11 +1,10 @@
 import { twMerge } from 'tailwind-merge'
 import { ActionClose, ActionSave } from '~/components/action'
 import { TextCustom } from '~/components/text'
-import { API_STATUS, ApiResponseDTO, Tag, TagRequestDTO } from '~/types'
+import { API_STATUS, ApiResponseDTO, Tag } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
 import { useEffect, useState } from 'react'
@@ -49,7 +48,6 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
     }
   })
 
-  const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
   const isEdit = !!data
@@ -70,11 +68,10 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
   }
 
   const handleSave = async (tag: Tag) => {
-    const tagRequest: TagRequestDTO = {
+    const tagRequest: Tag = {
       ...tag,
       modId: isEdit ? userInfo?.id : undefined,
-      regId: isEdit ? undefined : userInfo?.id,
-      navigate
+      regId: isEdit ? undefined : userInfo?.id
     }
 
     try {
