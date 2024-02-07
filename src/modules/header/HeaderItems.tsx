@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 import { useAppDispatch, useAppSelector } from '~/app/hooks'
 import { getPublicMenu, pulicMenuSelector } from '~/app/menu/menuSlice'
+import i18n from '~/i18n/i18n'
 
 const classes = {
   base: 'block p-2.5 text-lg font-medium text-text1 hover:text-primary-700 dark:text-text3 dark:hover:text-primary-500 transition-all dark:text-text7'
@@ -17,6 +18,7 @@ export default function HeaderItems(props: HeaderItemsProps) {
   const pubListMenus = useAppSelector(pulicMenuSelector)
 
   useEffect(() => {
+    console.log('🚀 ~ useEffect ~ i18n.language:', i18n.language)
     dishpatch(getPublicMenu())
   }, [dishpatch])
 

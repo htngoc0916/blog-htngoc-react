@@ -15,6 +15,7 @@ import categoryApi from '~/apis/categoryApi'
 import { toast } from 'react-toastify'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
+import { useTranslation } from 'react-i18next'
 
 export interface CategoryDetailProps {
   data: Category | null
@@ -23,14 +24,15 @@ export interface CategoryDetailProps {
   onSaveCategory: () => void
 }
 
-const schema = yup.object({
-  id: yup.number(),
-  categoryName: yup.string().required('Vui lòng nhập tên category'),
-  description: yup.string(),
-  usedYn: yup.string()
-})
-
 export default function CategoryDetail({ data, className, onCloseCategory, onSaveCategory }: CategoryDetailProps) {
+  const { t } = useTranslation('category')
+  const schema = yup.object({
+    id: yup.number(),
+    categoryName: yup.string().required(t('form.category-required')),
+    description: yup.string(),
+    usedYn: yup.string()
+  })
+
   const {
     handleSubmit,
     control,

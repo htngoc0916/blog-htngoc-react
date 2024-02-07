@@ -15,6 +15,7 @@ import TagApi from '~/apis/tagApi'
 import { Label } from 'flowbite-react'
 import { InputCustom, InputSelect } from '~/components/input'
 import { ColourOption } from '~/components/input/input-data'
+import { useTranslation } from 'react-i18next'
 
 export interface TagDetailProps {
   data: Tag | null
@@ -23,14 +24,16 @@ export interface TagDetailProps {
   onSaveTag: () => void
 }
 
-const schema = yup.object({
-  id: yup.number(),
-  tagName: yup.string().required('Vui lòng nhập tên Tag'),
-  color: yup.string(),
-  usedYn: yup.string()
-})
-
 export default function TagDetail({ data, className, onCloseTag, onSaveTag }: TagDetailProps) {
+  const { t } = useTranslation('tag')
+
+  const schema = yup.object({
+    id: yup.number(),
+    tagName: yup.string().required(t('form.validation.tag-required')),
+    color: yup.string(),
+    usedYn: yup.string()
+  })
+
   const {
     handleSubmit,
     control,

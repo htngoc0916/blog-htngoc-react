@@ -7,7 +7,8 @@ import * as ko from '~/language/ko'
 
 const DETECTION_OPTIONS = {
   order: ['localStorage', 'navigator'],
-  caches: ['localStorage']
+  caches: ['localStorage'],
+  convertDetectedLanguage: (lng: string) => lng.split('-')[0]
 }
 
 export const defaultNS = 'vi'
@@ -21,7 +22,7 @@ i18n.use(initReactI18next).use(LanguageDetector).init({
   detection: DETECTION_OPTIONS,
   resources,
   defaultNS,
-  fallbackLng: 'en'
+  fallbackLng: 'vi'
 })
 
 export default i18n

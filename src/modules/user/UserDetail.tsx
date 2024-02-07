@@ -18,7 +18,7 @@ import { InputCustom, InputFile, InputPassword } from '~/components/input'
 import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2'
 import { RadioCustom } from '~/components/radio'
 import { checkAdminRole } from '~/utils/checkAdmin'
-import categoryApi from '~/apis/categoryApi'
+import { useTranslation } from 'react-i18next'
 
 export interface UserDetailProps {
   data: User | undefined
@@ -31,17 +31,19 @@ export interface DelelteImage {
   imageUrl: string
 }
 
-const schema = yup.object({
-  id: yup.number(),
-  userName: yup.string().required('Vui lòng nhập tên'),
-  email: yup.string().required('Vui lòng nhập email'),
-  avatar: yup.string(),
-  usedYn: yup.string(),
-  password: yup.string(),
-  role: yup.string()
-})
-
 const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSaveUser }: UserDetailProps) {
+  const { t } = useTranslation('auth')
+
+  const schema = yup.object({
+    id: yup.number(),
+    userName: yup.string().required(t('form.username-required')),
+    email: yup.string().required(t('form.email-required')),
+    avatar: yup.string(),
+    usedYn: yup.string(),
+    password: yup.string(),
+    role: yup.string()
+  })
+
   const {
     handleSubmit,
     control,
