@@ -34,18 +34,17 @@ export function HeaderNavbar(props: DefaultProps) {
       >
         <div className='container-page'>
           <Navbar fluid rounded className='transition-all bg-transparent sm:px-0 dark:bg-darkbg'>
-            <HeaderLogo href='/' className='logo'></HeaderLogo>
+            <HeaderLogo href='/' className='logo' />
 
             <div className='flex items-center justify-center gap-3 md:order-2 avatar'>
-              <Internationalization></Internationalization>
-
-              <ButtonDarkMode></ButtonDarkMode>
+              <Internationalization />
+              <ButtonDarkMode />
               <HeaderUserInfo />
               <Navbar.Toggle />
             </div>
 
             <Navbar.Collapse color='primary'>
-              <HeaderItems></HeaderItems>
+              <HeaderItems />
             </Navbar.Collapse>
           </Navbar>
         </div>

@@ -5,13 +5,20 @@ import * as vi from '~/language/vi'
 import * as en from '~/language/en'
 import * as ko from '~/language/ko'
 
+export const defaultNS = 'vi'
+
 const DETECTION_OPTIONS = {
   order: ['localStorage', 'navigator'],
   caches: ['localStorage'],
-  convertDetectedLanguage: (lng: string) => lng.split('-')[0]
+  convertDetectedLanguage: () => {
+    const defaultLanguage = localStorage.getItem('i18nextLng')
+    if (defaultLanguage === null) {
+      return 'vi'
+    }
+    return defaultLanguage
+  }
 }
 
-export const defaultNS = 'vi'
 export const resources = {
   en,
   vi,
@@ -22,7 +29,7 @@ i18n.use(initReactI18next).use(LanguageDetector).init({
   detection: DETECTION_OPTIONS,
   resources,
   defaultNS,
-  fallbackLng: 'vi'
+  fallbackLng: 'en'
 })
 
 export default i18n

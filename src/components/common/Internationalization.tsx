@@ -1,5 +1,5 @@
 import { Dropdown } from 'flowbite-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { twMerge } from 'tailwind-merge'
 import { IconVietNam, IconUnitedStates, IconKorea } from '~/components/icons'
@@ -34,7 +34,10 @@ interface Laguage {
 
 export default function Internationalization({ className }: InternationalizationProps) {
   const { i18n } = useTranslation()
-  const defaultLanguage = languages.find((language) => language.key === i18n.language) as Laguage
+  const defaultLanguage = useMemo(() => {
+    return languages.find((language) => language.key === i18n.language) as Laguage
+  }, [i18n.language])
+
   const [currentLanguage, setCurrentLanguage] = useState<Laguage>(defaultLanguage)
 
   const handleChangeLanguage = (item: Laguage) => {
