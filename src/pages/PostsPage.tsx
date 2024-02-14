@@ -39,7 +39,6 @@ export default function PostsPage() {
   }, [])
 
   const handleEditPost = useCallback((post: Post) => {
-    console.log('🚀 ~ PostsPage ~ post:', post)
     navigate(`${pathname}/${post.id}`)
   }, [])
 

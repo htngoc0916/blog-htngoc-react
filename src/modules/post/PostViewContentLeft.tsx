@@ -1,6 +1,6 @@
 export interface IPostContentLeftProps {}
 
-export default function PostContentLeft() {
+export default function PostViewContentLeft() {
   return (
     <div
       id='category'

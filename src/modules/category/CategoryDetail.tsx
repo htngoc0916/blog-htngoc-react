@@ -130,6 +130,7 @@ export default function CategoryDetail({ data, className, onCloseCategory, onSav
             name='description'
             color='primary'
             rows={6}
+            maxLength={150}
             control={control}
             className='resize-none dark:bg-darkbg3'
           />

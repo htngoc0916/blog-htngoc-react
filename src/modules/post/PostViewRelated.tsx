@@ -12,7 +12,7 @@ import { HiArrowLongRight, HiArrowLongLeft } from 'react-icons/hi2'
 
 export interface IPostRelatedProps {}
 
-export default function PostRelated() {
+export default function PostViewRelated() {
   const dataNew = PostList().filter((item) => item.type === 'new')
 
   return (

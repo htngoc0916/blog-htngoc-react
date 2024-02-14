@@ -3,10 +3,10 @@ import { IconBlockQoute } from '~/components/icons'
 
 export interface IPostContentMainProps {}
 
-export default function PostContentMain() {
+export default function PostViewContentMain() {
   return (
     <div className='h-screen max-w-screen-xl'>
-      <div className='text-xl font-bold md:text-2xl'>Thiết lập môi trường đầu tiên cho vs code</div>
+      <h1 className='text-xl font-bold md:text-2xl'>Thiết lập môi trường đầu tiên cho vs code</h1>
       <div className='pt-4 leading-7 md:text-lg lg:leading-9'>
         Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget
         vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu

@@ -15,21 +15,21 @@ const SignupPage = lazy(() => import('~/pages/RegisterPage'))
 const CategoriesPage = lazy(() => import('~/pages/CategoriesPage'))
 
 const PostsPage = lazy(() => import('~/pages/PostsPage'))
-const PostDetailViewPage = lazy(() => import('~/pages/PostDetailViewPage'))
-const PostAdd = lazy(() => import('~/modules/post/PostAdd'))
+const PostViewLayout = lazy(() => import('~/layout/PostViewLayout'))
+const PostDetail = lazy(() => import('~/modules/post/PostDetail'))
 
 const UsersPage = lazy(() => import('~/pages/UsersPage'))
 const TagsPage = lazy(() => import('~/pages/TagsPage'))
 const ContactsPage = lazy(() => import('~/pages/ContactsPage'))
 const SystemPage = lazy(() => import('~/pages/SystemPage'))
 
-const routers = createBrowserRouter(
+const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootRoute></RootRoute>}>
       <Route path='/' element={<HomeLayout></HomeLayout>}>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path='about' element={<AboutPage></AboutPage>}></Route>
-        <Route path='post/:slug' element={<PostDetailViewPage></PostDetailViewPage>}></Route>
+        <Route path='post/:slug' element={<PostViewLayout></PostViewLayout>}></Route>
       </Route>
 
       <Route path='/auth' element={<PrivateRoute component={DashboardLayout} />}>
@@ -37,7 +37,7 @@ const routers = createBrowserRouter(
         <Route path='categories' element={<CategoriesPage></CategoriesPage>}></Route>
         <Route path='posts'>
           <Route index element={<PostsPage></PostsPage>}></Route>
-          <Route path=':postId' element={<PostAdd></PostAdd>}></Route>
+          <Route path=':postId' element={<PostDetail></PostDetail>}></Route>
         </Route>
         <Route path='tags' element={<TagsPage></TagsPage>}></Route>
         <Route path='users' element={<UsersPage></UsersPage>}></Route>
@@ -52,4 +52,4 @@ const routers = createBrowserRouter(
     </Route>
   )
 )
-export default routers
+export default routes

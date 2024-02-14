@@ -1,17 +1,19 @@
 import { useEffect } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 import { Breadcrumb } from 'flowbite-react'
+import PostDetailForm from './PostDetailForm'
 
-export interface PostAddProps {}
+export interface PostDetailProps {}
 
-function PostAdd(props: PostAddProps) {
+function PostDetail(props: PostDetailProps) {
   const { postId } = useParams<{ postId: string }>()
-  const { pathname } = useLocation()
+  const isEdit = postId !== '0'
 
   useEffect(() => {
     console.log(postId)
   }, [postId])
+
   return (
     <div className='flex flex-col h-full p-6 mx-auto'>
       <div className='mb-5 text-lg'>
@@ -28,13 +30,14 @@ function PostAdd(props: PostAddProps) {
               <span>Post</span>
             </Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>Create post</Breadcrumb.Item>
+          <Breadcrumb.Item>{isEdit ? 'Edit post' : 'Create post'}</Breadcrumb.Item>
         </Breadcrumb>
       </div>
-      <div className='grid flex-1 grid-flow-row grid-cols-1 gap-4 xl:grid-flow-col'>
-        <div className='flex flex-col order-2 px-4 py-6 bg-white rounded-xl dark:bg-darkbg3 xl:order-1'>asd</div>
+
+      <div className='grid grid-cols-1 gap-4 xl:grid-cols-2'>
+        <PostDetailForm data={null} isEdit={isEdit} className='p-4 bg-white rounded-lg'></PostDetailForm>
       </div>
     </div>
   )
 }
-export default PostAdd
+export default PostDetail
