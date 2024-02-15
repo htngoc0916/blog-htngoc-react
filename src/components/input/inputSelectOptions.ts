@@ -1,4 +1,4 @@
-export interface ColourOption {
+export interface SelectOption {
   readonly value: string
   readonly label: string
   readonly color: string
@@ -6,9 +6,9 @@ export interface ColourOption {
   readonly isDisabled?: boolean
 }
 
-export const colourOptions: readonly ColourOption[] = [
+export const colourOptions: SelectOption[] = [
   { value: 'purple', label: 'Purple', color: '#d8b4fe' },
-  { value: 'info', label: 'Cyan', color: '#67e8f9', isFixed: true },
+  { value: 'cyan', label: 'Cyan', color: '#67e8f9', isFixed: true },
   { value: 'indigo', label: 'Indigo', color: '#a5b4fc' },
   { value: 'pink', label: 'Pirk', color: '#f9a8d4' },
   { value: 'light', label: 'Light', color: '#e2e8f0' },

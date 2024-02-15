@@ -1,6 +1,6 @@
 import { Field, Form } from '~/components/form'
 import { TextCustom } from '~/components/text'
-import { Post } from '~/types'
+import { Post, defaultFilter } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -9,6 +9,15 @@ import { ActionSave } from '~/components/action'
 import { Label } from 'flowbite-react'
 import { InputCustom, InputSelect } from '~/components/input'
 import { TextareaCustom } from '~/components/textarea'
+import { useDispatch } from 'react-redux'
+import { useAppSelector } from '~/app/hooks'
+import { TagListSelector, getTag } from '~/app/tag/tagSlice'
+import { useEffect, useMemo } from 'react'
+import { SelectOption } from '~/components/input/inputSelectOptions'
+import { categoryListSelector, getCategory } from '~/app/category/categorySlice'
+import CategoriesPage from '~/pages/CategoriesPage'
+import { DropdownCustom } from '~/components/dropdown'
+import { DropdownOptions } from '~/components/dropdown/DropdownCustom'
 
 export interface PostDetailFormProps {
   isEdit: boolean
@@ -49,6 +58,34 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       usedYn: 'Y'
     }
   })
+
+  const dispatch = useDispatch()
+  const tagList = useAppSelector(TagListSelector)
+  const categoryList = useAppSelector(categoryListSelector)
+
+  const dropdownOptions: DropdownOptions[] = useMemo(() => {
+    return categoryList.map((category) => ({
+      key: category.id?.toString(),
+      value: category.categoryName
+    })) as DropdownOptions[]
+  }, [])
+
+  const selectOptions: SelectOption[] = useMemo(() => {
+    return tagList.map((tag) => ({
+      value: tag?.tagName,
+      label: tag?.tagName,
+      color: tag?.color,
+      isDisabled: tag?.usedYn !== 'Y'
+    })) as SelectOption[]
+  }, [])
+
+  useEffect(() => {
+    dispatch(getTag({ ...defaultFilter, usedYn: 'Y' }))
+  }, [])
+
+  useEffect(() => {
+    dispatch(getCategory({ ...defaultFilter, usedYn: 'Y' }))
+  }, [])
 
   const handleToggleChange = async (value: boolean) => {
     setValue('usedYn', value ? 'Y' : 'N')
@@ -98,8 +135,19 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
         </Field>
 
         <Field>
+          <Label htmlFor='category'>Category</Label>
+          <DropdownCustom name='category' className='w-full' data={dropdownOptions} control={control}></DropdownCustom>
+        </Field>
+
+        <Field>
           <Label htmlFor='tags'>Tags</Label>
-          <InputSelect name='tags' control={control} onChange={handleTagChange}></InputSelect>
+          <InputSelect
+            data={selectOptions}
+            name='tags'
+            isMulti
+            control={control}
+            onChange={handleTagChange}
+          ></InputSelect>
         </Field>
 
         <div className='flex items-center justify-center mb-5'>
