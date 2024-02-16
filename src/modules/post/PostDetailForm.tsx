@@ -7,23 +7,51 @@ import { useForm } from 'react-hook-form'
 import { ButtonToggleSwitch } from '~/components/button'
 import { ActionSave } from '~/components/action'
 import { Label } from 'flowbite-react'
-import { InputCustom, InputSelect } from '~/components/input'
+import { InputCustom, InputFile, InputSelect } from '~/components/input'
 import { TextareaCustom } from '~/components/textarea'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '~/app/hooks'
 import { TagListSelector, getTag } from '~/app/tag/tagSlice'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SelectOption } from '~/components/input/inputSelectOptions'
 import { categoryListSelector, getCategory } from '~/app/category/categorySlice'
-import CategoriesPage from '~/pages/CategoriesPage'
 import { DropdownCustom } from '~/components/dropdown'
 import { DropdownOptions } from '~/components/dropdown/DropdownCustom'
-
+import ReactQuill from 'react-quill'
 export interface PostDetailFormProps {
   isEdit: boolean
   data: Post | null
   className?: string
 }
+
+const myColors = ['purple', '#785412', '#452632', '#856325', '#963254', '#254563', 'white']
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ align: ['right', 'center', 'justify'] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['link', 'image'],
+    [{ color: myColors }],
+    [{ background: myColors }]
+  ]
+}
+
+const formats = [
+  'header',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'link',
+  'color',
+  'image',
+  'background',
+  'align'
+]
 
 export default function PostDetailForm({ data, isEdit, className }: PostDetailFormProps) {
   const schema = yup.object({
@@ -79,6 +107,11 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     })) as SelectOption[]
   }, [])
 
+  const [code, setCode] = useState('hello guys you can also add fonts and another features to this editor.')
+  const handleProcedureContentChange = (content: any) => {
+    setCode(content)
+  }
+
   useEffect(() => {
     dispatch(getTag({ ...defaultFilter, usedYn: 'Y' }))
   }, [])
@@ -94,6 +127,12 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   const handleSave = () => {}
 
   const handleTagChange = () => {}
+
+  const handleOnFileUpload = useCallback(async (file: File) => {}, [])
+
+  const [uploadedImage, setUploadedImage] = useState<string>('')
+
+  const handleOnFileDelete = async () => {}
 
   return (
     <div id='post-add__form' className={className}>
@@ -118,6 +157,10 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
           <InputCustom name='title' control={control} message={errors?.title?.message} maxLength={100}></InputCustom>
         </Field>
         <Field>
+          <Label htmlFor='slug'>Slug</Label>
+          <InputCustom id='slug' name='slug' color='primary' control={control} />
+        </Field>
+        <Field>
           <Label htmlFor='description'>Description</Label>
           <TextareaCustom
             id='description'
@@ -129,25 +172,49 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
             className='resize-none dark:bg-darkbg3'
           />
         </Field>
-        <Field>
-          <Label htmlFor='slug'>Slug</Label>
-          <InputCustom id='slug' name='slug' color='primary' control={control} />
+        <Field className='grid grid-cols-2 gap-6 mb-0'>
+          <Field>
+            <Label htmlFor='category'>Category</Label>
+            <DropdownCustom name='category' data={dropdownOptions} control={control}></DropdownCustom>
+          </Field>
+          <Field>
+            <Label htmlFor='tags'>Tags</Label>
+            <InputSelect
+              data={selectOptions}
+              name='tags'
+              isMulti
+              control={control}
+              onChange={handleTagChange}
+            ></InputSelect>
+          </Field>
         </Field>
 
         <Field>
-          <Label htmlFor='category'>Category</Label>
-          <DropdownCustom name='category' className='w-full' data={dropdownOptions} control={control}></DropdownCustom>
+          <Label htmlFor='thumbnail'>Post Image</Label>
+          <InputFile
+            onFileUpload={handleOnFileUpload}
+            uploadUrl={uploadedImage}
+            onFileDelete={handleOnFileDelete}
+            size='md'
+          >
+            <div>
+              <p>
+                <span className='text-primary-700 dark:text-primary-400'>Click to upload</span> or drag and drop
+              </p>
+              <p className='text-sm text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            </div>
+          </InputFile>
         </Field>
 
         <Field>
-          <Label htmlFor='tags'>Tags</Label>
-          <InputSelect
-            data={selectOptions}
-            name='tags'
-            isMulti
-            control={control}
-            onChange={handleTagChange}
-          ></InputSelect>
+          <Label htmlFor='content'>Contents</Label>
+          <ReactQuill
+            theme='snow'
+            modules={modules}
+            formats={formats}
+            value={code}
+            onChange={handleProcedureContentChange}
+          />
         </Field>
 
         <div className='flex items-center justify-center mb-5'>

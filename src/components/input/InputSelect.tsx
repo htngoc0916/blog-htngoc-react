@@ -2,7 +2,6 @@ import { Control, useController } from 'react-hook-form'
 import { SelectOption } from './inputSelectOptions'
 import Select, { StylesConfig } from 'react-select'
 import chroma from 'chroma-js'
-import { useState } from 'react'
 
 const dot = (color = 'transparent') => ({
   alignItems: 'center',

@@ -51,7 +51,7 @@
 
   //react-select
   .input-select-container .input-select__control {
-    @apply border-gray-200 hover:border-primary-400 dark:border-primary-400 dark:bg-darkbg3 min-h-[42px] rounded-lg text-base;
+    @apply border-gray-300 hover:border-primary-400 dark:border-primary-400 dark:bg-darkbg3 min-h-[42px] rounded-lg text-base;
   }
   .input-select-container .input-select__control--is-focused {
     @apply border-primary-500 hover:border-primary-500 dark:border-primary-400 dark:hover:border-primary-400 shadow-none ring-1 ring-primary-500;

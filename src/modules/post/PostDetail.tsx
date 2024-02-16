@@ -35,7 +35,7 @@ function PostDetail(props: PostDetailProps) {
       </div>
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-2'>
-        <PostDetailForm data={null} isEdit={isEdit} className='p-4 bg-white rounded-lg'></PostDetailForm>
+        <PostDetailForm data={null} isEdit={isEdit} className='p-10 bg-white rounded-lg'></PostDetailForm>
       </div>
     </div>
   )
