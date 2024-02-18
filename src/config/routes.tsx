@@ -16,7 +16,7 @@ const CategoriesPage = lazy(() => import('~/pages/CategoriesPage'))
 
 const PostsPage = lazy(() => import('~/pages/PostsPage'))
 const PostViewLayout = lazy(() => import('~/layout/PostViewLayout'))
-const PostDetail = lazy(() => import('~/modules/post/PostDetail'))
+const PostDetailAdd = lazy(() => import('~/modules/post/PostDetailAdd'))
 
 const UsersPage = lazy(() => import('~/pages/UsersPage'))
 const TagsPage = lazy(() => import('~/pages/TagsPage'))
@@ -37,7 +37,7 @@ const routes = createBrowserRouter(
         <Route path='categories' element={<CategoriesPage></CategoriesPage>}></Route>
         <Route path='posts'>
           <Route index element={<PostsPage></PostsPage>}></Route>
-          <Route path=':postId' element={<PostDetail></PostDetail>}></Route>
+          <Route path=':postId' element={<PostDetailAdd></PostDetailAdd>}></Route>
         </Route>
         <Route path='tags' element={<TagsPage></TagsPage>}></Route>
         <Route path='users' element={<UsersPage></UsersPage>}></Route>

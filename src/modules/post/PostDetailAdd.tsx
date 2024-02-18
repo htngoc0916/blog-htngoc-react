@@ -6,7 +6,7 @@ import PostDetailForm from './PostDetailForm'
 
 export interface PostDetailProps {}
 
-function PostDetail(props: PostDetailProps) {
+function PostDetailAdd(props: PostDetailProps) {
   const { postId } = useParams<{ postId: string }>()
   const isEdit = postId !== '0'
 
@@ -35,9 +35,13 @@ function PostDetail(props: PostDetailProps) {
       </div>
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-2'>
-        <PostDetailForm data={null} isEdit={isEdit} className='p-10 bg-white rounded-lg'></PostDetailForm>
+        <PostDetailForm
+          data={null}
+          isEdit={isEdit}
+          className='p-10 bg-white rounded-lg dark:bg-gray-800'
+        ></PostDetailForm>
       </div>
     </div>
   )
 }
-export default PostDetail
+export default PostDetailAdd

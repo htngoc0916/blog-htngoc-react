@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'content';
 
 @layer components {
   .pt-page {
@@ -81,5 +82,15 @@
     -webkit-font-smoothing: antialiased;
     // font-family: 'Roboto', sans-serif;
     @apply text-text1 dark:text-white bg-[#fff];
+  }
+}
+
+.quill {
+  position: relative;
+  .ql-toolbar {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
   }
 }

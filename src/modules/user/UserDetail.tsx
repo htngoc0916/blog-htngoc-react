@@ -2,7 +2,6 @@ import { API_STATUS, ApiResponseDTO, DeleteAvatarDTO, FileMaster, ROLE, UploadAv
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
 import { memo, useCallback, useEffect, useState } from 'react'
@@ -65,7 +64,6 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     }
   })
 
-  const navigate = useNavigate()
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
   const isEdit = Boolean(data)
@@ -96,8 +94,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   const handleOnFileDelete = async () => {
     try {
       const deleteAvartar: DeleteAvatarDTO = {
-        userId: data?.id as number,
-        navigate
+        userId: data?.id as number
       }
       await userApi.deleteAvatar(deleteAvartar)
       setUploadedImage('')
@@ -114,8 +111,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
 
       const uploadAvatar: UploadAvatarDTO = {
         email: data?.email || '',
-        file,
-        navigate
+        file
       }
 
       const response: ApiResponseDTO<FileMaster> = await userApi.uploadAvatar(uploadAvatar)
@@ -124,7 +120,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
         setValue('avatar', response.data.fileUrl)
       }
     },
-    [navigate, setValue, data?.email, isEdit]
+    [setValue, data?.email, isEdit]
   )
 
   const handleSave = async (user: User) => {

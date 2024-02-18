@@ -18,10 +18,8 @@ export interface User extends BaseDTO {
 export interface UploadAvatarDTO {
   email: string
   file: File
-  navigate: (to: string) => void
 }
 
 export interface DeleteAvatarDTO {
   userId: number
-  navigate: (to: string) => void
 }

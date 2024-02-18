@@ -17,15 +17,12 @@ export interface FileMaster {
 export interface UploadRequest {
   id: number
   file: File
-  navigate: (to: string) => void
 }
 
 export interface DeleteUploadRequest {
   url: string
-  navigate: (to: string) => void
 }
 
 export interface DeleteUploadByIdRequest {
   id: number
-  navigate: (to: string) => void
 }

@@ -55,7 +55,7 @@ const colourStyles: StylesConfig<SelectOption, true> = {
 export interface InputSelectProps {
   name: string
   control?: Control<any>
-  onChange?: (value: SelectOption) => void
+  onChange?: (value: SelectOption[]) => void
   isMulti?: true | undefined
   data: SelectOption[]
 }
@@ -69,9 +69,7 @@ export default function InputSelect(props: InputSelectProps) {
   })
 
   const handleOnChange = (selectedOption: SelectOption[] | any) => {
-    if (onChange) {
-      onChange(selectedOption)
-    }
+    onChange?.(selectedOption)
   }
 
   return (

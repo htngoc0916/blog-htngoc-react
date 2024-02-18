@@ -37,7 +37,7 @@ export default function DropdownCustom(props: DropdownCustomProps) {
     return (
       <button
         type='button'
-        className='group p-0.5 focus:outline-none text-text1 bg-white border border-gray-300 enabled:hover:bg-gray-100 focus:ring-primary-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:enabled:hover:bg-gray-700 dark:enabled:hover:border-gray-700 dark:focus:ring-gray-700 rounded-lg focus:ring-2 w-full flex justify-start items-center'
+        className='group p-0.5 focus:outline-none text-text1 bg-white dark:bg-darkbg3 border border-gray-300 dark:border-primary-400 enabled:hover:bg-gray-100 focus:ring-primary-300 dark:text-white  dark:enabled:hover:bg-gray-700 dark:enabled:hover:border-gray-700 dark:focus:ring-gray-700 rounded-lg focus:ring-2 w-full flex justify-start items-center'
       >
         <span className='flex items-center justify-between w-full px-2 py-2 text-sm transition-all duration-200 rounded-md'>
           {label}

@@ -1,6 +1,6 @@
 import { Field, Form } from '~/components/form'
 import { TextCustom } from '~/components/text'
-import { Post, defaultFilter } from '~/types'
+import { Post, UploadRequest, defaultFilter } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -18,51 +18,26 @@ import { categoryListSelector, getCategory } from '~/app/category/categorySlice'
 import { DropdownCustom } from '~/components/dropdown'
 import { DropdownOptions } from '~/components/dropdown/DropdownCustom'
 import ReactQuill from 'react-quill'
+import { useQuillUploadImage } from '~/hooks/useQuillUploadImage'
+import { toast } from 'react-toastify'
+import { userInfoSelector } from '~/app/auth/authSlice'
+
 export interface PostDetailFormProps {
   isEdit: boolean
   data: Post | null
   className?: string
 }
 
-const myColors = ['purple', '#785412', '#452632', '#856325', '#963254', '#254563', 'white']
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ align: ['right', 'center', 'justify'] }],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    ['link', 'image'],
-    [{ color: myColors }],
-    [{ background: myColors }]
-  ]
-}
-
-const formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'link',
-  'color',
-  'image',
-  'background',
-  'align'
-]
-
 export default function PostDetailForm({ data, isEdit, className }: PostDetailFormProps) {
   const schema = yup.object({
     id: yup.number(),
-    title: yup.string().required('Vui long nhap title'),
+    title: yup.string().required('Vui lòng nhập tiêu đề'),
     description: yup.string(),
     content: yup.string(),
     slug: yup.string(),
     thumbnail: yup.string(),
     categoryId: yup.number(),
-    tags: yup.string(),
+    tags: yup.array().of(yup.string()),
     usedYn: yup.string()
   })
 
@@ -82,14 +57,17 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       slug: '',
       thumbnail: '',
       categoryId: 0,
-      tags: '',
+      tags: [],
       usedYn: 'Y'
     }
   })
 
   const dispatch = useDispatch()
+  const userInfo = useAppSelector(userInfoSelector)
   const tagList = useAppSelector(TagListSelector)
   const categoryList = useAppSelector(categoryListSelector)
+
+  const { modules, formats } = useQuillUploadImage()
 
   const dropdownOptions: DropdownOptions[] = useMemo(() => {
     return categoryList.map((category) => ({
@@ -107,9 +85,10 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     })) as SelectOption[]
   }, [])
 
-  const [code, setCode] = useState('hello guys you can also add fonts and another features to this editor.')
-  const handleProcedureContentChange = (content: any) => {
-    setCode(content)
+  const [postContent, setPostContent] = useState('')
+  const handleContentChange = (content: any) => {
+    setPostContent(content)
+    setValue('content', content)
   }
 
   useEffect(() => {
@@ -124,11 +103,32 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const handleSave = () => {}
+  const handleSave = (value: any) => {
+    const postSave: Post = { ...value }
 
-  const handleTagChange = () => {}
+    console.log('🚀 ~ handleSave ~ post:', postSave)
+  }
 
-  const handleOnFileUpload = useCallback(async (file: File) => {}, [])
+  const handleTagChange = (options: SelectOption[]) => {
+    const tags: string[] = options.map((option) => option.value)
+    setValue('tags', tags)
+  }
+
+  const handleOnFileUpload = useCallback(
+    async (file: File) => {
+      const postUploadImage: UploadRequest = {
+        id: userInfo?.id || 0,
+        file
+      }
+
+      const response: ApiResponseDTO<FileMaster> = await userApi.uploadAvatar(uploadAvatar)
+      if (response?.status.includes(API_STATUS.SUCCESS)) {
+        setUploadedImage(response.data.fileUrl)
+        setValue('avatar', response.data.fileUrl)
+      }
+    },
+    [navigate, setValue, data?.email, isEdit]
+  )
 
   const [uploadedImage, setUploadedImage] = useState<string>('')
 
@@ -174,8 +174,8 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
         </Field>
         <Field className='grid grid-cols-2 gap-6 mb-0'>
           <Field>
-            <Label htmlFor='category'>Category</Label>
-            <DropdownCustom name='category' data={dropdownOptions} control={control}></DropdownCustom>
+            <Label htmlFor='categoryId'>Category</Label>
+            <DropdownCustom name='categoryId' data={dropdownOptions} control={control}></DropdownCustom>
           </Field>
           <Field>
             <Label htmlFor='tags'>Tags</Label>
@@ -208,13 +208,16 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
         <Field>
           <Label htmlFor='content'>Contents</Label>
-          <ReactQuill
-            theme='snow'
-            modules={modules}
-            formats={formats}
-            value={code}
-            onChange={handleProcedureContentChange}
-          />
+          <div className='entry-content'>
+            <ReactQuill
+              theme='snow'
+              modules={modules}
+              formats={formats}
+              value={postContent}
+              onChange={handleContentChange}
+              placeholder='Nhập nội dung...'
+            />
+          </div>
         </Field>
 
         <div className='flex items-center justify-center mb-5'>

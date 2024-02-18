@@ -11,7 +11,7 @@ export const colourOptions: SelectOption[] = [
   { value: 'cyan', label: 'Cyan', color: '#67e8f9', isFixed: true },
   { value: 'indigo', label: 'Indigo', color: '#a5b4fc' },
   { value: 'pink', label: 'Pirk', color: '#f9a8d4' },
-  { value: 'light', label: 'Light', color: '#e2e8f0' },
+  // { value: 'light', label: 'Light', color: '#e2e8f0' },
   { value: 'green', label: 'Green', color: '#86efac' },
   { value: 'lime', label: 'Lime', color: '#bef264' },
   { value: 'red', label: 'Red', color: '#fca5a5' },
