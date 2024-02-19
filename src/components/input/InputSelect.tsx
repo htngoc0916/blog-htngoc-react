@@ -2,6 +2,7 @@ import { Control, useController } from 'react-hook-form'
 import { SelectOption } from './inputSelectOptions'
 import Select, { StylesConfig } from 'react-select'
 import chroma from 'chroma-js'
+import { memo } from 'react'
 
 const dot = (color = 'transparent') => ({
   alignItems: 'center',
@@ -34,7 +35,7 @@ const colourStyles: StylesConfig<SelectOption, true> = {
       const color = chroma(data.color)
       bgColor = color.alpha(0.3).css()
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
 
     return {
@@ -60,8 +61,9 @@ export interface InputSelectProps {
   data: SelectOption[]
 }
 
-export default function InputSelect(props: InputSelectProps) {
+const InputSelect = memo(function InputSelect(props: InputSelectProps) {
   const { control, name, onChange, data, isMulti = undefined, ...rest } = props
+  console.log('🚀 ~ InputSelect ~ name:', name)
 
   const { field } = useController({
     control,
@@ -81,11 +83,12 @@ export default function InputSelect(props: InputSelectProps) {
       className='input-select-container'
       classNamePrefix='input-select'
       isSearchable
-      isMulti={isMulti}
+      // isMulti={isMulti}
       {...field}
       {...rest}
       onChange={handleOnChange}
-      value={data.find((option) => option.value === field.value)}
+      // value={data.find((option) => option.value === field.value)}
     />
   )
-}
+})
+export default InputSelect

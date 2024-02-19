@@ -3,6 +3,7 @@ import { TextCustom } from '~/components/text'
 import {
   API_STATUS,
   ApiResponseDTO,
+  Category,
   DeleteFileByIdRequest,
   FileMaster,
   Post,
@@ -52,7 +53,8 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     tags: yup.array().of(yup.string()),
     usedYn: yup.string(),
 
-    thumbnailId: yup.number()
+    thumbnailId: yup.number(),
+    categoryName: yup.string()
   })
 
   const {
@@ -74,7 +76,9 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       categoryId: 0,
       tags: [],
       usedYn: 'Y',
-      thumbnailId: 0
+
+      thumbnailId: 0,
+      categoryName: ''
     }
   })
 
@@ -92,14 +96,14 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     })) as DropdownOptions[]
   }, [])
 
-  const selectOptions: SelectOption[] = useMemo(() => {
-    return tagList.map((tag) => ({
-      value: tag?.tagName,
-      label: tag?.tagName,
-      color: tag?.color,
-      isDisabled: tag?.usedYn !== 'Y'
-    })) as SelectOption[]
-  }, [])
+  // const selectOptions: SelectOption[] = useMemo(() => {
+  //   return tagList.map((tag) => ({
+  //     value: tag?.tagName,
+  //     label: tag?.tagName,
+  //     color: tag?.color,
+  //     isDisabled: tag?.usedYn !== 'Y'
+  //   })) as SelectOption[]
+  // }, [])
 
   const [postContent, setPostContent] = useState('')
   const handleContentChange = (content: any) => {
@@ -113,7 +117,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
   const handleSave = async (post: any) => {
     console.log('🚀 ~ handleSave ~ post:', post)
-    return
     try {
       const action = isEdit ? postApi.editPost : postApi.addPost
       if (!isEdit) {
@@ -140,10 +143,10 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     }
   }
 
-  const handlePostChange = (options: SelectOption[]) => {
+  const handleTagChange = useCallback((options: SelectOption[]) => {
     const tags: string[] = options.map((option) => option.value)
     setValue('tags', tags)
-  }
+  }, [])
 
   const handleOnFileUpload = useCallback(
     async (file: File) => {
@@ -204,12 +207,16 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('usedYn', data?.usedYn)
     setValue('categoryId', data?.categoryId)
     setValue('thumbnail', data?.thumbnail)
-    setValue('tags', (data?.tags as string[]) || [])
     setValue('content', data?.content)
 
     setUploadedImage(data?.thumbnail || '')
-    setPostContent(data?.content || 'Nhập nội dung...')
-  }, [data, setValue])
+    setPostContent(data?.content || '')
+    setValue('tags', (data?.tags as string[]) || [])
+    console.log('🚀 ~ useEffect ~ data?.tags :', data?.tags)
+
+    const categories: Category = categoryList.filter((category: Category) => category.id === data?.categoryId)[0]
+    setValue('categoryName', categories?.categoryName)
+  }, [data, setValue, categoryList])
 
   return (
     <div id='post-add__form' className={className}>
@@ -252,17 +259,16 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
         <Field className='grid grid-cols-2 gap-6 mb-0'>
           <Field>
             <Label htmlFor='categoryId'>Category</Label>
-            <DropdownCustom name='categoryId' data={dropdownOptions} control={control}></DropdownCustom>
+            <DropdownCustom
+              name='categoryId'
+              data={dropdownOptions}
+              control={control}
+              defaultValue={getValues('categoryName')}
+            ></DropdownCustom>
           </Field>
           <Field>
             <Label htmlFor='tags'>Tags</Label>
-            <InputSelect
-              data={selectOptions}
-              name='tags'
-              isMulti
-              control={control}
-              onChange={handlePostChange}
-            ></InputSelect>
+            <InputSelect data={[]} name='aas' control={control} onChange={handleTagChange}></InputSelect>
           </Field>
         </Field>
 
