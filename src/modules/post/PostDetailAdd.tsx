@@ -1,8 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { HiOutlinePencilSquare } from 'react-icons/hi2'
 import { Breadcrumb } from 'flowbite-react'
 import PostDetailForm from './PostDetailForm'
+import { API_STATUS, ApiResponseDTO, Post } from '~/types'
+import postApi from '~/apis/postApi'
 
 export interface PostDetailProps {}
 
@@ -10,8 +12,22 @@ function PostDetailAdd(props: PostDetailProps) {
   const { postId } = useParams<{ postId: string }>()
   const isEdit = postId !== '0'
 
+  const [selectedPost, setSelectedPost] = useState<Post | undefined>(undefined)
+
   useEffect(() => {
-    console.log(postId)
+    if (postId && Number(postId) > 0) {
+      const getPostById = async () => {
+        const response: ApiResponseDTO<Post> = await postApi.getPostById(Number(postId))
+        if (response?.status.includes(API_STATUS.FAILED)) {
+          console.log('Failed to fetch post details', response.message)
+          return null
+        } else {
+          setSelectedPost(response.data)
+        }
+      }
+
+      getPostById()
+    }
   }, [postId])
 
   return (
@@ -36,7 +52,7 @@ function PostDetailAdd(props: PostDetailProps) {
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-2'>
         <PostDetailForm
-          data={null}
+          data={selectedPost}
           isEdit={isEdit}
           className='p-10 bg-white rounded-lg dark:bg-gray-800'
         ></PostDetailForm>

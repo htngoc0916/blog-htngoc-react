@@ -16,7 +16,6 @@ import { Label } from 'flowbite-react'
 import { InputCustom, InputSelect } from '~/components/input'
 import { SelectOption, colourOptions } from '~/components/input/inputSelectOptions'
 import { useTranslation } from 'react-i18next'
-import TestInput from '~/components/input/InputCreatableSelect'
 
 export interface TagDetailProps {
   data: Tag | null
@@ -66,9 +65,9 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const handleColorChange = (selectedOption: SelectOption) => {
+  const handleColorChange = (selectedOption: SelectOption[]) => {
     console.log('🚀 ~ handleColorChange ~ selectedOption:', selectedOption)
-    setValue('color', selectedOption ? selectedOption.value : '')
+    setValue('color', selectedOption[0] ? selectedOption[0].value : '')
   }
 
   const handleSave = async (tag: Tag) => {

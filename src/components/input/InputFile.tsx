@@ -34,8 +34,6 @@ const classes = {
   }
 }
 
-const maxSize = 1048576
-
 export interface InputFileProps {
   className?: string
   size?: 'sm' | 'md'
@@ -44,10 +42,20 @@ export interface InputFileProps {
   uploadUrl?: string
   onFileUpload?: (file: File) => void
   onFileDelete?: () => void
+  maxSize?: number
 }
 
 const InputFile = memo(function InputFile(props: InputFileProps) {
-  const { className, color = 'primary', size = 'sm', children, onFileUpload, onFileDelete, uploadUrl } = props
+  const {
+    className,
+    color = 'primary',
+    size = 'sm',
+    children,
+    onFileUpload,
+    onFileDelete,
+    uploadUrl,
+    maxSize = 1024 * 1024
+  } = props
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -77,7 +85,7 @@ const InputFile = memo(function InputFile(props: InputFileProps) {
   return (
     <div className={twMerge(classes.label.base, classes.label.color[color], classes.label.size[size], className)}>
       {uploadUrl && (
-        <div className='absolute top-0 left-0 z-10 w-full h-full rounded-lg'>
+        <div className='absolute top-0 left-0 w-full h-full rounded-lg z-1'>
           <div className='relative bg-white rounded-lg'>
             <div className={twMerge(classes.label.size[size])}>
               <img

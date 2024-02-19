@@ -4,6 +4,11 @@ import hljs from 'highlight.js'
 import ImageUploader from 'quill-image-uploader'
 import 'quill-image-uploader/dist/quill.imageUploader.min.css'
 import { Quill } from 'react-quill'
+import { toast } from 'react-toastify'
+import { API_STATUS, ApiResponseDTO, FileMaster, UploadRequest } from '~/types'
+import fileUpload from '~/apis/fileUploadApi'
+import { useAppSelector } from '~/app/hooks'
+import { userInfoSelector } from '~/app/auth/authSlice'
 
 hljs.configure({
   languages: ['javascript', 'java', 'python', 'node']
@@ -12,6 +17,8 @@ hljs.configure({
 Quill.register('modules/imageUploader', ImageUploader)
 
 export const useQuillUploadImage = () => {
+  const userInfo = useAppSelector(userInfoSelector)
+
   const modules = useMemo(
     () => ({
       syntax: {
@@ -28,15 +35,25 @@ export const useQuillUploadImage = () => {
         matchVisual: false
       },
       imageUploader: {
-        upload: (file: File) => {
-          return new Promise((resolve, reject) => {
-            // Your upload logic here
-            setTimeout(() => {
-              resolve(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/480px-JavaScript-logo.png'
-              )
-            }, 3500)
-          })
+        upload: async (file: File) => {
+          const postUploadRequest: UploadRequest = {
+            id: userInfo?.id || 0,
+            file
+          }
+
+          try {
+            const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadImage(postUploadRequest)
+
+            if (response?.status.includes(API_STATUS.SUCCESS)) {
+              return response.data.fileUrl
+            } else {
+              toast.error(response.message)
+              return ''
+            }
+          } catch (error) {
+            toast.error('Upload error')
+            console.error(error)
+          }
         }
       }
     }),

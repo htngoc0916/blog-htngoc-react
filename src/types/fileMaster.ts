@@ -14,15 +14,15 @@ export interface FileMaster {
   publicId: string
 }
 
-export interface UploadRequest {
+export interface UploadFileRequest {
   id: number
   file: File
 }
 
-export interface DeleteUploadRequest {
+export interface DeleteFileRequest {
   url: string
 }
 
-export interface DeleteUploadByIdRequest {
+export interface DeleteFileByIdRequest {
   id: number
 }

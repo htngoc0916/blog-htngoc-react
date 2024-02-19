@@ -1,6 +1,14 @@
 import { Field, Form } from '~/components/form'
 import { TextCustom } from '~/components/text'
-import { Post, UploadRequest, defaultFilter } from '~/types'
+import {
+  API_STATUS,
+  ApiResponseDTO,
+  DeleteFileByIdRequest,
+  FileMaster,
+  Post,
+  UploadFileRequest,
+  defaultFilter
+} from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -21,10 +29,14 @@ import ReactQuill from 'react-quill'
 import { useQuillUploadImage } from '~/hooks/useQuillUploadImage'
 import { toast } from 'react-toastify'
 import { userInfoSelector } from '~/app/auth/authSlice'
+import fileUpload from '~/apis/fileUploadApi'
+import postApi from '~/apis/postApi'
+import slugify from 'slugify'
 
+const maxSize = 5 * 1024 * 1024
 export interface PostDetailFormProps {
   isEdit: boolean
-  data: Post | null
+  data: Post | undefined
   className?: string
 }
 
@@ -38,14 +50,17 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     thumbnail: yup.string(),
     categoryId: yup.number(),
     tags: yup.array().of(yup.string()),
-    usedYn: yup.string()
+    usedYn: yup.string(),
+
+    thumbnailId: yup.number()
   })
 
   const {
     handleSubmit,
     control,
     setValue,
-    formState: { errors }
+    getValues,
+    formState: { errors, isSubmitting }
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onSubmit',
@@ -58,7 +73,8 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       thumbnail: '',
       categoryId: 0,
       tags: [],
-      usedYn: 'Y'
+      usedYn: 'Y',
+      thumbnailId: 0
     }
   })
 
@@ -66,7 +82,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   const userInfo = useAppSelector(userInfoSelector)
   const tagList = useAppSelector(TagListSelector)
   const categoryList = useAppSelector(categoryListSelector)
-
+  const [uploadedImage, setUploadedImage] = useState<string>('')
   const { modules, formats } = useQuillUploadImage()
 
   const dropdownOptions: DropdownOptions[] = useMemo(() => {
@@ -91,6 +107,87 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('content', content)
   }
 
+  const handleToggleChange = async (value: boolean) => {
+    setValue('usedYn', value ? 'Y' : 'N')
+  }
+
+  const handleSave = async (post: any) => {
+    console.log('🚀 ~ handleSave ~ post:', post)
+    return
+    try {
+      const action = isEdit ? postApi.editPost : postApi.addPost
+      if (!isEdit) {
+        //check title
+      }
+
+      post.slug = slugify(post.slug || post.title, { lower: true })
+
+      const postRequest: Post = {
+        ...post,
+        modId: isEdit ? userInfo?.id : undefined,
+        regId: isEdit ? undefined : userInfo?.id,
+        userId: userInfo?.id
+      }
+
+      const response: ApiResponseDTO<Post> = await action(postRequest)
+      if (response?.status.includes(API_STATUS.FAILED)) {
+        toast.error(response.message)
+      } else {
+        toast.success(response?.message)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handlePostChange = (options: SelectOption[]) => {
+    const tags: string[] = options.map((option) => option.value)
+    setValue('tags', tags)
+  }
+
+  const handleOnFileUpload = useCallback(
+    async (file: File) => {
+      const postUploadRequest: UploadFileRequest = {
+        id: userInfo?.id || 0,
+        file
+      }
+
+      try {
+        const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadImage(postUploadRequest)
+
+        if (response?.status.includes(API_STATUS.SUCCESS)) {
+          console.log('🚀 ~ response:', response)
+          setUploadedImage(response.data.fileUrl)
+          setValue('thumbnail', response.data.fileUrl)
+          setValue('thumbnailId', response.data.id)
+        } else {
+          toast.error(response.message)
+        }
+      } catch (error) {
+        toast.error('Upload error')
+        console.error(error)
+      }
+    },
+    [userInfo?.id, setValue]
+  )
+
+  const handleOnFileDelete = async () => {
+    const fileId = getValues('thumbnailId')
+    if (!fileId) return
+
+    try {
+      const deletePostImage: DeleteFileByIdRequest = {
+        id: fileId
+      }
+      await fileUpload.deleteImage(deletePostImage)
+      setUploadedImage('')
+      setValue('thumbnailId', 0)
+    } catch (error) {
+      toast.error('Delete image error')
+      console.log('🚀 ~ handleOnFileDelete ~ error:', error)
+    }
+  }
+
   useEffect(() => {
     dispatch(getTag({ ...defaultFilter, usedYn: 'Y' }))
   }, [])
@@ -99,40 +196,20 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     dispatch(getCategory({ ...defaultFilter, usedYn: 'Y' }))
   }, [])
 
-  const handleToggleChange = async (value: boolean) => {
-    setValue('usedYn', value ? 'Y' : 'N')
-  }
+  useEffect(() => {
+    setValue('id', data?.id)
+    setValue('title', data?.title || '')
+    setValue('description', data?.description)
+    setValue('slug', data?.slug)
+    setValue('usedYn', data?.usedYn)
+    setValue('categoryId', data?.categoryId)
+    setValue('thumbnail', data?.thumbnail)
+    setValue('tags', (data?.tags as string[]) || [])
+    setValue('content', data?.content)
 
-  const handleSave = (value: any) => {
-    const postSave: Post = { ...value }
-
-    console.log('🚀 ~ handleSave ~ post:', postSave)
-  }
-
-  const handleTagChange = (options: SelectOption[]) => {
-    const tags: string[] = options.map((option) => option.value)
-    setValue('tags', tags)
-  }
-
-  const handleOnFileUpload = useCallback(
-    async (file: File) => {
-      const postUploadImage: UploadRequest = {
-        id: userInfo?.id || 0,
-        file
-      }
-
-      const response: ApiResponseDTO<FileMaster> = await userApi.uploadAvatar(uploadAvatar)
-      if (response?.status.includes(API_STATUS.SUCCESS)) {
-        setUploadedImage(response.data.fileUrl)
-        setValue('avatar', response.data.fileUrl)
-      }
-    },
-    [navigate, setValue, data?.email, isEdit]
-  )
-
-  const [uploadedImage, setUploadedImage] = useState<string>('')
-
-  const handleOnFileDelete = async () => {}
+    setUploadedImage(data?.thumbnail || '')
+    setPostContent(data?.content || 'Nhập nội dung...')
+  }, [data, setValue])
 
   return (
     <div id='post-add__form' className={className}>
@@ -184,7 +261,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
               name='tags'
               isMulti
               control={control}
-              onChange={handleTagChange}
+              onChange={handlePostChange}
             ></InputSelect>
           </Field>
         </Field>
@@ -196,6 +273,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
             uploadUrl={uploadedImage}
             onFileDelete={handleOnFileDelete}
             size='md'
+            maxSize={maxSize}
           >
             <div>
               <p>
@@ -221,7 +299,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
         </Field>
 
         <div className='flex items-center justify-center mb-5'>
-          <ActionSave isProcessing={false} disabled={false} className='w-24' />
+          <ActionSave isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
         </div>
       </Form>
     </div>
