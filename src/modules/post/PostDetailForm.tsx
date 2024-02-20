@@ -34,7 +34,6 @@ import { userInfoSelector } from '~/app/auth/authSlice'
 import fileUpload from '~/apis/fileUploadApi'
 import postApi from '~/apis/postApi'
 import slugify from 'slugify'
-import { HtmlContent } from '~/components/common'
 
 const maxSize = 5 * 1024 * 1024
 export interface PostDetailFormProps {
@@ -55,7 +54,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     tags: yup.array().of(yup.string()),
     usedYn: yup.string(),
 
-    thumbnailId: yup.number(),
+    images: yup.array().of(yup.number()),
     categoryName: yup.string()
   })
 
@@ -79,7 +78,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       tags: [],
       usedYn: 'Y',
 
-      thumbnailId: 0,
+      images: [],
       categoryName: ''
     }
   })
@@ -119,6 +118,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
   const handleSave = async (post: any) => {
     console.log('🚀 ~ handleSave ~ post:', post)
+
     try {
       const action = isEdit ? postApi.editPost : postApi.addPost
       if (!isEdit) {
@@ -162,9 +162,9 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
         if (response?.status.includes(API_STATUS.SUCCESS)) {
           console.log('🚀 ~ response:', response)
-          setUploadedImage(response.data.fileUrl)
-          setValue('thumbnail', response.data.fileUrl)
-          setValue('thumbnailId', response.data.id)
+          setUploadedImage(response?.data?.fileUrl)
+          setValue('thumbnail', response?.data?.fileUrl)
+          setValue('images', [...(getValues('images') as number[]), response?.data?.id])
         } else {
           toast.error(response.message)
         }
@@ -173,20 +173,26 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
         console.error(error)
       }
     },
-    [userInfo?.id, setValue]
+    [userInfo?.id, setValue, getValues]
   )
 
   const handleOnFileDelete = async () => {
-    const fileId = getValues('thumbnailId')
-    if (!fileId) return
+    // const fileId = getValues('images')
+    // console.log('🚀 ~ handleOnFileDelete ~ fileId:', fileId)
+    // if (!fileId) return
 
     try {
-      const deletePostImage: DeleteFileByIdRequest = {
-        id: fileId
-      }
-      await fileUpload.deleteImage(deletePostImage)
+      // const deletePostImage: DeleteFileByIdRequest = {
+      //   id: fileId
+      // }
+      // await fileUpload.deleteImage(deletePostImage)
+
+      const fileName = getValues('thumbnail')
+      console.log('🚀 ~ handleOnFileDelete ~ fileName:', fileName)
+      await fileUpload.deleteImageByFileName(fileName as string)
+
       setUploadedImage('')
-      setValue('thumbnailId', 0)
+      setValue('images', [])
     } catch (error) {
       toast.error('Delete image error')
       console.log('🚀 ~ handleOnFileDelete ~ error:', error)
@@ -206,9 +212,9 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('title', data?.title || '')
     setValue('description', data?.description)
     setValue('slug', data?.slug)
-    setValue('usedYn', data?.usedYn)
+    setValue('usedYn', data?.usedYn || 'N')
     setValue('categoryId', data?.categoryId)
-    setValue('thumbnail', data?.thumbnail)
+    setValue('thumbnail', data?.thumbnail || '')
     setValue('content', data?.content)
 
     setUploadedImage(data?.thumbnail || '')
@@ -329,7 +335,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
             </Field>
 
             <div className='flex items-center justify-center gap-5 mb-4'>
-              <ActionSave isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
+              <ActionSave type='submit' isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
             </div>
           </Form>
         </div>

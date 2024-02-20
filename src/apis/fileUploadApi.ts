@@ -29,6 +29,18 @@ const fileUpload = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+
+  deleteImageByFileName(fileName: string): Promise<ApiResponseDTO<string>> {
+    const accessToken = getToken()
+    const url = CLOUDINARY_UPLOAD + '/delete/filename/' + fileName
+
+    return axiosPrivate.delete(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   }
 }
 

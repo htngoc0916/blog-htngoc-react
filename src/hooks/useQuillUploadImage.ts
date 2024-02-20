@@ -25,6 +25,8 @@ export const useQuillUploadImage = () => {
         highlight: (text: any) => hljs.highlightAuto(text).value
       },
       toolbar: [
+        [{ header: 1 }, { header: 2 }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
         ['bold', 'italic', 'underline', 'blockquote'],
         [{ list: 'ordered' }, { list: 'bullet' }],
         ['link', 'image', 'video'],
@@ -57,7 +59,7 @@ export const useQuillUploadImage = () => {
         }
       }
     }),
-    []
+    [userInfo?.id]
   )
 
   const formats = [
