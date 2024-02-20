@@ -2,7 +2,7 @@ import { Control, useController } from 'react-hook-form'
 import { SelectOption } from './inputSelectOptions'
 import Select, { StylesConfig } from 'react-select'
 import chroma from 'chroma-js'
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 const dot = (color = 'transparent') => ({
   alignItems: 'center',
@@ -59,20 +59,28 @@ export interface InputSelectProps {
   onChange?: (value: SelectOption[]) => void
   isMulti?: true | undefined
   data: SelectOption[]
+  value: string[]
 }
 
 const InputSelect = memo(function InputSelect(props: InputSelectProps) {
-  const { control, name, onChange, data, isMulti = undefined, ...rest } = props
-  console.log('🚀 ~ InputSelect ~ name:', name)
+  const { control, name, onChange, data, value, isMulti = undefined, ...rest } = props
 
   const { field } = useController({
     control,
     name
   })
 
+  const [selecetd, setSelected] = useState<SelectOption[]>()
+
   const handleOnChange = (selectedOption: SelectOption[] | any) => {
     onChange?.(selectedOption)
+    setSelected(selectedOption)
   }
+
+  useEffect(() => {
+    const values = data.filter((option) => value.includes(option.value))
+    setSelected(values)
+  }, [value, data])
 
   return (
     <Select
@@ -83,11 +91,11 @@ const InputSelect = memo(function InputSelect(props: InputSelectProps) {
       className='input-select-container'
       classNamePrefix='input-select'
       isSearchable
-      // isMulti={isMulti}
+      isMulti={isMulti}
       {...field}
       {...rest}
       onChange={handleOnChange}
-      // value={data.find((option) => option.value === field.value)}
+      value={selecetd}
     />
   )
 })

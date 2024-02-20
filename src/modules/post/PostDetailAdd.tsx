@@ -50,12 +50,8 @@ function PostDetailAdd(props: PostDetailProps) {
         </Breadcrumb>
       </div>
 
-      <div className='grid grid-cols-1 gap-4 xl:grid-cols-2'>
-        <PostDetailForm
-          data={selectedPost}
-          isEdit={isEdit}
-          className='p-10 bg-white rounded-lg dark:bg-gray-800'
-        ></PostDetailForm>
+      <div className=''>
+        <PostDetailForm data={selectedPost} isEdit={isEdit}></PostDetailForm>
       </div>
     </div>
   )

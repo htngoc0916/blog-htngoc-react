@@ -2,7 +2,7 @@ import IconCode from '~/components/icons/IconCode'
 import { projecData } from './data.projects'
 import { TextDescript, TextMark } from '.'
 import { Button, Card } from 'flowbite-react'
-import { HiOutlineArrowLongRight } from 'react-icons/hi2'
+import { HiOutlineArrowTrendingUp } from 'react-icons/hi2'
 
 export interface ProjectItemsProps {
   className?: string
@@ -25,10 +25,9 @@ export function ProjectItem(props: ProjectItemsProps) {
               <span>{item.languages}</span>
             </div>
 
-            <Button color='primary'>
-              <div className='flex items-center justify-center gap-2'>
-                <span>Xem thêm</span> <HiOutlineArrowLongRight className='w-5 h-5' />
-              </div>
+            <Button outline gradientDuoTone='primary' className='w-[180px] group mx-auto'>
+              <span>Xem thêm</span>
+              <HiOutlineArrowTrendingUp className='w-5 h-5 ml-2 transition-all text-primary-600 group-hover:text-white' />
             </Button>
           </Card>
         </div>

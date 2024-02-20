@@ -7,6 +7,7 @@ import {
   DeleteFileByIdRequest,
   FileMaster,
   Post,
+  Tag,
   UploadFileRequest,
   defaultFilter
 } from '~/types'
@@ -33,6 +34,7 @@ import { userInfoSelector } from '~/app/auth/authSlice'
 import fileUpload from '~/apis/fileUploadApi'
 import postApi from '~/apis/postApi'
 import slugify from 'slugify'
+import { HtmlContent } from '~/components/common'
 
 const maxSize = 5 * 1024 * 1024
 export interface PostDetailFormProps {
@@ -96,14 +98,14 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     })) as DropdownOptions[]
   }, [])
 
-  // const selectOptions: SelectOption[] = useMemo(() => {
-  //   return tagList.map((tag) => ({
-  //     value: tag?.tagName,
-  //     label: tag?.tagName,
-  //     color: tag?.color,
-  //     isDisabled: tag?.usedYn !== 'Y'
-  //   })) as SelectOption[]
-  // }, [])
+  const selectOptions: SelectOption[] = useMemo(() => {
+    return tagList.map((tag) => ({
+      value: tag?.tagName,
+      label: tag?.tagName,
+      color: tag?.color,
+      isDisabled: tag?.usedYn !== 'Y'
+    })) as SelectOption[]
+  }, [])
 
   const [postContent, setPostContent] = useState('')
   const handleContentChange = (content: any) => {
@@ -211,103 +213,130 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
     setUploadedImage(data?.thumbnail || '')
     setPostContent(data?.content || '')
-    setValue('tags', (data?.tags as string[]) || [])
-    console.log('🚀 ~ useEffect ~ data?.tags :', data?.tags)
+
+    if (data?.tags) {
+      const tags = (data.tags as Tag[]).map((tag: Tag) => {
+        return tag.tagName
+      })
+
+      setValue('tags', tags)
+    }
 
     const categories: Category = categoryList.filter((category: Category) => category.id === data?.categoryId)[0]
-    setValue('categoryName', categories?.categoryName)
+    if (categories) {
+      setValue('categoryName', categories?.categoryName)
+    }
   }, [data, setValue, categoryList])
 
   return (
-    <div id='post-add__form' className={className}>
-      <div className='flex mb-10'>
-        <TextCustom size='xs' className='text-text2 dark:text-text7'>
-          {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
-        </TextCustom>
-      </div>
-
-      <Form onSubmit={handleSubmit(handleSave)}>
-        <Field>
-          <ButtonToggleSwitch
-            name='usedYn'
-            label='Active'
-            control={control}
-            checked={data?.usedYn === 'Y'}
-            onChange={handleToggleChange}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor='title'>Title</Label>
-          <InputCustom name='title' control={control} message={errors?.title?.message} maxLength={100}></InputCustom>
-        </Field>
-        <Field>
-          <Label htmlFor='slug'>Slug</Label>
-          <InputCustom id='slug' name='slug' color='primary' control={control} />
-        </Field>
-        <Field>
-          <Label htmlFor='description'>Description</Label>
-          <TextareaCustom
-            id='description'
-            name='description'
-            color='primary'
-            rows={6}
-            maxLength={150}
-            control={control}
-            className='resize-none dark:bg-darkbg3'
-          />
-        </Field>
-        <Field className='grid grid-cols-2 gap-6 mb-0'>
-          <Field>
-            <Label htmlFor='categoryId'>Category</Label>
-            <DropdownCustom
-              name='categoryId'
-              data={dropdownOptions}
-              control={control}
-              defaultValue={getValues('categoryName')}
-            ></DropdownCustom>
-          </Field>
-          <Field>
-            <Label htmlFor='tags'>Tags</Label>
-            <InputSelect data={[]} name='aas' control={control} onChange={handleTagChange}></InputSelect>
-          </Field>
-        </Field>
-
-        <Field>
-          <Label htmlFor='thumbnail'>Post Image</Label>
-          <InputFile
-            onFileUpload={handleOnFileUpload}
-            uploadUrl={uploadedImage}
-            onFileDelete={handleOnFileDelete}
-            size='md'
-            maxSize={maxSize}
-          >
-            <div>
-              <p>
-                <span className='text-primary-700 dark:text-primary-400'>Click to upload</span> or drag and drop
-              </p>
-              <p className='text-sm text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-            </div>
-          </InputFile>
-        </Field>
-
-        <Field>
-          <Label htmlFor='content'>Contents</Label>
-          <div className='entry-content'>
-            <ReactQuill
-              theme='snow'
-              modules={modules}
-              formats={formats}
-              value={postContent}
-              onChange={handleContentChange}
-              placeholder='Nhập nội dung...'
-            />
+    <div className={className}>
+      <div className='grid grid-cols-2 gap-10'>
+        <div id='post-add__form' className='p-10 bg-white rounded-lg dark:bg-darkbg2'>
+          <div className='flex mb-10'>
+            <TextCustom size='xs' className='text-text2 dark:text-text7'>
+              {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
+            </TextCustom>
           </div>
-        </Field>
 
-        <div className='flex items-center justify-center mb-5'>
-          <ActionSave isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
+          <Form onSubmit={handleSubmit(handleSave)}>
+            <Field>
+              <ButtonToggleSwitch
+                name='usedYn'
+                label='Active'
+                control={control}
+                checked={data?.usedYn === 'Y'}
+                onChange={handleToggleChange}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor='title'>Title</Label>
+              <InputCustom
+                name='title'
+                control={control}
+                message={errors?.title?.message}
+                maxLength={100}
+              ></InputCustom>
+            </Field>
+            <Field>
+              <Label htmlFor='slug'>Slug</Label>
+              <InputCustom id='slug' name='slug' color='primary' control={control} />
+            </Field>
+            <Field>
+              <Label htmlFor='description'>Description</Label>
+              <TextareaCustom
+                id='description'
+                name='description'
+                color='primary'
+                rows={6}
+                maxLength={150}
+                control={control}
+                className='resize-none dark:bg-darkbg3'
+              />
+            </Field>
+            <Field className='grid grid-cols-2 gap-6 mb-0'>
+              <Field>
+                <Label htmlFor='categoryId'>Category</Label>
+                <DropdownCustom
+                  name='categoryId'
+                  data={dropdownOptions}
+                  control={control}
+                  defaultValue={getValues('categoryName')}
+                ></DropdownCustom>
+              </Field>
+              <Field>
+                <Label htmlFor='tags'>Tags</Label>
+                <InputSelect
+                  data={selectOptions}
+                  name='tags'
+                  value={getValues('tags') as string[]}
+                  control={control}
+                  isMulti
+                  onChange={handleTagChange}
+                ></InputSelect>
+              </Field>
+            </Field>
+
+            <Field>
+              <Label htmlFor='thumbnail'>Post Image</Label>
+              <InputFile
+                onFileUpload={handleOnFileUpload}
+                uploadUrl={uploadedImage}
+                onFileDelete={handleOnFileDelete}
+                size='md'
+                maxSize={maxSize}
+              >
+                <div>
+                  <p>
+                    <span className='text-primary-700 dark:text-primary-400'>Click to upload</span> or drag and drop
+                  </p>
+                  <p className='text-sm text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                </div>
+              </InputFile>
+            </Field>
+
+            <Field>
+              <Label htmlFor='content'>Contents</Label>
+              <div className='entry-content'>
+                <ReactQuill
+                  theme='snow'
+                  modules={modules}
+                  formats={formats}
+                  value={postContent}
+                  onChange={handleContentChange}
+                  placeholder='Nhập nội dung...'
+                />
+              </div>
+            </Field>
+
+            <div className='flex items-center justify-center gap-5 mb-4'>
+              <ActionSave isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
+            </div>
+          </Form>
         </div>
-      </Form>
+        <div id='post-add__preview' className='p-10 bg-white rounded-lg dark:bg-darkbg2'>
+          <div>Prewiew Content</div>
+        </div>
+      </div>
     </div>
   )
 }

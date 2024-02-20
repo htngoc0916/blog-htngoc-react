@@ -5,7 +5,7 @@ import ImageUploader from 'quill-image-uploader'
 import 'quill-image-uploader/dist/quill.imageUploader.min.css'
 import { Quill } from 'react-quill'
 import { toast } from 'react-toastify'
-import { API_STATUS, ApiResponseDTO, FileMaster, UploadRequest } from '~/types'
+import { API_STATUS, ApiResponseDTO, FileMaster, UploadFileRequest } from '~/types'
 import fileUpload from '~/apis/fileUploadApi'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
@@ -36,7 +36,7 @@ export const useQuillUploadImage = () => {
       },
       imageUploader: {
         upload: async (file: File) => {
-          const postUploadRequest: UploadRequest = {
+          const postUploadRequest: UploadFileRequest = {
             id: userInfo?.id || 0,
             file
           }
