@@ -66,10 +66,10 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const handleTagChange = (selectedOption: SelectOption[]) => {
-    console.log('🚀 ~ handleTagChange ~ selectedOption:', selectedOption)
-    return
-    setValue('color', selectedOption[0]?.color)
+  const handleTagChange = (options: SelectOption[]) => {
+    const tags: string[] = options.map((option) => option.value)
+    console.log('🚀 ~ handleTagChange ~ tags:', tags)
+    // setValue('color', selectedOption[0]?.color)
   }
 
   const handleSave = async (tag: Tag) => {
@@ -118,7 +118,7 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
           <ButtonToggleSwitch
             name='usedYn'
             control={control}
-            checked={data?.usedYn === 'Y'}
+            checked={!!getValues('usedYn')}
             onChange={handleToggleChange}
           />
         </Field>
@@ -138,7 +138,7 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
             name='color'
             control={control}
             onChange={handleTagChange}
-            value={[...getValues('tagName')]}
+            value={[getValues('color')] as string[]}
           ></InputSelect>
         </Field>
 

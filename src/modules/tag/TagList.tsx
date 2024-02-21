@@ -46,18 +46,18 @@ const TagList = memo(function TagList({ data, className, onEditTag, onRemoveTag 
           <Table.Body className='divide-y text-text1 dark:text-text8'>
             {data &&
               data.map((tag) => (
-                <Table.Row key={tag.id}>
-                  <Table.Cell>{tag.id}</Table.Cell>
-                  <Table.Cell>{tag.tagName}</Table.Cell>
+                <Table.Row key={tag?.id}>
+                  <Table.Cell>{tag?.id}</Table.Cell>
+                  <Table.Cell>{tag?.tagName}</Table.Cell>
                   <Table.Cell>
                     <BadgeGroup>
-                      <Badge color={tag.color || 'info'}>{tag.color || 'info'}</Badge>
+                      <Badge color={tag?.color}>{tag?.color}</Badge>
                     </BadgeGroup>
                   </Table.Cell>
                   <Table.Cell>
-                    <Active active={tag.usedYn === 'Y' ? true : false}></Active>
+                    <Active active={tag?.usedYn === 'Y' ? true : false}></Active>
                   </Table.Cell>
-                  <Table.Cell className='hidden 2xl:table-cell'>{tag.regDt?.toString()}</Table.Cell>
+                  <Table.Cell className='hidden 2xl:table-cell'>{tag?.regDt?.toString()}</Table.Cell>
                   <Table.Cell>
                     <ActionEdit onClick={() => onEditTag?.(tag)} />
                     <ActionDelete onClick={() => handleRemoveTagClick(tag)} />

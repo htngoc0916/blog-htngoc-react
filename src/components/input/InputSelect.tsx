@@ -59,11 +59,12 @@ export interface InputSelectProps {
   onChange?: (value: SelectOption[]) => void
   isMulti?: true | undefined
   data: SelectOption[]
-  value: string[]
+  value?: string[]
 }
 
 const InputSelect = memo(function InputSelect(props: InputSelectProps) {
   const { control, name, onChange, data, value, isMulti = undefined, ...rest } = props
+  console.log('🚀 ~ InputSelect ~ value:', value)
 
   const { field } = useController({
     control,
@@ -73,12 +74,14 @@ const InputSelect = memo(function InputSelect(props: InputSelectProps) {
   const [selecetd, setSelected] = useState<SelectOption[]>()
 
   const handleOnChange = (selectedOption: SelectOption[] | any) => {
-    onChange?.(selectedOption)
-    setSelected(selectedOption)
+    if (selectedOption) {
+      setSelected(selectedOption)
+      onChange?.(selectedOption)
+    }
   }
 
   useEffect(() => {
-    const values = data.filter((option) => value.includes(option.value))
+    const values = data.filter((option) => value?.includes(option.value))
     setSelected(values)
   }, [value, data])
 

@@ -56,7 +56,7 @@ export default function HomeAllPost(props: IHomeAllPostProps) {
                 </Link>
               )}
             >
-              <CardTag color={item.tags.color || 'infor'} href={`/category/${slugify(item.tags.name)}`}>
+              <CardTag color={item?.tags?.color} href={`/category/${slugify(item.tags.name)}`}>
                 {item.tags.name}
               </CardTag>
 
