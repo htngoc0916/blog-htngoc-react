@@ -95,7 +95,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       key: category.id?.toString(),
       value: category.categoryName
     })) as DropdownOptions[]
-  }, [])
+  }, [categoryList])
 
   const selectOptions: SelectOption[] = useMemo(() => {
     return tagList.map((tag) => ({
@@ -104,7 +104,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       color: tag?.color,
       isDisabled: tag?.usedYn !== 'Y'
     })) as SelectOption[]
-  }, [])
+  }, [tagList])
 
   const [postContent, setPostContent] = useState('')
   const handleContentChange = (content: any) => {
@@ -145,10 +145,13 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     }
   }
 
-  const handleTagChange = useCallback((options: SelectOption[]) => {
-    const tags: string[] = options.map((option) => option.value)
-    setValue('tags', tags)
-  }, [])
+  const handleTagChange = useCallback(
+    (options: SelectOption[]) => {
+      const tags: string[] = options.map((option) => option.value)
+      setValue('tags', tags)
+    },
+    [setValue]
+  )
 
   const handleOnFileUpload = useCallback(
     async (file: File) => {
@@ -200,12 +203,9 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   }
 
   useEffect(() => {
-    dispatch(getTag({ ...defaultFilter, usedYn: 'Y' }))
-  }, [])
-
-  useEffect(() => {
     dispatch(getCategory({ ...defaultFilter, usedYn: 'Y' }))
-  }, [])
+    dispatch(getTag({ ...defaultFilter, usedYn: 'Y' }))
+  }, [dispatch])
 
   useEffect(() => {
     setValue('id', data?.id)

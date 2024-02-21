@@ -38,6 +38,7 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
     handleSubmit,
     control,
     setValue,
+    getValues,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schema),
@@ -65,9 +66,10 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const handleColorChange = (selectedOption: SelectOption[]) => {
-    console.log('🚀 ~ handleColorChange ~ selectedOption:', selectedOption)
-    setValue('color', selectedOption[0] ? selectedOption[0].value : '')
+  const handleTagChange = (selectedOption: SelectOption[]) => {
+    console.log('🚀 ~ handleTagChange ~ selectedOption:', selectedOption)
+    return
+    setValue('color', selectedOption[0]?.color)
   }
 
   const handleSave = async (tag: Tag) => {
@@ -131,7 +133,13 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
         </Field>
         <Field>
           <Label htmlFor='color'>Color</Label>
-          <InputSelect data={colourOptions} name='color' control={control} onChange={handleColorChange}></InputSelect>
+          <InputSelect
+            data={colourOptions}
+            name='color'
+            control={control}
+            onChange={handleTagChange}
+            value={[...getValues('tagName')]}
+          ></InputSelect>
         </Field>
 
         <div className='flex items-center justify-center'>

@@ -24,9 +24,9 @@ function PostDetailAdd(props: PostDetailProps) {
         } else {
           setSelectedPost(response.data)
         }
-      }
 
-      getPostById()
+        getPostById()
+      }
     }
   }, [postId])
 

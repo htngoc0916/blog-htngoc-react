@@ -1,8 +1,9 @@
 // useUploadQuill.ts
 import { useMemo } from 'react'
 import hljs from 'highlight.js'
-import ImageUploader from 'quill-image-uploader'
 import 'quill-image-uploader/dist/quill.imageUploader.min.css'
+
+import ImageUploader from 'quill-image-uploader'
 import { Quill } from 'react-quill'
 import { toast } from 'react-toastify'
 import { API_STATUS, ApiResponseDTO, FileMaster, UploadFileRequest } from '~/types'
