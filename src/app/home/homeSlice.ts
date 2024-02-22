@@ -5,7 +5,7 @@ import { RootState } from '../store'
 export interface HomeSate {
   loading: boolean
   filter: FilterPramsDTO
-  newPostList: PostList
+  hotPostList: PostList
   allPostList: PostList
 }
 
@@ -17,7 +17,7 @@ export interface PostList {
 const initialState: HomeSate = {
   loading: false,
   filter: { ...defaultFilter },
-  newPostList: {
+  hotPostList: {
     data: [],
     paginaton: { ...defaultPagination }
   },
@@ -31,7 +31,7 @@ const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    fetchDataHome(state) {
+    fetchDataHome(state, _action: PayloadAction<FilterPramsDTO>) {
       state.loading = true
     },
     fetchDataHomeSuccess(state) {
@@ -41,22 +41,43 @@ const homeSlice = createSlice({
       state.loading = false
     },
 
-    setNewPostListHome(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
+    setHotPostListHome(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
       const { data, ...paginationWithoutData } = action.payload
-      state.newPostList = { data, paginaton: { ...paginationWithoutData } }
+      state.hotPostList = { data, paginaton: { ...paginationWithoutData } }
     },
     setAllPostListHome(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
       const { data, ...paginationWithoutData } = action.payload
       state.allPostList = { data, paginaton: { ...paginationWithoutData } }
+    },
+
+    loadmoreAllPostList(state, _action: PayloadAction<FilterPramsDTO>) {
+      state.loading = true
+    },
+    loadmoreAllPostListSuccess(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
+      const { data, ...paginationWithoutData } = action.payload
+      state.allPostList = { data, paginaton: { ...paginationWithoutData } }
+      state.loading = false
+    },
+    loadmoreAllPostListFailed(state) {
+      state.loading = false
     }
   }
 })
 
-export const { fetchDataHome, fetchDataHomeSuccess, fetchDataHomeFailed, setNewPostListHome, setAllPostListHome } =
-  homeSlice.actions
+export const {
+  fetchDataHome,
+  fetchDataHomeSuccess,
+  fetchDataHomeFailed,
+  setHotPostListHome,
+  setAllPostListHome,
+  loadmoreAllPostList,
+  loadmoreAllPostListFailed,
+  loadmoreAllPostListSuccess
+} = homeSlice.actions
 
-export const homeLoadingSelector = (satete: RootState) => state.home.loading
-export const newPostListSelector = (state: RootState) => state.home.newPostList
-export const allPostListSelector = (state: RootState) => state.home.allPostList
+export const homeLoadingSelector = (state: RootState) => state.home.loading
+export const homeHotPostSelector = (state: RootState) => state.home.hotPostList
+export const homeAllPostListSelector = (state: RootState) => state.home.allPostList
+export const homeFilterSelector = (state: RootState) => state.home.filter
 
 export default homeSlice.reducer

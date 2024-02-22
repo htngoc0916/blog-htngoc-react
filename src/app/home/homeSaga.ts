@@ -1,17 +1,28 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { homeActions } from './homeSlice'
+import { fetchDataHome, fetchDataHomeFailed, fetchDataHomeSuccess, loadmoreAllPostList } from './homeSlice'
+import { FilterPramsDTO } from '~/types'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { handleFetchAllPostList, handleFetchHotPostList } from './homeHandler'
 
-export function* fetchHomeData() {
+export function* onFetchHomeData(action: PayloadAction<FilterPramsDTO>) {
   try {
-    yield all([call(fetchNewPostList), call(fetchAllPostList)])
+    yield all([call(handleFetchHotPostList, action), call(handleFetchAllPostList, action)])
 
-    yield put(homeActions.fetchDataSuccess())
+    yield put(fetchDataHomeSuccess())
   } catch (error) {
     console.log('Failed to fetch dashboard data', error)
-    yield put(homeActions.fetchDataFailed())
+    yield put(fetchDataHomeFailed())
   }
 }
 
-export default function* homeSage() {
-  yield takeLatest(homeActions.fetchData.type, fetchHomeData)
+function* runFetchDataHome() {
+  yield takeLatest(fetchDataHome, onFetchHomeData)
+}
+
+function* runLoadmoreAllPost() {
+  yield takeLatest(loadmoreAllPostList, handleFetchAllPostList)
+}
+
+export default function* homeSaga() {
+  yield all([call(runFetchDataHome), call(runLoadmoreAllPost)])
 }

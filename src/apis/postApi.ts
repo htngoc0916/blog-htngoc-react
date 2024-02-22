@@ -12,6 +12,13 @@ const postApi = {
       params
     })
   },
+  getHotPost(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Post[]>>> {
+    const url = POST_URL
+    return axiosPublic.get(url, {
+      headers: { 'Accept-Language': i18n.language },
+      params
+    })
+  },
 
   getPostById(id: number): Promise<ApiResponseDTO<Post>> {
     const url = POST_URL + '/' + id

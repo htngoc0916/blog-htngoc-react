@@ -41,7 +41,10 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     slug: yup.string(),
     thumbnail: yup.string(),
     thumbnailId: yup.number(),
-    categoryId: yup.number(),
+    categoryId: yup
+      .number()
+      .required('Vui lòng chọn danh mục')
+      .test('is-greater-than-zero', 'Vui lòng chọn danh mục', (value) => value > 0),
     tags: yup.array().of(yup.string()),
     usedYn: yup.string(),
 
@@ -110,7 +113,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   }
 
   const handleSave = async (post: any) => {
-    console.log('🚀 ~ handleSave ~ post:', post)
     try {
       const action = isEdit ? postApi.editPost : postApi.addPost
       if (!isEdit) {
@@ -139,7 +141,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
   const handleTagChange = useCallback(
     (options: SelectOption[]) => {
-      console.log('🚀 ~ PostDetailForm ~ options:', options)
       const tags: string[] = options.map((option) => option.value)
       setValue('tags', tags)
     },
@@ -207,7 +208,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('description', data?.description)
     setValue('slug', data?.slug)
     setValue('usedYn', data?.usedYn || 'Y')
-    setValue('categoryId', data?.categoryId)
+    setValue('categoryId', data?.categoryId || 0)
     setValue('thumbnail', data?.thumbnail || '')
     setValue('thumbnailId', data?.thumbnailId || undefined)
     setValue('content', data?.content)

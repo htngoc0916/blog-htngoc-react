@@ -1,7 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 import { DefaultProps } from '~/utils/defautProp'
 import FeatureTitle from './FeatureTitle'
-import { PostList } from './data.post'
 import { Button, Card } from 'flowbite-react'
 import { CardTag, CardTitle, CardAuthor, AuthorName, CardPostTime, AuthorAvatar } from '~/components/common'
 import CardImage from '~/components/common/CardImage'
@@ -9,15 +8,42 @@ import { Link } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import slugify from 'slugify'
 import { useTranslation } from 'react-i18next'
+import { useAppSelector } from '~/app/hooks'
+import { homeAllPostListSelector, homeFilterSelector, loadmoreAllPostList } from '~/app/home/homeSlice'
+import { Tag } from '~/types'
+import { convertToYYYYMMDD } from '~/utils/commonUtils'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-export interface IHomeAllPostProps extends DefaultProps {}
+const renderTags = (tags: Tag[]) => {
+  return (
+    <div id='tags' className='flex gap-2'>
+      {tags.map((tag: Tag) => (
+        <CardTag color={tag?.color} key={tag?.tagName} href={`/category/${slugify(tag?.tagName || '')}`}>
+          {tag?.tagName}
+        </CardTag>
+      ))}
+    </div>
+  )
+}
 
-export default function HomeAllPost(props: IHomeAllPostProps) {
-  const data = PostList()
+export default function HomeAllPost(props: DefaultProps) {
   const { t } = useTranslation(['home', 'common'])
 
+  const dispatch = useDispatch()
+  const filter = useAppSelector(homeFilterSelector)
+  const postList = useAppSelector(homeAllPostListSelector)
+  const [lastPage, setLastPage] = useState(false)
+
+  useEffect(() => {
+    const { paginaton } = postList
+    setLastPage(paginaton.last)
+  }, [postList])
+
   const handleLoadMore = async () => {
-    console.log('')
+    const { paginaton } = postList
+    console.log('🚀 ~ handleLoadMore ~ paginaton:', paginaton.pageNo + 1)
+    dispatch(loadmoreAllPostList({ ...filter, pageNo: paginaton.pageNo + 1 }))
   }
 
   return (
@@ -46,38 +72,36 @@ export default function HomeAllPost(props: IHomeAllPostProps) {
         </div>
 
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-screen-2xl'>
-          {data.map((item) => (
+          {postList?.data?.map((post) => (
             <Card
-              key={item.id}
+              key={post?.id}
               className='overflow-hidden md:max-w-lg group'
               renderImage={() => (
-                <Link to={`/post/${slugify(item.title)}`} className='w-full h-full overflow-hidden'>
-                  <CardImage src={item.imgSrc} className='rounded-b-none max-h-img-md group-hover:scale-105' />
+                <Link to={`/post/${slugify(post?.title)}`} className='w-full h-full overflow-hidden'>
+                  <CardImage src={post?.thumbnail} className='rounded-b-none max-h-img-md group-hover:scale-105' />
                 </Link>
               )}
             >
-              <CardTag color={item?.tags?.color} href={`/category/${slugify(item.tags.name)}`}>
-                {item.tags.name}
-              </CardTag>
+              {post?.tags && renderTags(post?.tags as Tag[])}
 
-              <CardBody href={`/post/${slugify(item.title)}`}>
+              <CardBody href={`/post/${slugify(post?.title)}`}>
                 <CardTitle className='block' animation>
-                  {item.title}
+                  {post?.title}
                 </CardTitle>
               </CardBody>
 
               <CardAuthor className='flex justify-between'>
-                <AuthorAvatar img={item.avartaSrc || ''} rounded size='sm'>
-                  <AuthorName className='text-base lg:text-base'>{item.author}</AuthorName>
+                <AuthorAvatar img={post?.user?.avatar || ''} rounded size='sm'>
+                  <AuthorName className='text-base lg:text-base'>{post?.user?.userName}</AuthorName>
                 </AuthorAvatar>
-                <CardPostTime className='text-base'>{item.postTime}</CardPostTime>
+                <CardPostTime className='text-base'>{convertToYYYYMMDD(post?.regDt as Date)}</CardPostTime>
               </CardAuthor>
             </Card>
           ))}
         </div>
 
         <div className='flex items-center justify-center pt-10'>
-          <Button size='sm' gradientDuoTone='primary' isProcessing={false} onClick={handleLoadMore}>
+          <Button size='sm' gradientDuoTone='primary' isProcessing={false} onClick={handleLoadMore} disabled={lastPage}>
             {t('common:acctions.load-more')}
           </Button>
         </div>

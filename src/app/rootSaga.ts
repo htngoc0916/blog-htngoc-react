@@ -6,7 +6,8 @@ import categorySaga from './category/categorySaga'
 import tagSaga from './tag/tagSaga'
 import userSaga from './user/userSaga'
 import postSaga from './post/postSaga'
+import homeSaga from './home/homeSaga'
 
 export default function* rootSaga() {
-  yield all([authSaga(), darkModeSaga(), menuSaga(), categorySaga(), tagSaga(), userSaga(), postSaga()])
+  yield all([authSaga(), darkModeSaga(), menuSaga(), categorySaga(), tagSaga(), userSaga(), postSaga(), homeSaga()])
 }
