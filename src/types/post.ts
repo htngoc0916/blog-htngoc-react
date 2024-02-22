@@ -7,6 +7,7 @@ export interface Post extends BaseDTO {
   content: string
   slug: string
   thumbnail?: string
+  thumbnailId?: number
   viewCnt?: number
   categoryId: number
   tags?: (string | Tag)[]

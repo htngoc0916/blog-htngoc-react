@@ -16,11 +16,11 @@ function ModalDelete({ show, onClose, onConfirm, message }: ModalDeleteProps) {
           <HiOutlineExclamationCircle className='mx-auto mb-4 text-gray-400 h-14 w-14 dark:text-gray-200' />
           <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>{message}</h3>
           <div className='flex justify-center gap-4'>
-            <Button color='failure' onClick={onConfirm}>
-              {'Có, Tôi muốn'}
+            <Button color='failure' onClick={onConfirm} className='w-24'>
+              {'Có'}
             </Button>
-            <Button color='gray' onClick={onClose}>
-              {'Không, Huỷ bỏ'}
+            <Button color='gray' onClick={onClose} className='w-24'>
+              {'Không'}
             </Button>
           </div>
         </div>

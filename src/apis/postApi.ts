@@ -42,6 +42,18 @@ const postApi = {
         'Accept-Language': i18n.language
       }
     })
+  },
+
+  removePost(id: number): Promise<ApiResponseDTO<null>> {
+    const accessToken = getToken()
+    const url = POST_URL + '/' + id
+    return axiosPrivate.delete(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
+      }
+    })
   }
 }
 export default postApi

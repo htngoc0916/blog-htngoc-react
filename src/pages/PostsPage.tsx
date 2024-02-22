@@ -2,12 +2,14 @@ import { Pagination } from 'flowbite-react'
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import postApi from '~/apis/postApi'
 import { useAppSelector } from '~/app/hooks'
 import { getPost, postFilterSelector, postListSelector, postPaginationSelector } from '~/app/post/postSlice'
 import { ActionAdd } from '~/components/action'
 import DashboardTitle from '~/components/common/DashboardTitle'
 import { PostFilter, PostList } from '~/modules/post'
-import { FilterPramsDTO, Post } from '~/types'
+import { API_STATUS, ApiResponseDTO, FilterPramsDTO, Post } from '~/types'
 
 export default function PostsPage() {
   const navigate = useNavigate()
@@ -36,15 +38,32 @@ export default function PostsPage() {
 
   const handleAddPost = useCallback(() => {
     navigate(`${pathname}/0`)
-  }, [])
+  }, [navigate, pathname])
 
-  const handleEditPost = useCallback((post: Post) => {
-    navigate(`${pathname}/${post.id}`)
-  }, [])
+  const handleEditPost = useCallback(
+    (post: Post) => {
+      navigate(`${pathname}/${post.id}`)
+    },
+    [navigate, pathname]
+  )
 
-  const handleRemovePost = useCallback(async (post: Post) => {
-    console.log('🚀 ~ PostsPage ~ post:', post)
-  }, [])
+  const handleRemovePost = useCallback(
+    async (post: Post) => {
+      try {
+        const response: ApiResponseDTO<null> = await postApi.removePost(post?.id || 0)
+        if (response?.status.includes(API_STATUS.FAILED)) {
+          return toast.error(response.message)
+        }
+
+        toast.success(response?.message)
+        dispatch(getPost(filter))
+      } catch (error: any) {
+        console.log(error)
+        return toast.error(error)
+      }
+    },
+    [dispatch, filter]
+  )
 
   useEffect(() => {
     dispatch(getPost(filter))

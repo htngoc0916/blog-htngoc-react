@@ -66,10 +66,8 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
     setValue('usedYn', value ? 'Y' : 'N')
   }
 
-  const handleTagChange = (options: SelectOption[]) => {
-    const tags: string[] = options.map((option) => option.value)
-    console.log('🚀 ~ handleTagChange ~ tags:', tags)
-    // setValue('color', selectedOption[0]?.color)
+  const handleTagChange = (options: SelectOption) => {
+    setValue('color', options.value)
   }
 
   const handleSave = async (tag: Tag) => {
@@ -133,13 +131,7 @@ export default function TagDetail({ data, className, onCloseTag, onSaveTag }: Ta
         </Field>
         <Field>
           <Label htmlFor='color'>Color</Label>
-          <InputSelect
-            data={colourOptions}
-            name='color'
-            control={control}
-            onChange={handleTagChange}
-            value={[getValues('color')] as string[]}
-          ></InputSelect>
+          <InputSelect data={colourOptions} name='color' control={control} onChange={handleTagChange}></InputSelect>
         </Field>
 
         <div className='flex items-center justify-center'>

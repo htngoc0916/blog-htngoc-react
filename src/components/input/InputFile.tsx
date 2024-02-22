@@ -4,6 +4,8 @@ import { FileRejection, useDropzone } from 'react-dropzone'
 import { ReactNode, memo, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { ActionClose } from '../action'
+import Loader from '../loader'
+import { Spinner } from 'flowbite-react'
 
 const classes = {
   base: 'flex items-center justify-center w-full',
@@ -43,6 +45,7 @@ export interface InputFileProps {
   onFileUpload?: (file: File) => void
   onFileDelete?: () => void
   maxSize?: number
+  loading?: boolean
 }
 
 const InputFile = memo(function InputFile(props: InputFileProps) {
@@ -54,6 +57,7 @@ const InputFile = memo(function InputFile(props: InputFileProps) {
     onFileUpload,
     onFileDelete,
     uploadUrl,
+    loading = false,
     maxSize = 1024 * 1024
   } = props
 
@@ -84,30 +88,40 @@ const InputFile = memo(function InputFile(props: InputFileProps) {
 
   return (
     <div className={twMerge(classes.label.base, classes.label.color[color], classes.label.size[size], className)}>
-      {uploadUrl && (
-        <div className='absolute top-0 left-0 w-full h-full rounded-lg z-1'>
-          <div className='relative bg-white rounded-lg'>
-            <div className={twMerge(classes.label.size[size])}>
-              <img
-                src={uploadUrl}
-                alt='upload image'
-                className='object-cover w-full h-full border-inherit'
-                loading='lazy'
-              />
-            </div>
-            <ActionClose
-              className='absolute p-1 bg-gray-100 rounded-sm top-1 right-1'
-              onClick={onFileDelete}
-            ></ActionClose>
-          </div>
+      {loading ? (
+        <div className='absolute top-0 left-0 flex items-center justify-center w-full h-full rounded-lg z-1'>
+          <Spinner color='purple' />
         </div>
+      ) : (
+        <>
+          {uploadUrl ? (
+            <div className='absolute top-0 left-0 w-full h-full rounded-lg z-1'>
+              <div className='relative bg-white rounded-lg'>
+                <div className={twMerge(classes.label.size[size])}>
+                  <img
+                    src={uploadUrl}
+                    alt='upload image'
+                    className='object-cover w-full h-full border-inherit'
+                    loading='lazy'
+                  />
+                </div>
+                <ActionClose
+                  className='absolute p-1 bg-gray-100 rounded-sm top-1 right-1'
+                  onClick={onFileDelete}
+                ></ActionClose>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className={twMerge(classes.children.base)} {...getRootProps()}>
+                <HiOutlineCloudArrowUp className={classes.children.color[color]}></HiOutlineCloudArrowUp>
+                {children}
+              </div>
+              <input id='dropzone-file' className='hidden' {...getInputProps()} />
+            </>
+          )}
+        </>
       )}
-
-      <div className={twMerge(classes.children.base)} {...getRootProps()}>
-        <HiOutlineCloudArrowUp className={classes.children.color[color]}></HiOutlineCloudArrowUp>
-        {children}
-      </div>
-      <input id='dropzone-file' className='hidden' {...getInputProps()} />
     </div>
   )
 })

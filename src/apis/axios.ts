@@ -51,33 +51,41 @@ axiosPrivate.interceptors.response.use(
   async (error) => {
     if (error.response && error.response.status) {
       const originalRequest = error.config
+      if (error.response) {
+        if (error.response.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true
+          const refreshToken = await getFreshToken()
+          if (refreshToken) {
+            try {
+              const response: ApiResponseDTO<AuthResponseDTO> = await authApi.authRefreshToken({
+                refreshToken
+              })
+              await saveToken(response.data.accessToken, response.data.refreshToken)
 
-      if (error.response.status === 401) {
-        const refreshToken = await getFreshToken()
-        if (refreshToken) {
-          try {
-            const response: ApiResponseDTO<AuthResponseDTO> = await authApi.authRefreshToken({
-              refreshToken
-            })
-            await saveToken(response.data.accessToken, response.data.refreshToken)
-
-            if (response && response.status.includes(API_STATUS.SUCCESS)) {
-              if (originalRequest.headers) {
-                originalRequest.headers['Authorization'] = `Bearer ${response.data.accessToken}`
+              if (response && response.status.includes(API_STATUS.SUCCESS)) {
+                if (originalRequest.headers) {
+                  originalRequest.headers['Authorization'] = `Bearer ${response.data.accessToken}`
+                }
+                store?.dispatch(refreshTokenSuccess({ ...response.data }))
+                return axiosPrivate(originalRequest)
               }
-              store?.dispatch(refreshTokenSuccess({ ...response.data }))
-              return axiosPrivate(originalRequest)
+            } catch (_error: any) {
+              if (_error.response && _error.response.data) {
+                return Promise.reject(_error.response.data)
+              }
+              console.log('Error refreshing token')
+              return Promise.reject(_error)
             }
-          } catch (refreshError: any) {
-            console.log('Error refreshing token')
           }
         }
-      }
-      if (error.response.status === 404 || error.response.status === 403) {
-        await store?.dispatch(refreshTokenFailed())
-        await removeToken()
-        if (globalRouter.navigate) {
-          await globalRouter?.navigate('/login')
+        if (error.response.status === 404 || error.response.status === 403) {
+          await store?.dispatch(refreshTokenFailed())
+          await removeToken()
+          if (globalRouter.navigate) {
+            await globalRouter?.navigate('/login')
+          }
+
+          return Promise.reject(error.response.data)
         }
       }
     }

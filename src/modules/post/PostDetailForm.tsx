@@ -1,23 +1,13 @@
 import { Field, Form } from '~/components/form'
 import { TextCustom } from '~/components/text'
-import {
-  API_STATUS,
-  ApiResponseDTO,
-  Category,
-  DeleteFileByIdRequest,
-  FileMaster,
-  Post,
-  Tag,
-  UploadFileRequest,
-  defaultFilter
-} from '~/types'
+import { API_STATUS, ApiResponseDTO, Category, FileMaster, Post, Tag, UploadFileRequest, defaultFilter } from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { ButtonToggleSwitch } from '~/components/button'
 import { ActionSave } from '~/components/action'
 import { Label } from 'flowbite-react'
-import { InputCustom, InputFile, InputSelect } from '~/components/input'
+import { InputCustom, InputFile, InputSelectMulti } from '~/components/input'
 import { TextareaCustom } from '~/components/textarea'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '~/app/hooks'
@@ -50,11 +40,12 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     content: yup.string(),
     slug: yup.string(),
     thumbnail: yup.string(),
+    thumbnailId: yup.number(),
     categoryId: yup.number(),
     tags: yup.array().of(yup.string()),
     usedYn: yup.string(),
 
-    images: yup.array().of(yup.number()),
+    // images: yup.array().of(yup.number()),
     categoryName: yup.string()
   })
 
@@ -74,11 +65,12 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       content: '',
       slug: '',
       thumbnail: '',
-      categoryId: 0,
+      thumbnailId: undefined,
+      categoryId: undefined,
       tags: [],
       usedYn: 'Y',
 
-      images: [],
+      // images: [],
       categoryName: ''
     }
   })
@@ -89,6 +81,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   const categoryList = useAppSelector(categoryListSelector)
   const [uploadedImage, setUploadedImage] = useState<string>('')
   const { modules, formats } = useQuillUploadImage()
+  const [uploadLoading, setUploadLoading] = useState(false)
 
   const dropdownOptions: DropdownOptions[] = useMemo(() => {
     return categoryList.map((category) => ({
@@ -118,7 +111,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
   const handleSave = async (post: any) => {
     console.log('🚀 ~ handleSave ~ post:', post)
-
     try {
       const action = isEdit ? postApi.editPost : postApi.addPost
       if (!isEdit) {
@@ -147,6 +139,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
   const handleTagChange = useCallback(
     (options: SelectOption[]) => {
+      console.log('🚀 ~ PostDetailForm ~ options:', options)
       const tags: string[] = options.map((option) => option.value)
       setValue('tags', tags)
     },
@@ -161,41 +154,42 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
       }
 
       try {
+        setUploadLoading(true)
+
         const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadImage(postUploadRequest)
 
         if (response?.status.includes(API_STATUS.SUCCESS)) {
-          console.log('🚀 ~ response:', response)
           setUploadedImage(response?.data?.fileUrl)
           setValue('thumbnail', response?.data?.fileUrl)
-          setValue('images', [...(getValues('images') as number[]), response?.data?.id])
+          setValue('thumbnailId', response?.data?.id)
+          // setValue('images', [...(getValues('images') as number[]), response?.data?.id])
         } else {
           toast.error(response.message)
         }
       } catch (error) {
         toast.error('Upload error')
         console.error(error)
+      } finally {
+        setUploadLoading(false)
       }
     },
-    [userInfo?.id, setValue, getValues]
+    [userInfo?.id, setValue]
   )
 
   const handleOnFileDelete = async () => {
-    // const fileId = getValues('images')
-    // console.log('🚀 ~ handleOnFileDelete ~ fileId:', fileId)
-    // if (!fileId) return
+    const thumbnailId = getValues('thumbnailId')
+    if (!thumbnailId || thumbnailId === 0) {
+      return
+    }
 
     try {
-      // const deletePostImage: DeleteFileByIdRequest = {
-      //   id: fileId
-      // }
-      // await fileUpload.deleteImage(deletePostImage)
-
-      const fileName = getValues('thumbnail')
-      console.log('🚀 ~ handleOnFileDelete ~ fileName:', fileName)
-      await fileUpload.deleteImageByFileName(fileName as string)
+      const response: ApiResponseDTO<string> = await fileUpload.deleteImageById(thumbnailId)
+      console.log('🚀 ~ handleOnFileDelete ~ response:', response)
 
       setUploadedImage('')
-      setValue('images', [])
+      setValue('thumbnail', '')
+      setValue('thumbnailId', undefined)
+      // setValue('images', [])
     } catch (error) {
       toast.error('Delete image error')
       console.log('🚀 ~ handleOnFileDelete ~ error:', error)
@@ -212,9 +206,10 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('title', data?.title || '')
     setValue('description', data?.description)
     setValue('slug', data?.slug)
-    setValue('usedYn', data?.usedYn || 'N')
+    setValue('usedYn', data?.usedYn || 'Y')
     setValue('categoryId', data?.categoryId)
     setValue('thumbnail', data?.thumbnail || '')
+    setValue('thumbnailId', data?.thumbnailId || undefined)
     setValue('content', data?.content)
 
     setUploadedImage(data?.thumbnail || '')
@@ -229,9 +224,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     }
 
     const categories: Category = categoryList.filter((category: Category) => category.id === data?.categoryId)[0]
-    if (categories) {
-      setValue('categoryName', categories?.categoryName)
-    }
+    setValue('categoryName', categories ? categories?.categoryName : 'Select category')
   }, [data, setValue, categoryList])
 
   return (
@@ -250,7 +243,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
                 name='usedYn'
                 label='Active'
                 control={control}
-                checked={data?.usedYn === 'Y'}
+                checked={getValues('usedYn') === 'Y'}
                 onChange={handleToggleChange}
               />
             </Field>
@@ -291,14 +284,13 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
               </Field>
               <Field>
                 <Label htmlFor='tags'>Tags</Label>
-                <InputSelect
+                <InputSelectMulti
                   data={selectOptions}
                   name='tags'
                   value={getValues('tags') as string[]}
                   control={control}
-                  isMulti
                   onChange={handleTagChange}
-                ></InputSelect>
+                ></InputSelectMulti>
               </Field>
             </Field>
 
@@ -309,6 +301,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
                 uploadUrl={uploadedImage}
                 onFileDelete={handleOnFileDelete}
                 size='md'
+                loading={uploadLoading}
                 maxSize={maxSize}
               >
                 <div>

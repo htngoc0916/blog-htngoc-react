@@ -47,6 +47,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
     handleSubmit,
     control,
     setValue,
+    getValues,
     setError,
     watch,
     formState: { errors }
@@ -66,6 +67,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
 
   const userInfo = useAppSelector(userInfoSelector)
   const [loading, setLoading] = useState(false)
+  const [uploadLoading, setUploadLoading] = useState(false)
   const isEdit = Boolean(data)
 
   const watchRole = watch('role')
@@ -107,17 +109,25 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
   //avatar upload
   const handleOnFileUpload = useCallback(
     async (file: File) => {
-      if (!isEdit) return toast.warning('Hãy tạo user trước khi upload avatar!')
+      try {
+        setUploadLoading(true)
 
-      const uploadAvatar: UploadAvatarDTO = {
-        email: data?.email || '',
-        file
-      }
+        if (!isEdit) return toast.warning('Hãy tạo user trước khi upload avatar!')
 
-      const response: ApiResponseDTO<FileMaster> = await userApi.uploadAvatar(uploadAvatar)
-      if (response?.status.includes(API_STATUS.SUCCESS)) {
-        setUploadedImage(response.data.fileUrl)
-        setValue('avatar', response.data.fileUrl)
+        const uploadAvatar: UploadAvatarDTO = {
+          email: data?.email || '',
+          file
+        }
+
+        const response: ApiResponseDTO<FileMaster> = await userApi.uploadAvatar(uploadAvatar)
+        if (response?.status.includes(API_STATUS.SUCCESS)) {
+          setUploadedImage(response.data.fileUrl)
+          setValue('avatar', response.data.fileUrl)
+        }
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setUploadLoading(false)
       }
     },
     [setValue, data?.email, isEdit]
@@ -177,7 +187,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
             name='usedYn'
             label='Active'
             control={control}
-            checked={data?.usedYn === 'Y'}
+            checked={getValues('usedYn') === 'Y'}
             onChange={handleToggleChange}
           />
         </Field>
@@ -187,6 +197,7 @@ const UserDetail = memo(function UserDetail({ data, className, onCloseUser, onSa
               onFileUpload={handleOnFileUpload}
               uploadUrl={uploadedImage}
               onFileDelete={handleOnFileDelete}
+              loading={uploadLoading}
             ></InputFile>
           </div>
           <div className='flex-1 text-sm'>

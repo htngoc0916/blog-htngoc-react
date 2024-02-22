@@ -1,6 +1,9 @@
+import { useDispatch } from 'react-redux'
 import { HomeAllPost, HomeBanner, HomeTopPost } from '~/modules/home'
 
 export default function HomePage() {
+  const dispatch = useDispatch()
+
   return (
     <main>
       <HomeBanner className='dark:bg-darkbg1 pt-page dark:bg-darkbg2 bg-text8'></HomeBanner>

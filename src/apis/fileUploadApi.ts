@@ -1,4 +1,4 @@
-import { ApiResponseDTO, FileMaster, UploadFileRequest, DeleteFileByIdRequest } from '~/types'
+import { ApiResponseDTO, FileMaster, UploadFileRequest } from '~/types'
 import { getToken } from '~/utils/auth'
 import { axiosPrivate } from './axios'
 import { CLOUDINARY_UPLOAD } from './apiConstanst'
@@ -19,9 +19,9 @@ const fileUpload = {
     })
   },
 
-  deleteImage(data: DeleteFileByIdRequest): Promise<ApiResponseDTO<string>> {
+  deleteImageById(id: number): Promise<ApiResponseDTO<string>> {
     const accessToken = getToken()
-    const url = CLOUDINARY_UPLOAD + '/delete/' + data.id
+    const url = CLOUDINARY_UPLOAD + '/delete/' + id
 
     return axiosPrivate.delete(url, {
       headers: {
