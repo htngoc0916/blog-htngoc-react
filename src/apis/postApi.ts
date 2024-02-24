@@ -1,5 +1,5 @@
 import { Post, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
-import { POST_URL } from './apiConstanst'
+import { POST_GET_BY_SLUG, POST_GET_RELATED_BY_SLUG, POST_URL } from './apiConstanst'
 import { axiosPrivate, axiosPublic } from './axios'
 import i18n from '~/i18n/i18n'
 import { getToken } from '~/utils/auth'
@@ -22,6 +22,20 @@ const postApi = {
 
   getPostById(id: number): Promise<ApiResponseDTO<Post>> {
     const url = POST_URL + '/' + id
+    return axiosPublic.get(url, {
+      headers: { 'Accept-Language': i18n.language }
+    })
+  },
+
+  getPostBySlug(slug: string): Promise<ApiResponseDTO<Post>> {
+    const url = POST_GET_BY_SLUG + '/' + slug
+    return axiosPublic.get(url, {
+      headers: { 'Accept-Language': i18n.language }
+    })
+  },
+
+  getRelatedPostBySlug(slug: string): Promise<ApiResponseDTO<Post>> {
+    const url = POST_GET_RELATED_BY_SLUG + '/' + slug
     return axiosPublic.get(url, {
       headers: { 'Accept-Language': i18n.language }
     })

@@ -57,7 +57,7 @@ const PostList = memo(function PostList({ data, className, onEditPost, onRemoveP
                   <Table.Cell>
                     <div className='flex items-center justify-start gap-1'>
                       <HiOutlineEye className='w-4 h-4'></HiOutlineEye>
-                      {numberWithCommas(post?.viewCnt)}
+                      {numberWithCommas(post?.viewCnt as number)}
                     </div>
                   </Table.Cell>
                   <Table.Cell>{post?.user?.userName}</Table.Cell>

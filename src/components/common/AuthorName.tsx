@@ -8,5 +8,9 @@ export interface IAuthorNameProps extends DefaultProps {}
 
 export default function AuthorName(props: IAuthorNameProps) {
   const { children, className } = props
-  return <span className={twMerge(classes.base, className)}>{children}</span>
+  return (
+    <span id='auth-avatar' className={twMerge(classes.base, className)}>
+      {children}
+    </span>
+  )
 }

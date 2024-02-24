@@ -2,11 +2,20 @@ import { all, call, put, takeLatest } from 'redux-saga/effects'
 import { fetchDataHome, fetchDataHomeFailed, fetchDataHomeSuccess, loadmoreAllPostList } from './homeSlice'
 import { FilterPramsDTO } from '~/types'
 import { PayloadAction } from '@reduxjs/toolkit'
-import { handleFetchAllPostList, handleFetchHotPostList } from './homeHandler'
+import {
+  handleFetchAllPostList,
+  handleFetchHotPostList,
+  handleLoadmoreAllPostList,
+  handleFetchAllCategoryList
+} from './homeHandler'
 
-export function* onFetchHomeData(action: PayloadAction<FilterPramsDTO>) {
+function* onFetchHomeData(action: PayloadAction<FilterPramsDTO>) {
   try {
-    yield all([call(handleFetchHotPostList, action), call(handleFetchAllPostList, action)])
+    yield all([
+      call(handleFetchHotPostList, action),
+      call(handleFetchAllPostList, action),
+      call(handleFetchAllCategoryList, action)
+    ])
 
     yield put(fetchDataHomeSuccess())
   } catch (error) {
@@ -20,7 +29,7 @@ function* runFetchDataHome() {
 }
 
 function* runLoadmoreAllPost() {
-  yield takeLatest(loadmoreAllPostList, handleFetchAllPostList)
+  yield takeLatest(loadmoreAllPostList, handleLoadmoreAllPostList)
 }
 
 export default function* homeSaga() {

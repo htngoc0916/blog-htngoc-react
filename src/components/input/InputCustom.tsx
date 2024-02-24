@@ -1,6 +1,6 @@
 // ~/components/input
 import { TextInput, TextInputProps } from 'flowbite-react'
-import { ChangeEvent, ReactNode, useState } from 'react'
+import { ChangeEvent, ReactNode } from 'react'
 import { Control, useController } from 'react-hook-form'
 import { withErrorBoundary } from 'react-error-boundary'
 import ErrorFallBack from '../error'

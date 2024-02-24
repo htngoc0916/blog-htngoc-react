@@ -6,9 +6,7 @@ import PostDetailForm from './PostDetailForm'
 import { API_STATUS, ApiResponseDTO, Post } from '~/types'
 import postApi from '~/apis/postApi'
 
-export interface PostDetailProps {}
-
-function PostDetailAdd(props: PostDetailProps) {
+function PostDetailAdd() {
   const { postId } = useParams<{ postId: string }>()
   const isEdit = postId !== '0'
 

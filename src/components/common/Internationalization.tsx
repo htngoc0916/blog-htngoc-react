@@ -49,9 +49,11 @@ export default function Internationalization({ className }: Internationalization
     <Dropdown
       label=''
       renderTrigger={() => (
-        <div className={twMerge('flex items-center justify-center gap-2', className)}>
+        <div className={twMerge('group flex items-center justify-center gap-2 cursor-pointer', className)}>
           {currentLanguage.icon && <currentLanguage.icon className='w-6 h-6 rounded-full'></currentLanguage.icon>}
-          <span className='w-8 text-text2 dark:text-white'>{currentLanguage.key.toUpperCase()}</span>
+          <span className='w-8 group-hover:font-bold text-text2 dark:text-white'>
+            {currentLanguage.key.toUpperCase()}
+          </span>
         </div>
       )}
     >

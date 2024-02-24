@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { FilterPramsDTO, ListResponseDTO, PaginationResponseDTO, Post, defaultPagination, defaultFilter } from '~/types'
+import { FilterPramsDTO, ListResponseDTO, Post, defaultPagination, defaultFilter, Category, PostList } from '~/types'
 import { RootState } from '../store'
 
 export interface HomeSate {
@@ -7,16 +7,12 @@ export interface HomeSate {
   filter: FilterPramsDTO
   hotPostList: PostList
   allPostList: PostList
-}
-
-export interface PostList {
-  data: Post[]
-  paginaton: PaginationResponseDTO
+  categoryList: Category[]
 }
 
 const initialState: HomeSate = {
   loading: false,
-  filter: { ...defaultFilter },
+  filter: { ...defaultFilter, usedYn: 'Y' },
   hotPostList: {
     data: [],
     paginaton: { ...defaultPagination }
@@ -24,7 +20,8 @@ const initialState: HomeSate = {
   allPostList: {
     data: [],
     paginaton: { ...defaultPagination }
-  }
+  },
+  categoryList: []
 }
 
 const homeSlice = createSlice({
@@ -41,6 +38,14 @@ const homeSlice = createSlice({
       state.loading = false
     },
 
+    setCategoryList(state, action: PayloadAction<ListResponseDTO<Category[]>>) {
+      const { data } = action.payload
+      const categories: Category = {
+        id: 0,
+        categoryName: 'All'
+      }
+      state.categoryList = [categories, ...data]
+    },
     setHotPostListHome(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
       const { data, ...paginationWithoutData } = action.payload
       state.hotPostList = { data, paginaton: { ...paginationWithoutData } }
@@ -55,7 +60,9 @@ const homeSlice = createSlice({
     },
     loadmoreAllPostListSuccess(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
       const { data, ...paginationWithoutData } = action.payload
-      state.allPostList = { data, paginaton: { ...paginationWithoutData } }
+      const mergeData = [...state.allPostList.data, ...data]
+
+      state.allPostList = { data: mergeData, paginaton: { ...paginationWithoutData } }
       state.loading = false
     },
     loadmoreAllPostListFailed(state) {
@@ -72,12 +79,14 @@ export const {
   setAllPostListHome,
   loadmoreAllPostList,
   loadmoreAllPostListFailed,
-  loadmoreAllPostListSuccess
+  loadmoreAllPostListSuccess,
+  setCategoryList
 } = homeSlice.actions
 
 export const homeLoadingSelector = (state: RootState) => state.home.loading
+export const homeFilterSelector = (state: RootState) => state.home.filter
 export const homeHotPostSelector = (state: RootState) => state.home.hotPostList
 export const homeAllPostListSelector = (state: RootState) => state.home.allPostList
-export const homeFilterSelector = (state: RootState) => state.home.filter
+export const homeCategorySelector = (state: RootState) => state.home.categoryList
 
 export default homeSlice.reducer

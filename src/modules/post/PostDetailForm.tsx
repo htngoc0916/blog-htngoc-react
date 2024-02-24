@@ -280,6 +280,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
                   name='categoryId'
                   data={dropdownOptions}
                   control={control}
+                  message={errors?.categoryId?.message}
                   defaultValue={getValues('categoryName')}
                 ></DropdownCustom>
               </Field>

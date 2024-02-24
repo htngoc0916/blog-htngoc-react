@@ -1,60 +1,61 @@
 import { Badge } from 'flowbite-react'
 import { twMerge } from 'tailwind-merge'
 import { BadgeGroup } from '~/components/badge'
-import { AuthorAvatar, AuthorName, CardPostTime } from '~/components/common'
-import useWindowSize from '~/hooks/useWindowSize'
-import { pageSize } from '~/utils/constant'
+import { AuthorAvatar, AuthorName, CardAuthor, CardPostTime } from '~/components/common'
 import { DefaultProps } from '~/utils/defautProp'
-import { TruncateText } from '~/utils/truncateText'
+import truncateText from '~/utils/truncateText'
 import { HiOutlineEye } from 'react-icons/hi2'
+import { useAppSelector } from '~/app/hooks'
+import { postViewDetailSelector } from '~/app/post/postViewSlice'
+import { memo } from 'react'
+import { convertToYYYYMMDD } from '~/utils/commonUtils'
+import { numberWithCommas } from '~/utils/numberWithCommas'
+import { Tag } from '~/types'
 
-export default function PostViewMeta(props: DefaultProps) {
-  const { width } = useWindowSize()
+const PostViewMeta = memo(function PostViewMeta(props: DefaultProps) {
+  const postViewDetail = useAppSelector(postViewDetailSelector)
+  console.log('🚀 ~ PostViewMeta ~ postViewDetail:', postViewDetail)
+
   return (
-    <div className={props.className}>
+    <div className={props.className} id='post-detail__meta'>
       <div className={twMerge('flex flex-col items-start justify-center')}>
         <BadgeGroup className='mb-3'>
-          <Badge size='sm'>Frontend</Badge>
-          <Badge size='sm' color='warning'>
-            Java
-          </Badge>
+          {postViewDetail?.tags &&
+            postViewDetail.tags.map((tag: Tag) => (
+              <Badge key={tag?.id} size='sm' color={tag.color}>
+                {tag?.tagName}
+              </Badge>
+            ))}
         </BadgeGroup>
 
-        <h3 className='text-2xl font-bold md:mb-5 md:text-5xl'>How collaboration makes us better designers</h3>
-        <p className='text-lg lg:text-xl md:via-primary-100 xl:pr-10'>
-          {TruncateText(
-            `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius quidem delectus exercitationem animi illo
-    magni doloribus distinctio vitae possimus! Corporis mollitia perspiciatis molestias soluta impedit et
-    consequatur repellendus fugit culpa?`,
-            150
-          )}
+        <h3 className='mb-2 text-2xl font-bold md:mb-5 md:text-4xl'>{postViewDetail?.title}</h3>
+        <p className='text-lg md:via-primary-100 xl:pr-10'>
+          {truncateText(postViewDetail?.description as string, 150)}
         </p>
 
-        <AuthorAvatar
-          rounded
-          img='/img/avatar_people.jpg'
-          size={width && width > pageSize.SIZE_MD ? 'ct' : 'md'}
-          bordered
-          className='mt-8'
-        >
-          <AuthorName className='text-base font-bold md:text-lg'>htngoc</AuthorName>
-          <CardPostTime className='text-base'>
-            <div className='flex items-center justify-center gap-10'>
-              <div>
-                Published <span>14 Jan 2024</span>
-              </div>
+        <CardAuthor className='mt-3'>
+          <AuthorAvatar rounded img='/img/avatar_people.jpg' className='w-10 h-10 rounded-full lg:w-14 lg:h-14'>
+            <AuthorName className='text-sm font-bold md:text-lg'>{postViewDetail?.user?.userName}</AuthorName>
+            <CardPostTime className='flex items-center justify-between w-full gap-20 text-sm lg:text-base'>
+              <span>{convertToYYYYMMDD(postViewDetail?.regDt as Date)}</span>
               <div className='flex items-center justify-center gap-1'>
-                <HiOutlineEye className='inline-block w-6 h-6'></HiOutlineEye>
-                <span>1,234</span>
+                <HiOutlineEye className='inline-block w-5 h-5' />
+                <span>{numberWithCommas(postViewDetail?.viewCnt as number)}</span>
               </div>
-            </div>
-          </CardPostTime>
-        </AuthorAvatar>
+            </CardPostTime>
+          </AuthorAvatar>
+        </CardAuthor>
       </div>
 
       <div className='rounded-lg md:max-h-img-lg max-h-img-md md:rounded-xl'>
-        <img src='/img/image_1.jpg' alt='post banner' className='object-cover w-full h-full rounded-lg md:rounded-xl' />
+        <img
+          src={postViewDetail?.thumbnail}
+          alt='post banner'
+          className='object-cover w-full h-full rounded-lg md:rounded-xl'
+        />
       </div>
     </div>
   )
-}
+})
+
+export default PostViewMeta

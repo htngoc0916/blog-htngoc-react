@@ -10,6 +10,7 @@ import tagSlice from './tag/tagSlice'
 import userSlice from './user/userSlice'
 import postSlice from './post/postSlice'
 import homeSlice from './home/homeSlice'
+import postViewSlice from './post/postViewSlice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   tags: tagSlice,
   users: userSlice,
   posts: postSlice,
-  home: homeSlice
+  home: homeSlice,
+  postView: postViewSlice
 })
 
 export default rootReducer

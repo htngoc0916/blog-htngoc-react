@@ -12,3 +12,4 @@ export { default as CardCustom } from './CardCustom'
 export { default as Internationalization } from './Internationalization'
 
 export { default as HtmlContent } from './HtmlContent'
+export { default as TagGroup } from './TagGroup'

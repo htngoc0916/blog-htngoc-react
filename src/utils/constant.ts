@@ -1,3 +1,5 @@
+export const BLOG_TITLE = 'Blog | HoangTuanNgoc'
+
 export const pageSize = {
   SIZE_MD: 768,
   SIZE_LG: 1024

@@ -10,7 +10,7 @@ export interface Post extends BaseDTO {
   thumbnailId?: number
   viewCnt?: number
   categoryId?: number
-  tags?: (string | Tag)[]
+  tags?: Tag[]
   usedYn: 'Y' | 'N' | ''
   user: User
 

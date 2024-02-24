@@ -15,7 +15,7 @@ const SignupPage = lazy(() => import('~/pages/RegisterPage'))
 const CategoriesPage = lazy(() => import('~/pages/CategoriesPage'))
 
 const PostsPage = lazy(() => import('~/pages/PostsPage'))
-const PostViewLayout = lazy(() => import('~/layout/PostViewLayout'))
+const PostViewDetailPage = lazy(() => import('~/pages/PostViewDetailPage'))
 const PostDetailAdd = lazy(() => import('~/modules/post/PostDetailAdd'))
 
 const UsersPage = lazy(() => import('~/pages/UsersPage'))
@@ -29,7 +29,7 @@ const routes = createBrowserRouter(
       <Route path='/' element={<HomeLayout></HomeLayout>}>
         <Route index element={<HomePage></HomePage>}></Route>
         <Route path='about' element={<AboutPage></AboutPage>}></Route>
-        <Route path='post/:slug' element={<PostViewLayout></PostViewLayout>}></Route>
+        <Route path='post/:slug' element={<PostViewDetailPage></PostViewDetailPage>}></Route>
       </Route>
 
       <Route path='/auth' element={<PrivateRoute component={DashboardLayout} />}>
