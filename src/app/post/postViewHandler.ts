@@ -11,7 +11,7 @@ function* handleFetchDataPostView(action: PayloadAction<string>) {
       yield put(setPostViewDetail(response?.data))
     }
   } catch (error: any) {
-    console.log(error)
+    console.log('🚀 ~ function*handleFetchDataPostView ~ error:', error)
   }
 }
 
@@ -22,7 +22,7 @@ function* handleFetchRelatedPosts(action: PayloadAction<string>) {
       yield put(setPostRelates(response?.data))
     }
   } catch (error: any) {
-    console.log(error)
+    console.log('🚀 ~ function*handleFetchRelatedPosts ~ error:', error)
   }
 }
 
@@ -36,8 +36,19 @@ function* handleFetchPostComments(action: PayloadAction<string>) {
     //   yield put(setPostViewDetail(response?.data))
     // }
   } catch (error: any) {
-    console.log(error)
+    console.log('🚀 ~ function*handleFetchPostComments ~ error:', error)
   }
 }
 
-export { handleFetchDataPostView, handleFetchRelatedPosts, handleFetchPostComments }
+function* handleUpdatePostViewCount(action: PayloadAction<string>) {
+  try {
+    const response: ApiResponseDTO<ListResponseDTO<Post[]>> = yield call(postApi.updateViewCount, action.payload)
+    if (response?.status.includes(API_STATUS.SUCCESS)) {
+      yield put(setPostRelates(response?.data))
+    }
+  } catch (error: any) {
+    console.log('🚀 ~ function*handleUpdatePostViewCount ~ error:', error)
+  }
+}
+
+export { handleFetchDataPostView, handleFetchRelatedPosts, handleFetchPostComments, handleUpdatePostViewCount }

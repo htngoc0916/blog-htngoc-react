@@ -1,7 +1,7 @@
 1. Trang postVieDetail
 
 - viet api de lay ra cac muc luc bai viet
-- viet api de gui request khi vao trang de update lai viewCount
+- viet api de gui request khi vao trang de update lai viewCount (ok)
 
 2. Trang Home
 

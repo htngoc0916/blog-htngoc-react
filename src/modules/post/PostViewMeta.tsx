@@ -14,7 +14,6 @@ import { Tag } from '~/types'
 
 const PostViewMeta = memo(function PostViewMeta(props: DefaultProps) {
   const postViewDetail = useAppSelector(postViewDetailSelector)
-  console.log('🚀 ~ PostViewMeta ~ postViewDetail:', postViewDetail)
 
   return (
     <div className={props.className} id='post-detail__meta'>

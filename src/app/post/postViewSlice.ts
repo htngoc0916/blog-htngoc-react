@@ -32,7 +32,6 @@ const postViewSlice = createSlice({
     fetchDataPostViewFailed(state) {
       state.loading = false
     },
-
     setPostViewDetail(state, action: PayloadAction<Post>) {
       state.postViewDetail = action.payload
     },
