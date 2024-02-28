@@ -9,8 +9,6 @@ import CardImage from '~/components/common/CardImage'
 import { CardPost, TagGroup } from '~/components/common'
 import CardContent from '~/components/common/CardContent'
 import truncateText from '~/utils/truncateText'
-import slugify from 'slugify'
-import { useNavigate } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '~/app/hooks'
@@ -28,8 +26,6 @@ export default function HomeTopPost(props: HomeTopPostProps) {
   const hotPost = hotPostList?.data && hotPostList.data.length > 0 ? hotPostList.data[0] : undefined
   const newPosts = hotPostList?.data ? hotPostList.data.slice(1) : []
 
-  const navigate = useNavigate()
-
   return (
     <section className={twMerge('relative', props.className)}>
       <div className='absolute z-[-1] hidden w-full h-full md:block'>
@@ -44,11 +40,11 @@ export default function HomeTopPost(props: HomeTopPostProps) {
                 key={hotPost?.id}
                 className='lg:max-h-img-lg max-h-img-md'
                 imgSrc={hotPost?.thumbnail}
-                href={`/post/${slugify(hotPost?.slug)}`}
+                href={`/post/${hotPost?.slug}`}
               >
                 {hotPost?.tags && <TagGroup data={hotPost?.tags as Tag[]}></TagGroup>}
 
-                <CardBody href={`/post/${slugify(hotPost?.title)}`}>
+                <CardBody href={`/post/${hotPost?.slug}`}>
                   <CardTitle className='mb-5 text-white md:text-2xl lg:text-3xl'>{hotPost?.title}</CardTitle>
                   <CardContent className='hidden mb-3 text-white lg:block lg:text-lg'>
                     {truncateText(hotPost?.description, 100)}
@@ -69,31 +65,34 @@ export default function HomeTopPost(props: HomeTopPostProps) {
             )}
           </div>
 
-          <div className='grid w-full grid-flow-row gap-y-3 xl:col-span-2'>
-            {newPosts.map((post) => (
-              <Card
-                key={post?.id}
-                horizontal
-                renderImage={() => (
-                  <CardImage
-                    src={post?.thumbnail}
-                    className='rounded-none rounded-t-lg md:max-w-[200px] md:rounded-none md:rounded-l-lg max-h-img-sm'
-                    onClick={() => navigate(`/post/${post?.slug}`)}
-                  ></CardImage>
-                )}
-              >
-                {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
+          <div className='xl:col-span-2'>
+            <div id='hot-post__card' className='flex flex-col gap-3'>
+              {newPosts.map((post) => (
+                <Card
+                  key={post?.id}
+                  horizontal
+                  renderImage={() => (
+                    <CardImage
+                      to={`/post/${post?.slug}`}
+                      src={post?.thumbnail}
+                      className='object-cover w-full rounded-none rounded-t-lg md:w-64 md:rounded-none md:rounded-l-lg'
+                    ></CardImage>
+                  )}
+                  className='max-w-sm'
+                >
+                  {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
 
-                <CardBody href={`/post/${post?.slug}`}>
-                  <CardTitle>{truncateText(post?.title, 50)}</CardTitle>
-                </CardBody>
+                  <CardBody href={`/post/${post?.slug}`}>
+                    <CardTitle>{truncateText(post?.title, 50)}</CardTitle>
+                  </CardBody>
 
-                <CardAuthor className='flex justify-between'>
-                  <AuthorName className='text-base lg:text-base'>{post?.user?.userName}</AuthorName>
-                  <CardPostTime className='text-base'> {convertToYYYYMMDD(post?.regDt as Date)}</CardPostTime>
-                </CardAuthor>
-              </Card>
-            ))}
+                  <CardAuthor className='flex justify-between'>
+                    <AuthorName className='text-base lg:text-base'>{post?.user?.userName}</AuthorName>
+                    <CardPostTime className='text-base'> {convertToYYYYMMDD(post?.regDt as Date)}</CardPostTime>
+                  </CardAuthor>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </div>

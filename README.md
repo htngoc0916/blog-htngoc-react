@@ -2,6 +2,7 @@
 
 - viet api de lay ra cac muc luc bai viet
 - viet api de gui request khi vao trang de update lai viewCount (ok)
+- nhấn vào related post
 
 2. Trang Home
 

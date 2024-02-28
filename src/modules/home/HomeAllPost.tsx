@@ -12,13 +12,15 @@ import {
   homeAllPostListSelector,
   homeCategorySelector,
   homeFilterSelector,
-  loadmoreAllPostList
+  loadmoreAllPostList,
+  setAllPostListHome
 } from '~/app/home/homeSlice'
-import { Tag } from '~/types'
+import { API_STATUS, ApiResponseDTO, ListResponseDTO, Post, Tag } from '~/types'
 import { convertToYYYYMMDD } from '~/utils/commonUtils'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import truncateText from '~/utils/truncateText'
+import postApi from '~/apis/postApi'
 
 export default function HomeAllPost(props: DefaultProps) {
   const { t } = useTranslation(['home', 'common'])
@@ -28,6 +30,8 @@ export default function HomeAllPost(props: DefaultProps) {
   const categoryList = useAppSelector(homeCategorySelector)
   const postList = useAppSelector(homeAllPostListSelector)
   const [lastPage, setLastPage] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [activeCategory, setActiveCategory] = useState<number>(0)
 
   useEffect(() => {
     const { paginaton } = postList
@@ -37,6 +41,20 @@ export default function HomeAllPost(props: DefaultProps) {
   const handleLoadMore = async () => {
     const { paginaton } = postList
     dispatch(loadmoreAllPostList({ ...filter, pageNo: paginaton.pageNo + 1 }))
+  }
+
+  const handleCategoryClick = async (id: number) => {
+    try {
+      setLoading(true)
+      const action = id > 0 ? postApi.getPostByCategory(filter, id) : await postApi.getAllPosts(filter)
+      const response: ApiResponseDTO<ListResponseDTO<Post[]>> = await action
+      dispatch(setAllPostListHome(response?.data))
+    } catch (error: any) {
+      console.error(error)
+    } finally {
+      setActiveCategory(id)
+      setLoading(false)
+    }
   }
 
   return (
@@ -50,7 +68,14 @@ export default function HomeAllPost(props: DefaultProps) {
           <div className='flex flex-row flex-wrap items-end justify-center gap-2 pt-6 md:gap-4'>
             {categoryList &&
               categoryList.map((category) => (
-                <Button key={category.id} outline gradientDuoTone='primary'>
+                <Button
+                  type='button'
+                  key={category?.id}
+                  disabled={loading}
+                  outline={category?.id !== activeCategory}
+                  gradientDuoTone='primary'
+                  onClick={() => handleCategoryClick(category?.id as number)}
+                >
                   {category?.categoryName}
                 </Button>
               ))}
@@ -61,11 +86,9 @@ export default function HomeAllPost(props: DefaultProps) {
           {postList?.data?.map((post) => (
             <Card
               key={post?.id}
-              className='overflow-hidden group max-h-[422px]'
+              className='max-w-md overflow-hidden group'
               renderImage={() => (
-                <Link to={`/post/${post?.slug}`} className='w-full h-full overflow-hidden'>
-                  <CardImage src={post?.thumbnail} className='rounded-b-none max-h-img-md group-hover:scale-105' />
-                </Link>
+                <CardImage to={`/post/${post?.slug}`} src={post?.thumbnail} className='w-full h-48 rounded-b-none' />
               )}
             >
               {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
@@ -88,7 +111,14 @@ export default function HomeAllPost(props: DefaultProps) {
         </div>
 
         <div className='flex items-center justify-center pt-10'>
-          <Button size='sm' gradientDuoTone='primary' isProcessing={false} onClick={handleLoadMore} disabled={lastPage}>
+          <Button
+            type='button'
+            size='sm'
+            gradientDuoTone='primary'
+            isProcessing={false}
+            onClick={handleLoadMore}
+            disabled={lastPage}
+          >
             {t('common:acctions.load-more')}
           </Button>
         </div>

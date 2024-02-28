@@ -1,5 +1,11 @@
 import { Post, ApiResponseDTO, ListResponseDTO, FilterPramsDTO } from '~/types'
-import { POST_GET_BY_SLUG, POST_GET_RELATED_BY_SLUG, POST_URL, POST_VIEW_COUNT } from './apiConstanst'
+import {
+  POST_GET_BY_SLUG,
+  POST_GET_RELATED_BY_SLUG,
+  POST_URL,
+  POST_VIEW_COUNT,
+  POST_GET_BY_CATEGORY
+} from './apiConstanst'
 import { axiosPrivate, axiosPublic } from './axios'
 import i18n from '~/i18n/i18n'
 import { getToken } from '~/utils/auth'
@@ -41,6 +47,14 @@ const postApi = {
     })
   },
 
+  getPostByCategory(params: FilterPramsDTO, categoryId: number): Promise<ApiResponseDTO<ListResponseDTO<Post[]>>> {
+    const url = POST_GET_BY_CATEGORY + '/' + categoryId
+    return axiosPublic.get(url, {
+      headers: { 'Accept-Language': i18n.language },
+      params
+    })
+  },
+
   addPost(data: Post): Promise<ApiResponseDTO<Post>> {
     const accessToken = getToken()
     return axiosPrivate.post(POST_URL, data, {
@@ -67,8 +81,6 @@ const postApi = {
 
   updateViewCount(slug: string): Promise<ApiResponseDTO<any>> {
     const url = POST_VIEW_COUNT + '/' + slug
-    console.log('🚀 ~ updateViewCount ~ url:', url)
-
     return axiosPublic.put(url, slug, {
       headers: {
         'Content-Type': 'application/json',

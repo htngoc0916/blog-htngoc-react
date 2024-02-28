@@ -32,7 +32,7 @@ const PostViewMeta = memo(function PostViewMeta(props: DefaultProps) {
           {truncateText(postViewDetail?.description as string, 150)}
         </p>
 
-        <CardAuthor className='mt-3'>
+        <CardAuthor className='mt-6'>
           <AuthorAvatar rounded img='/img/avatar_people.jpg' className='w-10 h-10 rounded-full lg:w-14 lg:h-14'>
             <AuthorName className='text-sm font-bold md:text-lg'>{postViewDetail?.user?.userName}</AuthorName>
             <CardPostTime className='flex items-center justify-between w-full gap-20 text-sm lg:text-base'>

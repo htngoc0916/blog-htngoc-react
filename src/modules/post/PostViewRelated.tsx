@@ -46,16 +46,16 @@ export default function PostViewRelated() {
               <SwiperSlide key={post?.id}>
                 <Card
                   key={post?.id}
-                  className='h-full overflow-hidden md:max-w-lg group'
+                  className='h-full overflow-hidden shadow-sm md:max-w-lg group'
                   renderImage={() => (
-                    <Link to={`/post/${slugify(post?.title)}`} className='w-full h-full overflow-hidden'>
+                    <Link to={`/post/${post?.slug}`} className='w-full h-full overflow-hidden'>
                       <CardImage src={post?.thumbnail} className='rounded-b-none max-h-img-sm group-hover:scale-105' />
                     </Link>
                   )}
                 >
                   {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
 
-                  <CardBody href={`/post/${slugify(post?.title)}`}>
+                  <CardBody href={`/post/${post?.slug}`}>
                     <CardTitle className='block' animation>
                       {post?.title}
                     </CardTitle>
