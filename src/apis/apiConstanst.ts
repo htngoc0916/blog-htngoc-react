@@ -21,6 +21,7 @@ export const CLOUDINARY_UPLOAD = `${API_VERSION}/cloudinary`
 
 export const POST_URL = `${API_VERSION}/posts`
 export const POST_GET_BY_SLUG = `${API_VERSION}/posts/slug`
+export const POST_CHECK_TITLE = `${API_VERSION}/posts/checkTitle`
 export const POST_GET_BY_CATEGORY = `${API_VERSION}/posts/category`
 export const POST_VIEW_COUNT = `${API_VERSION}/posts/postView`
 export const POST_GET_RELATED_BY_SLUG = `${API_VERSION}/posts/related/slug`

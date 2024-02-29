@@ -4,11 +4,16 @@ import {
   POST_GET_RELATED_BY_SLUG,
   POST_URL,
   POST_VIEW_COUNT,
-  POST_GET_BY_CATEGORY
+  POST_GET_BY_CATEGORY,
+  POST_CHECK_TITLE
 } from './apiConstanst'
 import { axiosPrivate, axiosPublic } from './axios'
 import i18n from '~/i18n/i18n'
 import { getToken } from '~/utils/auth'
+
+export interface postTitle {
+  title: string
+}
 
 const postApi = {
   getAllPosts(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Post[]>>> {
@@ -52,6 +57,17 @@ const postApi = {
     return axiosPublic.get(url, {
       headers: { 'Accept-Language': i18n.language },
       params
+    })
+  },
+
+  postCheckTitle(data: postTitle): Promise<ApiResponseDTO<boolean>> {
+    const accessToken = getToken()
+    return axiosPrivate.put(POST_CHECK_TITLE, data, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        'Accept-Language': i18n.language
+      }
     })
   },
 

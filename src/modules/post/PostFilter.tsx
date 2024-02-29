@@ -32,7 +32,7 @@ const PostFilter = memo(function PostFilter(props: PostFilterProps) {
   const handleOnSearch = (value: PostFilter) => {
     const postFilter: FilterPramsDTO = {
       ...filter,
-      postName: value.search,
+      postTitle: value.search,
       usedYn: value.usedYn
     }
     onSeach?.(postFilter)

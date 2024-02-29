@@ -15,6 +15,7 @@ import { useAppSelector } from '~/app/hooks'
 import { homeHotPostSelector } from '~/app/home/homeSlice'
 import { Tag } from '~/types'
 import { convertToYYYYMMDD } from '~/utils/commonUtils'
+import { useNavigate } from 'react-router-dom'
 
 export interface HomeTopPostProps {
   className?: string
@@ -22,6 +23,7 @@ export interface HomeTopPostProps {
 
 export default function HomeTopPost(props: HomeTopPostProps) {
   const { t } = useTranslation('home')
+  const navigate = useNavigate()
   const hotPostList = useAppSelector(homeHotPostSelector)
   const hotPost = hotPostList?.data && hotPostList.data.length > 0 ? hotPostList.data[0] : undefined
   const newPosts = hotPostList?.data ? hotPostList.data.slice(1) : []
@@ -67,18 +69,19 @@ export default function HomeTopPost(props: HomeTopPostProps) {
 
           <div className='xl:col-span-2'>
             <div id='hot-post__card' className='flex flex-col gap-3'>
+              {/* md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px]*/}
               {newPosts.map((post) => (
                 <Card
                   key={post?.id}
+                  className='max-w-md group'
                   horizontal
                   renderImage={() => (
-                    <CardImage
-                      to={`/post/${post?.slug}`}
+                    <img
                       src={post?.thumbnail}
-                      className='object-cover w-full rounded-none rounded-t-lg md:w-64 md:rounded-none md:rounded-l-lg'
-                    ></CardImage>
+                      className='md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px] cursor-pointer object-cover'
+                      onClick={() => navigate(`/post/${post?.slug}`)}
+                    ></img>
                   )}
-                  className='max-w-sm'
                 >
                   {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
 

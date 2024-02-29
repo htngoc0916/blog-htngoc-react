@@ -57,6 +57,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     control,
     setValue,
     getValues,
+    setError,
     formState: { errors, isSubmitting }
   } = useForm({
     resolver: yupResolver(schema),
@@ -115,12 +116,20 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   const handleSave = async (post: any) => {
     try {
       const action = isEdit ? postApi.editPost : postApi.addPost
+
       if (!isEdit) {
-        //check title
+        const titleResponse: ApiResponseDTO<boolean> = await postApi.postCheckTitle({ title: post?.title })
+        console.log('🚀 ~ handleSave ~ titleResponse:', titleResponse)
+        if (titleResponse?.data) {
+          setError('title', {
+            type: 'manual',
+            message: titleResponse?.message
+          })
+          return
+        }
       }
 
-      post.slug = slugify(post.slug || post.title, { lower: true })
-
+      post.slug = slugify(post.title, { lower: true })
       const postRequest: Post = {
         ...post,
         modId: isEdit ? userInfo?.id : undefined,
@@ -256,10 +265,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
                 message={errors?.title?.message}
                 maxLength={100}
               ></InputCustom>
-            </Field>
-            <Field>
-              <Label htmlFor='slug'>Slug</Label>
-              <InputCustom id='slug' name='slug' color='primary' control={control} />
             </Field>
             <Field>
               <Label htmlFor='description'>Description</Label>

@@ -12,7 +12,7 @@ export interface ICardImageProps extends React.ComponentPropsWithoutRef<'img'> {
 export default function CardImage(props: ICardImageProps) {
   const { className, to, ...rest } = props
   return (
-    <Link to={to} className='h-full overflow-hidden'>
+    <Link to={to} className={twMerge('h-full overflow-hidden')}>
       <img {...rest} className={twMerge(classes.base, className)} />
     </Link>
   )
