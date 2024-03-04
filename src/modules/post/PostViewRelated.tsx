@@ -2,9 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Scrollbar, A11y, EffectFade } from 'swiper/modules'
 import { Button, Card } from 'flowbite-react'
 import CardTitle from '~/components/common/CardTitle'
-import { Link } from 'react-router-dom'
 import CardImage from '~/components/common/CardImage'
-import slugify from 'slugify'
 import CardBody from '~/components/common/CardBody'
 import { HiArrowLongRight, HiArrowLongLeft } from 'react-icons/hi2'
 import { useAppSelector } from '~/app/hooks'
@@ -48,13 +46,14 @@ export default function PostViewRelated() {
                   key={post?.id}
                   className='h-full overflow-hidden shadow-sm md:max-w-lg group'
                   renderImage={() => (
-                    <Link to={`/post/${post?.slug}`} className='w-full h-full overflow-hidden'>
-                      <CardImage src={post?.thumbnail} className='rounded-b-none max-h-img-sm group-hover:scale-105' />
-                    </Link>
+                    <CardImage
+                      to={`/post/${post?.slug}`}
+                      src={post?.thumbnail}
+                      className='w-full h-48 rounded-b-none'
+                    />
                   )}
                 >
                   {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
-
                   <CardBody href={`/post/${post?.slug}`}>
                     <CardTitle className='block' animation>
                       {post?.title}

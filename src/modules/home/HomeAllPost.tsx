@@ -4,7 +4,6 @@ import FeatureTitle from './FeatureTitle'
 import { Avatar, Button, Card } from 'flowbite-react'
 import { CardTitle, CardAuthor, AuthorName, CardPostTime, TagGroup } from '~/components/common'
 import CardImage from '~/components/common/CardImage'
-import { Link } from 'react-router-dom'
 import CardBody from '~/components/common/CardBody'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '~/app/hooks'
@@ -15,7 +14,7 @@ import {
   loadmoreAllPostList,
   setAllPostListHome
 } from '~/app/home/homeSlice'
-import { API_STATUS, ApiResponseDTO, ListResponseDTO, Post, Tag } from '~/types'
+import { ApiResponseDTO, ListResponseDTO, Post, Tag } from '~/types'
 import { convertToYYYYMMDD } from '~/utils/commonUtils'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'

@@ -18,7 +18,7 @@ import { categoryListSelector, getCategory } from '~/app/category/categorySlice'
 import { DropdownCustom } from '~/components/dropdown'
 import { DropdownOptions } from '~/components/dropdown/DropdownCustom'
 import ReactQuill from 'react-quill'
-import { useQuillUploadImage } from '~/hooks/useQuillUploadImage'
+import { useQuillDynamic } from '~/hooks/useQuillDynamic'
 import { toast } from 'react-toastify'
 import { userInfoSelector } from '~/app/auth/authSlice'
 import fileUpload from '~/apis/fileUploadApi'
@@ -84,7 +84,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   const tagList = useAppSelector(TagListSelector)
   const categoryList = useAppSelector(categoryListSelector)
   const [uploadedImage, setUploadedImage] = useState<string>('')
-  const { modules, formats } = useQuillUploadImage()
+  const { modules, formats } = useQuillDynamic()
   const [uploadLoading, setUploadLoading] = useState(false)
 
   const dropdownOptions: DropdownOptions[] = useMemo(() => {

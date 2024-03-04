@@ -5,7 +5,6 @@ import CardAuthor from '~/components/common/CardAuthor'
 import CardTitle from '~/components/common/CardTitle'
 import FeatureTitle from './FeatureTitle'
 import CardPostTime from '~/components/common/CardPostTime'
-import CardImage from '~/components/common/CardImage'
 import { CardPost, TagGroup } from '~/components/common'
 import CardContent from '~/components/common/CardContent'
 import truncateText from '~/utils/truncateText'
@@ -25,8 +24,8 @@ export default function HomeTopPost(props: HomeTopPostProps) {
   const { t } = useTranslation('home')
   const navigate = useNavigate()
   const hotPostList = useAppSelector(homeHotPostSelector)
-  const hotPost = hotPostList?.data && hotPostList.data.length > 0 ? hotPostList.data[0] : undefined
-  const newPosts = hotPostList?.data ? hotPostList.data.slice(1) : []
+  const hotPost = hotPostList && hotPostList.length > 0 ? hotPostList[0] : undefined
+  const newPosts = hotPostList ? hotPostList.slice(1) : []
 
   return (
     <section className={twMerge('relative', props.className)}>

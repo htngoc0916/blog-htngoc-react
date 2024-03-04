@@ -24,7 +24,7 @@ function* handleFetchAllPostList(action: PayloadAction<FilterPramsDTO>) {
 
 function* handleFetchHotPostList(action: PayloadAction<FilterPramsDTO>) {
   try {
-    const response: ApiResponseDTO<ListResponseDTO<Post[]>> = yield call(postApi.getHotPost, action.payload)
+    const response: ApiResponseDTO<Post[]> = yield call(postApi.getHotPost, action.payload)
     if (response?.status.includes(API_STATUS.SUCCESS)) {
       yield put(setHotPostListHome(response?.data))
     }

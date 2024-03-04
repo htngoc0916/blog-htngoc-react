@@ -6,7 +6,7 @@
 
 2. Trang Home
 
-- Viet api de lay ra cac bai viet noi bat -> lam side cho no
+- Viet api de lay ra cac bai viet noi bat (ok) -> lam side cho no
 - viet api de chon cac bai viet theo category (ok)
 
 3. Trang addPost

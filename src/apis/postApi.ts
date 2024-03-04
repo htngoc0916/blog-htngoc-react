@@ -5,7 +5,8 @@ import {
   POST_URL,
   POST_VIEW_COUNT,
   POST_GET_BY_CATEGORY,
-  POST_CHECK_TITLE
+  POST_CHECK_TITLE,
+  POST_GET_HOT_POST
 } from './apiConstanst'
 import { axiosPrivate, axiosPublic } from './axios'
 import i18n from '~/i18n/i18n'
@@ -24,8 +25,7 @@ const postApi = {
     })
   },
   getHotPost(params: FilterPramsDTO): Promise<ApiResponseDTO<ListResponseDTO<Post[]>>> {
-    const url = POST_URL
-    return axiosPublic.get(url, {
+    return axiosPublic.get(POST_GET_HOT_POST, {
       headers: { 'Accept-Language': i18n.language },
       params
     })

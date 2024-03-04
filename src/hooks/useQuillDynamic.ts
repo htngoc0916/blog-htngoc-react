@@ -1,6 +1,10 @@
 // useUploadQuill.ts
 import { useMemo } from 'react'
 import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css'
+import 'react-quill/dist/quill.core.css'
+import 'react-quill/dist/quill.snow.css'
+import 'quill-image-uploader/dist/quill.imageUploader.min.css'
 
 import ImageUploader from 'quill-image-uploader'
 import { Quill } from 'react-quill'
@@ -9,14 +13,22 @@ import { API_STATUS, ApiResponseDTO, FileMaster, UploadFileRequest } from '~/typ
 import fileUpload from '~/apis/fileUploadApi'
 import { useAppSelector } from '~/app/hooks'
 import { userInfoSelector } from '~/app/auth/authSlice'
+const QuillHighlight = Quill.import('formats/code')
 
 hljs.configure({
-  languages: ['javascript', 'java', 'python', 'node']
+  languages: ['javascript', 'python', 'java', 'sql']
 })
+
+QuillHighlight.prototype.render = function (highlight: any) {
+  this.quill.clipboard.dangerouslyPasteHTML(
+    this.quill.getSelection(true).index,
+    `<pre><code class="hljs ${highlight.language}">${highlight.value}</code></pre>`
+  )
+}
 
 Quill.register('modules/imageUploader', ImageUploader)
 
-export const useQuillUploadImage = () => {
+export const useQuillDynamic = () => {
   const userInfo = useAppSelector(userInfoSelector)
 
   const modules = useMemo(

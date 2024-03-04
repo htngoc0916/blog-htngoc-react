@@ -5,7 +5,7 @@ import { RootState } from '../store'
 export interface HomeSate {
   loading: boolean
   filter: FilterPramsDTO
-  hotPostList: PostList
+  hotPostList: Post[]
   allPostList: PostList
   categoryList: Category[]
 }
@@ -13,10 +13,7 @@ export interface HomeSate {
 const initialState: HomeSate = {
   loading: false,
   filter: { ...defaultFilter, usedYn: 'Y' },
-  hotPostList: {
-    data: [],
-    paginaton: { ...defaultPagination }
-  },
+  hotPostList: [],
   allPostList: {
     data: [],
     paginaton: { ...defaultPagination }
@@ -46,9 +43,8 @@ const homeSlice = createSlice({
       }
       state.categoryList = [categories, ...data]
     },
-    setHotPostListHome(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
-      const { data, ...paginationWithoutData } = action.payload
-      state.hotPostList = { data, paginaton: { ...paginationWithoutData } }
+    setHotPostListHome(state, action: PayloadAction<Post[]>) {
+      state.hotPostList = action.payload
     },
     setAllPostListHome(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
       const { data, ...paginationWithoutData } = action.payload
