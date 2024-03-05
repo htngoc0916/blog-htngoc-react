@@ -76,7 +76,7 @@
     @apply p-4 my-4 text-lg border-l-4 border-primary-400 bg-primary-50 dark:border-primary-500 dark:bg-gray-800 italic;
   }
 
-  pre {
-    @apply max-w-full rounded-lg text-sm p-4;
+  pre.ql-syntax {
+    @apply max-w-full rounded-lg text-sm p-4 bg-darkbg3 text-white;
   }
 }

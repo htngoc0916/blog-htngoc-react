@@ -68,7 +68,6 @@ export default function HomeTopPost(props: HomeTopPostProps) {
 
           <div className='xl:col-span-2'>
             <div id='hot-post__card' className='flex flex-col gap-3'>
-              {/* md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px]*/}
               {newPosts.map((post) => (
                 <Card
                   key={post?.id}
@@ -77,7 +76,7 @@ export default function HomeTopPost(props: HomeTopPostProps) {
                   renderImage={() => (
                     <img
                       src={post?.thumbnail}
-                      className='md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px] cursor-pointer object-cover'
+                      className='md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px] h-48 cursor-pointer object-cover'
                       onClick={() => navigate(`/post/${post?.slug}`)}
                     ></img>
                   )}

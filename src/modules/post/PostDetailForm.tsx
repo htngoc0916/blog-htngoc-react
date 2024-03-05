@@ -17,13 +17,12 @@ import { SelectOption } from '~/components/input/inputSelectOptions'
 import { categoryListSelector, getCategory } from '~/app/category/categorySlice'
 import { DropdownCustom } from '~/components/dropdown'
 import { DropdownOptions } from '~/components/dropdown/DropdownCustom'
-import ReactQuill from 'react-quill'
-import { useQuillDynamic } from '~/hooks/useQuillDynamic'
 import { toast } from 'react-toastify'
 import { userInfoSelector } from '~/app/auth/authSlice'
 import fileUpload from '~/apis/fileUploadApi'
 import postApi from '~/apis/postApi'
 import slugify from 'slugify'
+import { QuillCustom } from '~/components/editor'
 
 const maxSize = 5 * 1024 * 1024
 export interface PostDetailFormProps {
@@ -33,6 +32,7 @@ export interface PostDetailFormProps {
 }
 
 export default function PostDetailForm({ data, isEdit, className }: PostDetailFormProps) {
+  console.log('🚀 ~ PostDetailForm ~ data:', data)
   const schema = yup.object({
     id: yup.number(),
     title: yup.string().required('Vui lòng nhập tiêu đề'),
@@ -84,7 +84,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   const tagList = useAppSelector(TagListSelector)
   const categoryList = useAppSelector(categoryListSelector)
   const [uploadedImage, setUploadedImage] = useState<string>('')
-  const { modules, formats } = useQuillDynamic()
   const [uploadLoading, setUploadLoading] = useState(false)
 
   const dropdownOptions: DropdownOptions[] = useMemo(() => {
@@ -103,9 +102,7 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     })) as SelectOption[]
   }, [tagList])
 
-  const [postContent, setPostContent] = useState('')
-  const handleContentChange = (content: any) => {
-    setPostContent(content)
+  const handleContentChange = (content: string) => {
     setValue('content', content)
   }
 
@@ -223,7 +220,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
     setValue('content', data?.content)
 
     setUploadedImage(data?.thumbnail || '')
-    setPostContent(data?.content || '')
 
     if (data?.tags) {
       const tags = (data.tags as Tag[]).map((tag: Tag) => {
@@ -323,11 +319,9 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
             <Field>
               <Label htmlFor='content'>Contents</Label>
               <div className='entry-content'>
-                <ReactQuill
+                <QuillCustom
                   theme='snow'
-                  modules={modules}
-                  formats={formats}
-                  value={postContent}
+                  value={getValues('content')}
                   onChange={handleContentChange}
                   placeholder='Nhập nội dung...'
                 />
