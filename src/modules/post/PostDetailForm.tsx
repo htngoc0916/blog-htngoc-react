@@ -32,7 +32,6 @@ export interface PostDetailFormProps {
 }
 
 export default function PostDetailForm({ data, isEdit, className }: PostDetailFormProps) {
-  console.log('🚀 ~ PostDetailForm ~ data:', data)
   const schema = yup.object({
     id: yup.number(),
     title: yup.string().required('Vui lòng nhập tiêu đề'),
@@ -319,12 +318,14 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
             <Field>
               <Label htmlFor='content'>Contents</Label>
               <div className='entry-content'>
-                <QuillCustom
+                {/* <QuillCustom
                   theme='snow'
                   value={getValues('content')}
                   onChange={handleContentChange}
                   placeholder='Nhập nội dung...'
-                />
+                /> */}
+
+                <QuillCustom />
               </div>
             </Field>
 
