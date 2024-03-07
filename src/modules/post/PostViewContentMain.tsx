@@ -15,7 +15,7 @@ export default function PostViewContentMain() {
   }, [])
 
   return (
-    <div className='entry-content'>
+    <div className='content-editor'>
       <HtmlContent content={postViewDetail?.content}></HtmlContent>
     </div>
   )

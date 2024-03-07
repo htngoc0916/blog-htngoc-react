@@ -2,7 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'content';
+@import 'content-editor.scss';
 
 @layer components {
   .pt-page {

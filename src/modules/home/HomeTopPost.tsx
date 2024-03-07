@@ -25,7 +25,7 @@ export default function HomeTopPost(props: HomeTopPostProps) {
   const navigate = useNavigate()
   const hotPostList = useAppSelector(homeHotPostSelector)
   const hotPost = hotPostList && hotPostList.length > 0 ? hotPostList[0] : undefined
-  const newPosts = hotPostList ? hotPostList.slice(1) : []
+  const newPosts = hotPostList && hotPostList.length > 0 ? hotPostList.slice(1) : []
 
   return (
     <section className={twMerge('relative', props.className)}>

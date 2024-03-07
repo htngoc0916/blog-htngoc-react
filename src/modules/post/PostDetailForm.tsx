@@ -22,7 +22,7 @@ import { userInfoSelector } from '~/app/auth/authSlice'
 import fileUpload from '~/apis/fileUploadApi'
 import postApi from '~/apis/postApi'
 import slugify from 'slugify'
-import { QuillCustom } from '~/components/editor'
+import { TinyMceCustom } from '~/components/editor'
 
 const maxSize = 5 * 1024 * 1024
 export interface PostDetailFormProps {
@@ -234,8 +234,8 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
 
   return (
     <div className={className}>
-      <div className='grid grid-cols-2 gap-10'>
-        <div id='post-add__form' className='p-10 bg-white rounded-lg dark:bg-darkbg2'>
+      <div className='grid grid-cols-1 gap-10'>
+        <div id='post-add__form' className='max-w-screen-lg p-10 mx-auto bg-white rounded-lg dark:bg-darkbg2'>
           <div className='flex mb-10'>
             <TextCustom size='xs' className='text-text2 dark:text-text7'>
               {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
@@ -318,14 +318,11 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
             <Field>
               <Label htmlFor='content'>Contents</Label>
               <div className='entry-content'>
-                {/* <QuillCustom
-                  theme='snow'
+                <TinyMceCustom
                   value={getValues('content')}
                   onChange={handleContentChange}
                   placeholder='Nhập nội dung...'
-                /> */}
-
-                <QuillCustom />
+                ></TinyMceCustom>
               </div>
             </Field>
 
@@ -333,9 +330,6 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
               <ActionSave type='submit' isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
             </div>
           </Form>
-        </div>
-        <div id='post-add__preview' className='p-10 bg-white rounded-lg dark:bg-darkbg2'>
-          <div>Prewiew Content</div>
         </div>
       </div>
     </div>
