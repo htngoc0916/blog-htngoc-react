@@ -47,9 +47,7 @@ function PostDetailAdd() {
         </Breadcrumb>
       </div>
 
-      <div className=''>
-        <PostDetailForm data={selectedPost} isEdit={isEdit}></PostDetailForm>
-      </div>
+      <PostDetailForm data={selectedPost} isEdit={isEdit}></PostDetailForm>
     </div>
   )
 }

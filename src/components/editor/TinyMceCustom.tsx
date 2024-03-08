@@ -1,5 +1,10 @@
 import { Editor } from '@tinymce/tinymce-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { CLOUDINARY_UPLOAD } from '~/apis/apiConstanst'
+import fileUpload from '~/apis/fileUploadApi'
+import { userInfoSelector } from '~/app/auth/authSlice'
+import { useAppSelector } from '~/app/hooks'
+import { API_STATUS, ApiResponseDTO, FileMaster, UploadFileRequest } from '~/types'
 
 export interface TinyMceCustomProps {
   value?: string
@@ -9,26 +14,53 @@ export interface TinyMceCustomProps {
 
 export default function TinyMceCustom(props: TinyMceCustomProps) {
   const { value, placeholder, onChange } = props
+  const userInfo = useAppSelector(userInfoSelector)
   const apiKey = import.meta.env.VITE_TINY_MCE_EDITOR
-
-  const editorRef = useRef<Editor | null>(null)
 
   const [contentEditor, setContentEditor] = useState<string>()
   useEffect(() => {
     setContentEditor(value)
   }, [value])
 
-  const handleEditorChange = (content: string, editor: any) => {
-    // console.log('🚀 ~ handleEditorChange ~ editor:', editor)
-    // console.log('🚀 ~ handleEditorChange ~ content:', content)
+  const handleEditorChange = (content: string) => {
     onChange?.(content)
     setContentEditor(content)
   }
+
+  const handleImageUpload = (blobInfo: any, progress: any): Promise<string> =>
+    // eslint-disable-next-line no-async-promise-executor
+    new Promise(async (resolve, reject) => {
+      const formData = new FormData()
+      formData.append('file', blobInfo.blob(), blobInfo.filename())
+      try {
+        const file: File = blobInfo.blob()
+        if (!file) {
+          reject('Failed to convert blob to File.')
+          return
+        }
+        const postUploadRequest: UploadFileRequest = {
+          id: userInfo?.id || 0,
+          file: file
+        }
+
+        const response: ApiResponseDTO<FileMaster> = await fileUpload.uploadImage(postUploadRequest)
+
+        if (response?.status.includes(API_STATUS.SUCCESS)) {
+          resolve(response.data.fileUrl)
+        } else {
+          reject(`HTTP Error: ${response.status}`)
+        }
+      } catch (error) {
+        reject(`Image upload failed: ${error}`)
+      }
+    })
 
   return (
     <Editor
       apiKey={apiKey}
       init={{
+        skin: 'oxide',
+        icons: 'thin',
         height: 800,
         placeholder: placeholder,
         menubar: true,
@@ -73,9 +105,12 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
           { text: 'C#', value: 'csharp' },
           { text: 'C++', value: 'cpp' }
         ],
-        codesample_dialog_width: 600,
-        paste_as_text: true,
-        paste_block_drop: true
+        images_upload_url: `${CLOUDINARY_UPLOAD}/1/upload`,
+        paste_data_images: true,
+        automatic_uploads: true,
+        images_reuse_filename: true,
+        file_picker_types: 'image',
+        images_upload_handler: handleImageUpload
       }}
       value={contentEditor}
       onEditorChange={handleEditorChange}

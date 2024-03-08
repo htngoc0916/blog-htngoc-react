@@ -233,104 +233,97 @@ export default function PostDetailForm({ data, isEdit, className }: PostDetailFo
   }, [data, setValue, categoryList])
 
   return (
-    <div className={className}>
-      <div className='grid grid-cols-1 gap-10'>
-        <div id='post-add__form' className='max-w-screen-lg p-10 mx-auto bg-white rounded-lg dark:bg-darkbg2'>
-          <div className='flex mb-10'>
-            <TextCustom size='xs' className='text-text2 dark:text-text7'>
-              {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
-            </TextCustom>
-          </div>
-
-          <Form onSubmit={handleSubmit(handleSave)}>
-            <Field>
-              <ButtonToggleSwitch
-                name='usedYn'
-                label='Active'
-                control={control}
-                checked={getValues('usedYn') === 'Y'}
-                onChange={handleToggleChange}
-              />
-            </Field>
-            <Field>
-              <Label htmlFor='title'>Title</Label>
-              <InputCustom
-                name='title'
-                control={control}
-                message={errors?.title?.message}
-                maxLength={100}
-              ></InputCustom>
-            </Field>
-            <Field>
-              <Label htmlFor='description'>Description</Label>
-              <TextareaCustom
-                id='description'
-                name='description'
-                color='primary'
-                rows={6}
-                maxLength={150}
-                control={control}
-                className='resize-none dark:bg-darkbg3'
-              />
-            </Field>
-            <Field className='grid grid-cols-2 gap-6 mb-0'>
-              <Field>
-                <Label htmlFor='categoryId'>Category</Label>
-                <DropdownCustom
-                  name='categoryId'
-                  data={dropdownOptions}
-                  control={control}
-                  message={errors?.categoryId?.message}
-                  defaultValue={getValues('categoryName')}
-                ></DropdownCustom>
-              </Field>
-              <Field>
-                <Label htmlFor='tags'>Tags</Label>
-                <InputSelectMulti
-                  data={selectOptions}
-                  name='tags'
-                  value={getValues('tags') as string[]}
-                  control={control}
-                  onChange={handleTagChange}
-                ></InputSelectMulti>
-              </Field>
-            </Field>
-
-            <Field>
-              <Label htmlFor='thumbnail'>Post Image</Label>
-              <InputFile
-                onFileUpload={handleOnFileUpload}
-                uploadUrl={uploadedImage}
-                onFileDelete={handleOnFileDelete}
-                size='md'
-                loading={uploadLoading}
-                maxSize={maxSize}
-              >
-                <div>
-                  <p>
-                    <span className='text-primary-700 dark:text-primary-400'>Click to upload</span> or drag and drop
-                  </p>
-                  <p className='text-sm text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                </div>
-              </InputFile>
-            </Field>
-
-            <Field>
-              <Label htmlFor='content'>Contents</Label>
-              <div className='entry-content'>
-                <TinyMceCustom
-                  value={getValues('content')}
-                  onChange={handleContentChange}
-                  placeholder='Nhập nội dung...'
-                ></TinyMceCustom>
-              </div>
-            </Field>
-
-            <div className='flex items-center justify-center gap-5 mb-4'>
-              <ActionSave type='submit' isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
-            </div>
-          </Form>
+    <div id='post-modify__form' className={className}>
+      <div className='max-w-screen-lg p-10 mx-auto bg-white rounded-lg dark:bg-darkbg2'>
+        <div className='flex mb-10'>
+          <TextCustom size='xs' className='text-text2 dark:text-text7'>
+            {isEdit ? 'Chỉnh sửa' : 'Tạo mới'} 🤖
+          </TextCustom>
         </div>
+
+        <Form onSubmit={handleSubmit(handleSave)}>
+          <Field>
+            <ButtonToggleSwitch
+              name='usedYn'
+              label='Active'
+              control={control}
+              checked={getValues('usedYn') === 'Y'}
+              onChange={handleToggleChange}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor='title'>Title</Label>
+            <InputCustom name='title' control={control} message={errors?.title?.message} maxLength={100}></InputCustom>
+          </Field>
+          <Field>
+            <Label htmlFor='description'>Description</Label>
+            <TextareaCustom
+              id='description'
+              name='description'
+              color='primary'
+              rows={6}
+              maxLength={150}
+              control={control}
+              className='resize-none dark:bg-darkbg3'
+            />
+          </Field>
+          <Field className='grid grid-cols-2 gap-6 mb-0'>
+            <Field>
+              <Label htmlFor='categoryId'>Category</Label>
+              <DropdownCustom
+                name='categoryId'
+                data={dropdownOptions}
+                control={control}
+                message={errors?.categoryId?.message}
+                defaultValue={getValues('categoryName')}
+              ></DropdownCustom>
+            </Field>
+            <Field>
+              <Label htmlFor='tags'>Tags</Label>
+              <InputSelectMulti
+                data={selectOptions}
+                name='tags'
+                value={getValues('tags') as string[]}
+                control={control}
+                onChange={handleTagChange}
+              ></InputSelectMulti>
+            </Field>
+          </Field>
+
+          <Field>
+            <Label htmlFor='thumbnail'>Post Image</Label>
+            <InputFile
+              onFileUpload={handleOnFileUpload}
+              uploadUrl={uploadedImage}
+              onFileDelete={handleOnFileDelete}
+              size='md'
+              loading={uploadLoading}
+              maxSize={maxSize}
+            >
+              <div>
+                <p>
+                  <span className='text-primary-700 dark:text-primary-400'>Click to upload</span> or drag and drop
+                </p>
+                <p className='text-sm text-gray-500 dark:text-gray-400'>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+              </div>
+            </InputFile>
+          </Field>
+
+          <Field>
+            <Label htmlFor='content'>Contents</Label>
+            <div className='content-editor'>
+              <TinyMceCustom
+                value={getValues('content')}
+                onChange={handleContentChange}
+                placeholder='Nhập nội dung...'
+              ></TinyMceCustom>
+            </div>
+          </Field>
+
+          <div className='flex items-center justify-center gap-5 mb-4'>
+            <ActionSave type='submit' isProcessing={isSubmitting} disabled={isSubmitting} className='w-24' />
+          </div>
+        </Form>
       </div>
     </div>
   )

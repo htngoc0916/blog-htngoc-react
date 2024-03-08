@@ -35,7 +35,7 @@ export default function HomeTopPost(props: HomeTopPostProps) {
       <div className='relative z-30 container-page'>
         <FeatureTitle color='secondary'>{t('post.hot.title')}</FeatureTitle>
         <div className='grid grid-cols-1 gap-6 xl:grid-cols-5'>
-          <div className='xl:col-span-3'>
+          <div id='hot-post__main' className='xl:col-span-3'>
             {hotPost && (
               <CardPost
                 key={hotPost?.id}
@@ -67,7 +67,7 @@ export default function HomeTopPost(props: HomeTopPostProps) {
           </div>
 
           <div className='xl:col-span-2'>
-            <div id='hot-post__card' className='flex flex-col gap-3'>
+            <div id='hot-post__slide' className='flex flex-col gap-3'>
               {newPosts.map((post) => (
                 <Card
                   key={post?.id}
@@ -76,7 +76,7 @@ export default function HomeTopPost(props: HomeTopPostProps) {
                   renderImage={() => (
                     <img
                       src={post?.thumbnail}
-                      className='md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px] h-48 cursor-pointer object-cover'
+                      className='md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px] h-[184px] cursor-pointer object-cover'
                       onClick={() => navigate(`/post/${post?.slug}`)}
                     ></img>
                   )}

@@ -14,10 +14,6 @@ import { ErrorBoundary } from 'react-error-boundary'
 import ErrorFallBack from './components/error'
 import './i18n/i18n'
 
-import 'highlight.js/styles/atom-one-dark.css'
-import 'react-quill/dist/quill.snow.css'
-import 'quill-image-uploader/dist/quill.imageUploader.min.css'
-
 function App() {
   const theme = useSelector(themeDarkModeSelector)
   useEffect(() => {

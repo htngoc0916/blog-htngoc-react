@@ -1,8 +1,6 @@
 import { Menu } from '~/types'
 import { SidebarCollapse, SidebarItem } from '~/components/sidebar'
 import { menuIcons } from '~/components/icons/menu'
-import { v4 as uuidv4 } from 'uuid'
-
 export interface DashboardSidebarItemProps {
   data: Menu
 }
@@ -13,7 +11,7 @@ const DashboardSidebarItem = ({ data }: DashboardSidebarItemProps) => {
       {hasChildren ? (
         <SidebarCollapse title={data.menuName} icon={menuIcons[data.menuIcon]}>
           {data?.children?.map((children) => (
-            <SidebarItem key={uuidv4()} to={children.menuUrl} className='text-sm pl-9'>
+            <SidebarItem key={data.id} to={children.menuUrl} className='text-sm pl-9'>
               {children.menuName}
             </SidebarItem>
           ))}
