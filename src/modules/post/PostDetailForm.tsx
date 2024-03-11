@@ -241,6 +241,10 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
   const handleSelectedMeta = (meta: PostSlectedMeta) => {
     setAddedPostMeta((prevMeta) => [...prevMeta, meta])
   }
+
+  const handleDeletePostMeta = () => {
+    console.log('🚀 ~ handleDeletePostMeta ~ handleDeletePostMeta:', handleDeletePostMeta)
+  }
   return (
     <div className='grid grid-cols-6 gap-4'>
       <div id='post-detail_form' className='col-span-4'>
@@ -347,16 +351,19 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
           <div className='sticky p-6 bg-white rounded-lg top-40 dark:bg-darkbg2'>
             <div className='mb-3 text-lg font-bold text-text2 dark:text-white'>Mục lục bài viết ✍️</div>
             {addedPostMeta.map((postMeta) => (
-              // <Badge key={postMeta.key} color='primary' icon={HiMiniXMark}>
-              //   {postMeta.value}
-              // </Badge>
               <div
                 id={postMeta.key}
                 key={postMeta.key}
-                className='inline-flex items-center justify-between px-4 py-2 rounded-full gap2 bg-primary-50 text-primary-700'
+                className='inline-flex items-center justify-between gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-700'
               >
                 <span>{postMeta.value}</span>
-                <HiMiniXMark className='w-4 h-4' />
+
+                <span
+                  className='p-1 rounded-full cursor-pointer bg-primary-200 hover:bg-primary-500'
+                  onClick={handleDeletePostMeta}
+                >
+                  <HiMiniXMark className='w-4 h-4 text-white' />
+                </span>
               </div>
             ))}
           </div>
