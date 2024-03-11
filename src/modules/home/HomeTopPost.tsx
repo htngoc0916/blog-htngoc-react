@@ -14,7 +14,7 @@ import { useAppSelector } from '~/app/hooks'
 import { homeHotPostSelector } from '~/app/home/homeSlice'
 import { Tag } from '~/types'
 import { convertToYYYYMMDD } from '~/utils/commonUtils'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export interface HomeTopPostProps {
   className?: string
@@ -69,29 +69,27 @@ export default function HomeTopPost(props: HomeTopPostProps) {
           <div className='xl:col-span-2'>
             <div id='hot-post__slide' className='flex flex-col gap-3'>
               {newPosts.map((post) => (
-                <Card
-                  key={post?.id}
-                  className='max-w-md group'
-                  horizontal
-                  renderImage={() => (
-                    <img
-                      src={post?.thumbnail}
-                      className='md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg w-[200px] h-[184px] cursor-pointer object-cover'
-                      onClick={() => navigate(`/post/${post?.slug}`)}
-                    ></img>
-                  )}
+                <div
+                  key={post.id}
+                  className='flex flex-col h-auto overflow-hidden bg-white border border-gray-200 rounded-lg shadow-md md:flex-row dark:border-gray-700 dark:bg-gray-800 group'
                 >
-                  {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
-
-                  <CardBody href={`/post/${post?.slug}`}>
-                    <CardTitle>{truncateText(post?.title, 50)}</CardTitle>
-                  </CardBody>
-
-                  <CardAuthor className='flex justify-between'>
-                    <AuthorName className='text-base lg:text-base'>{post?.user?.userName}</AuthorName>
-                    <CardPostTime className='text-base'> {convertToYYYYMMDD(post?.regDt as Date)}</CardPostTime>
-                  </CardAuthor>
-                </Card>
+                  <Link
+                    to={`/post/${post?.slug}`}
+                    className='h-[184px] lg:w-48 w-full overflow-hidden md:rounded-l-lg md:rouded-none rouded-none rouded-t-lg'
+                  >
+                    <img src={post?.thumbnail} className='object-cover w-full h-full' />
+                  </Link>
+                  <div className='flex flex-col justify-around flex-1 h-auto p-4 rounded-r-lg'>
+                    {post?.tags && <TagGroup data={post?.tags as Tag[]}></TagGroup>}
+                    <CardBody href={`/post/${post?.slug}`}>
+                      <CardTitle>{truncateText(post?.title, 50)}</CardTitle>
+                    </CardBody>
+                    <CardAuthor className='flex justify-between flex-1'>
+                      <AuthorName className='text-base lg:text-base'>{post?.user?.userName}</AuthorName>
+                      <CardPostTime className='text-base'> {convertToYYYYMMDD(post?.regDt as Date)}</CardPostTime>
+                    </CardAuthor>
+                  </div>
+                </div>
               ))}
             </div>
           </div>

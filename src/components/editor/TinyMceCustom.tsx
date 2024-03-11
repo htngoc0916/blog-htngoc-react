@@ -1,21 +1,25 @@
 import { Editor } from '@tinymce/tinymce-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import slugify from 'slugify'
 import { CLOUDINARY_UPLOAD } from '~/apis/apiConstanst'
 import fileUpload from '~/apis/fileUploadApi'
 import { userInfoSelector } from '~/app/auth/authSlice'
 import { useAppSelector } from '~/app/hooks'
+import { PostSlectedMeta } from '~/modules/post/PostDetailForm'
 import { API_STATUS, ApiResponseDTO, FileMaster, UploadFileRequest } from '~/types'
 
 export interface TinyMceCustomProps {
   value?: string
   placeholder: string
   onChange: (content: string) => void
+  selectedMeta: (meta: PostSlectedMeta) => void
 }
 
 export default function TinyMceCustom(props: TinyMceCustomProps) {
-  const { value, placeholder, onChange } = props
+  const { value, placeholder, onChange, selectedMeta } = props
   const userInfo = useAppSelector(userInfoSelector)
   const apiKey = import.meta.env.VITE_TINY_MCE_EDITOR
+  const editorRef = useRef<Editor>(null)
 
   const [contentEditor, setContentEditor] = useState<string>()
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
     setContentEditor(content)
   }
 
-  const handleImageUpload = (blobInfo: any, progress: any): Promise<string> =>
+  const handleImageUpload = (blobInfo: any, _progress: any): Promise<string> =>
     // eslint-disable-next-line no-async-promise-executor
     new Promise(async (resolve, reject) => {
       const formData = new FormData()
@@ -55,8 +59,35 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
       }
     })
 
+  // const handleAddPostMeta = () => {
+  //   if (editorRef.current) {
+  //     const editor = editorRef.current.editor
+  //     const selectedHTML = editor?.selection.getContent({ format: 'html' })
+  //     console.log('🚀 ~ handleAddPostMeta ~ selectedHTML:', selectedHTML)
+  //     const selectedText = editor?.selection.getContent({ format: 'text' })
+
+  //     if (selectedText && selectedText.trim() !== '') {
+  //       selectedMeta?.({ key: slugify(selectedText), value: selectedText })
+  //     }
+  //   }
+  // }
+
+  const handleAddPostMeta = () => {
+    if (editorRef.current) {
+      const editor = editorRef.current.editor
+      const selectedText = editor?.selection.getContent({ format: 'text' })
+
+      if (selectedText && selectedText.trim() !== '') {
+        const idValue = slugify(selectedText)
+        editor?.execCommand('mceInsertContent', false, `<h3 id="${idValue}">${selectedText}</h3>`)
+        selectedMeta?.({ key: idValue, value: selectedText })
+      }
+    }
+  }
+
   return (
     <Editor
+      ref={editorRef}
       apiKey={apiKey}
       init={{
         skin: 'oxide',
@@ -92,7 +123,8 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
           'bold italic forecolor backcolor | alignleft aligncenter ' +
           'alignright alignjustify | bullist numlist outdent indent | ' +
           'link image media | blockquote codesample | ' +
-          'removeformat | help',
+          'removeformat | help | ' +
+          'addPostMeta',
         codesample_languages: [
           { text: 'HTML/XML', value: 'markup' },
           { text: 'JavaScript', value: 'javascript' },
@@ -105,7 +137,16 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
           { text: 'C#', value: 'csharp' },
           { text: 'C++', value: 'cpp' }
         ],
-        images_upload_url: `${CLOUDINARY_UPLOAD}/1/upload`,
+        setup: function (editor) {
+          editor.ui.registry.addButton('addPostMeta', {
+            text: 'Meta',
+            tooltip: 'Add post meta',
+            enabled: true,
+            onAction: handleAddPostMeta
+          })
+        },
+
+        images_upload_url: `${CLOUDINARY_UPLOAD}/${userInfo?.id}/upload`,
         paste_data_images: true,
         automatic_uploads: true,
         images_reuse_filename: true,

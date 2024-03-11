@@ -8,7 +8,7 @@ export interface TagGroupProps {
 
 export default function TagGroup({ data }: TagGroupProps) {
   return (
-    <div id='tags' className='flex gap-2'>
+    <div id='tags' className='flex gap-2 mb-3'>
       {data.map((tag: Tag) => (
         <CardTag key={tag?.tagName} color={tag?.color} href={`/category/${slugify(tag?.tagName || '')}`}>
           {tag?.tagName}

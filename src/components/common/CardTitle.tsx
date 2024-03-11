@@ -8,7 +8,7 @@ export interface ICardTitleProps {
 }
 
 const classes = {
-  base: 'text-xl font-bold tracking-tight text-text1 dark:text-white',
+  base: 'text-xl font-bold tracking-tight text-text1 dark:text-white break-all',
   animation: {
     on: 'bg-gradient-to-r from-primary-700/50 to-primary-700/40 bg-[length:0px_10px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_10px]',
     off: ''
