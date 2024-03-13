@@ -33,8 +33,8 @@ img {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
@@ -44,7 +44,7 @@ img {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(-45deg, #6a5af9, #d66efd);
+  background-image: linear-gradient(-45deg, #4132cd, #d66efd);
   border-radius: 50px;
 }
 /* end */

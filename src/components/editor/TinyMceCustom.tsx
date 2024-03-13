@@ -5,14 +5,13 @@ import { CLOUDINARY_UPLOAD } from '~/apis/apiConstanst'
 import fileUpload from '~/apis/fileUploadApi'
 import { userInfoSelector } from '~/app/auth/authSlice'
 import { useAppSelector } from '~/app/hooks'
-import { PostSlectedMeta } from '~/modules/post/PostDetailForm'
-import { API_STATUS, ApiResponseDTO, FileMaster, UploadFileRequest } from '~/types'
+import { API_STATUS, ApiResponseDTO, FileMaster, PostMeta, UploadFileRequest } from '~/types'
 
 export interface TinyMceCustomProps {
   value?: string
   placeholder: string
   onChange: (content: string) => void
-  selectedMeta: (meta: PostSlectedMeta) => void
+  selectedMeta: (meta: PostMeta) => void
 }
 
 export default function TinyMceCustom(props: TinyMceCustomProps) {
@@ -59,28 +58,14 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
       }
     })
 
-  // const handleAddPostMeta = () => {
-  //   if (editorRef.current) {
-  //     const editor = editorRef.current.editor
-  //     const selectedHTML = editor?.selection.getContent({ format: 'html' })
-  //     console.log('🚀 ~ handleAddPostMeta ~ selectedHTML:', selectedHTML)
-  //     const selectedText = editor?.selection.getContent({ format: 'text' })
-
-  //     if (selectedText && selectedText.trim() !== '') {
-  //       selectedMeta?.({ key: slugify(selectedText), value: selectedText })
-  //     }
-  //   }
-  // }
-
   const handleAddPostMeta = () => {
     if (editorRef.current) {
       const editor = editorRef.current.editor
-      const selectedText = editor?.selection.getContent({ format: 'text' })
-
-      if (selectedText && selectedText.trim() !== '') {
-        const idValue = slugify(selectedText)
-        editor?.execCommand('mceInsertContent', false, `<h3 id="${idValue}">${selectedText}</h3>`)
-        selectedMeta?.({ key: idValue, value: selectedText })
+      const title = editor?.selection.getContent({ format: 'text' })
+      if (title && title.trim() !== '') {
+        const slug = 'meta-' + slugify(title)
+        editor?.execCommand('mceInsertContent', false, `<h3 id="${slug}">${title}</h3>`)
+        selectedMeta?.({ title, slug })
       }
     }
   }

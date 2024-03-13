@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { fetchDataPostView } from '~/app/post/postViewSlice'
-import { PostViewContent, PostViewMeta, PostViewRelated } from '~/modules/post'
+import { PostViewContent, PostViewHeader, PostViewRelated } from '~/modules/post'
 import { BLOG_TITLE } from '~/utils/constant'
 
 export default function PostViewLayout() {
@@ -24,7 +24,7 @@ export default function PostViewLayout() {
   return (
     <section className='dark:bg-darkbg2 pt-page'>
       <div className='container-page'>
-        <PostViewMeta className='grid grid-cols-1 gap-4 lg:grid-cols-2'></PostViewMeta>
+        <PostViewHeader className='grid grid-cols-1 gap-4 lg:grid-cols-2'></PostViewHeader>
         <PostViewContent></PostViewContent>
         <PostViewRelated></PostViewRelated>
       </div>

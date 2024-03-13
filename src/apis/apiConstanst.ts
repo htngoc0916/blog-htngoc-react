@@ -26,3 +26,5 @@ export const POST_GET_BY_CATEGORY = `${API_VERSION}/posts/category`
 export const POST_GET_HOT_POST = `${API_VERSION}/posts/hotPosts`
 export const POST_VIEW_COUNT = `${API_VERSION}/posts/postView`
 export const POST_GET_RELATED_BY_SLUG = `${API_VERSION}/posts/related/slug`
+
+export const POST_META_GET_BY_SLUG = `${API_VERSION}/postsMetas/slug`

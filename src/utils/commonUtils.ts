@@ -2,7 +2,6 @@ function convertToYYYYMMDD(prams: Date | string): string {
   const dateObject = typeof prams === 'string' ? new Date(prams) : prams
 
   if (!(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
-    console.error('Invalid Date object')
     return ''
   }
 

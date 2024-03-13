@@ -1,12 +1,22 @@
 import { Field, Form } from '~/components/form'
 import { TextCustom } from '~/components/text'
-import { API_STATUS, ApiResponseDTO, Category, FileMaster, Post, Tag, UploadFileRequest, defaultFilter } from '~/types'
+import {
+  API_STATUS,
+  ApiResponseDTO,
+  Category,
+  FileMaster,
+  Post,
+  PostMeta,
+  Tag,
+  UploadFileRequest,
+  defaultFilter
+} from '~/types'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { ButtonToggleSwitch } from '~/components/button'
 import { ActionSave } from '~/components/action'
-import { Badge, Label } from 'flowbite-react'
+import { Label } from 'flowbite-react'
 import { InputCustom, InputFile, InputSelectMulti } from '~/components/input'
 import { TextareaCustom } from '~/components/textarea'
 import { useDispatch } from 'react-redux'
@@ -29,11 +39,6 @@ const maxSize = 5 * 1024 * 1024
 export interface PostDetailFormProps {
   isEdit: boolean
   data: Post | undefined
-}
-
-export interface PostSlectedMeta {
-  key: string
-  value: string
 }
 
 export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
@@ -89,6 +94,7 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
   const categoryList = useAppSelector(categoryListSelector)
   const [uploadedImage, setUploadedImage] = useState<string>('')
   const [uploadLoading, setUploadLoading] = useState(false)
+  const [addedPostMeta, setAddedPostMeta] = useState<PostMeta[]>([])
 
   const dropdownOptions: DropdownOptions[] = useMemo(() => {
     return categoryList.map((category) => ({
@@ -120,7 +126,6 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
 
       if (!isEdit) {
         const titleResponse: ApiResponseDTO<boolean> = await postApi.postCheckTitle({ title: post?.title })
-        console.log('🚀 ~ handleSave ~ titleResponse:', titleResponse)
         if (titleResponse?.data) {
           setError('title', {
             type: 'manual',
@@ -133,6 +138,7 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
       post.slug = slugify(post.title, { lower: true })
       const postRequest: Post = {
         ...post,
+        postMetas: addedPostMeta,
         modId: isEdit ? userInfo?.id : undefined,
         regId: isEdit ? undefined : userInfo?.id,
         userId: userInfo?.id
@@ -207,6 +213,25 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
     }
   }
 
+  const handleSelectedMeta = (meta: PostMeta) => {
+    setAddedPostMeta((prevMeta) => {
+      const currentMeta = prevMeta ?? []
+
+      const isExists = currentMeta.some((_postMeta) => _postMeta.slug === meta.slug)
+      if (isExists) {
+        toast.warn('Mục lục đã thêm trước đó.')
+        return [...currentMeta]
+      }
+
+      const updatedMeta = [...currentMeta, meta]
+      return updatedMeta
+    })
+  }
+
+  const handleDeletePostMeta = (postMeta: PostMeta) => () => {
+    setAddedPostMeta((prevMeta) => prevMeta.filter((meta) => meta.slug !== postMeta.slug))
+  }
+
   useEffect(() => {
     dispatch(getCategory({ ...defaultFilter, usedYn: 'Y' }))
     dispatch(getTag({ ...defaultFilter, usedYn: 'Y' }))
@@ -223,6 +248,7 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
     setValue('thumbnailId', data?.thumbnailId || undefined)
     setValue('content', data?.content)
 
+    setAddedPostMeta(data?.postMetas as PostMeta[])
     setUploadedImage(data?.thumbnail || '')
 
     if (data?.tags) {
@@ -237,14 +263,6 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
     setValue('categoryName', categories ? categories?.categoryName : 'Select category')
   }, [data, setValue, categoryList])
 
-  const [addedPostMeta, setAddedPostMeta] = useState<PostSlectedMeta[]>([])
-  const handleSelectedMeta = (meta: PostSlectedMeta) => {
-    setAddedPostMeta((prevMeta) => [...prevMeta, meta])
-  }
-
-  const handleDeletePostMeta = () => {
-    console.log('🚀 ~ handleDeletePostMeta ~ handleDeletePostMeta:', handleDeletePostMeta)
-  }
   return (
     <div className='grid grid-cols-6 gap-4'>
       <div id='post-detail_form' className='col-span-4'>
@@ -347,25 +365,27 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
         </div>
       </div>
       <div id='post-detail_meta' className='relative col-span-2'>
-        {addedPostMeta.length > 0 && (
-          <div className='sticky p-6 bg-white rounded-lg top-40 dark:bg-darkbg2'>
+        {addedPostMeta && (
+          <div className='sticky p-6 bg-white rounded-lg top-36 dark:bg-darkbg2'>
             <div className='mb-3 text-lg font-bold text-text2 dark:text-white'>Mục lục bài viết ✍️</div>
-            {addedPostMeta.map((postMeta) => (
-              <div
-                id={postMeta.key}
-                key={postMeta.key}
-                className='inline-flex items-center justify-between gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-700'
-              >
-                <span>{postMeta.value}</span>
-
-                <span
-                  className='p-1 rounded-full cursor-pointer bg-primary-200 hover:bg-primary-500'
-                  onClick={handleDeletePostMeta}
-                >
-                  <HiMiniXMark className='w-4 h-4 text-white' />
-                </span>
-              </div>
-            ))}
+            <div className='flex flex-col gap-2'>
+              {addedPostMeta.map((postMeta) => (
+                <div key={postMeta.slug}>
+                  <div
+                    id={postMeta.slug}
+                    className='inline-flex items-center justify-between gap-2 p-2 pl-4 rounded-full bg-primary-50 text-primary-700'
+                  >
+                    <span>{postMeta.title}</span>
+                    <span
+                      className='p-1 rounded-full cursor-pointer bg-primary-200 hover:bg-primary-500'
+                      onClick={handleDeletePostMeta(postMeta)}
+                    >
+                      <HiMiniXMark className='w-4 h-4 text-white' />
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

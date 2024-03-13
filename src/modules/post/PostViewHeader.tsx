@@ -12,7 +12,7 @@ import { convertToYYYYMMDD } from '~/utils/commonUtils'
 import { numberWithCommas } from '~/utils/numberWithCommas'
 import { Tag } from '~/types'
 
-const PostViewMeta = memo(function PostViewMeta(props: DefaultProps) {
+const PostViewHeader = memo(function PostViewHeader(props: DefaultProps) {
   const postViewDetail = useAppSelector(postViewDetailSelector)
 
   return (
@@ -57,4 +57,4 @@ const PostViewMeta = memo(function PostViewMeta(props: DefaultProps) {
   )
 })
 
-export default PostViewMeta
+export default PostViewHeader

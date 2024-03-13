@@ -13,7 +13,7 @@
 - viet api de lay ra cac muc luc bai viet
 - viet chuc nang search cho post (ok)
 - chinh lai slug khong can nhap (ok)
-- them chuc nang viet cac muc luc cho bai viet
+- them chuc nang viet cac muc luc cho bai viet (ok)
 
 4. mobile
 

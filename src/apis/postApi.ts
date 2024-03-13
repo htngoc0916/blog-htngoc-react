@@ -45,6 +45,13 @@ const postApi = {
     })
   },
 
+  getPostMetaListBySlug(slug: string): Promise<ApiResponseDTO<Post>> {
+    const url = POST_GET_BY_SLUG + '/' + slug
+    return axiosPublic.get(url, {
+      headers: { 'Accept-Language': i18n.language }
+    })
+  },
+
   getRelatedPostBySlug(slug: string): Promise<ApiResponseDTO<Post>> {
     const url = POST_GET_RELATED_BY_SLUG + '/' + slug
     return axiosPublic.get(url, {

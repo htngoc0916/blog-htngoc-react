@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Post, Comment, PostList, defaultPagination, ListResponseDTO } from '~/types'
+import { Post, Comment, PostList, defaultPagination, ListResponseDTO, PostMeta } from '~/types'
 import { RootState } from '../store'
 
 export interface PostViewSate {
   loading: boolean
   postViewDetail?: Post
+  postMetaList?: PostMeta[]
   postViewRelates?: PostList
   postViewComments?: Comment[]
 }
@@ -12,6 +13,7 @@ export interface PostViewSate {
 const initialState: PostViewSate = {
   loading: false,
   postViewDetail: undefined,
+  postMetaList: [],
   postViewComments: [],
   postViewRelates: {
     data: [],
@@ -25,6 +27,8 @@ const postViewSlice = createSlice({
   reducers: {
     fetchDataPostView(state, _action: PayloadAction<string>) {
       state.loading = true
+      state.postViewDetail = undefined
+      state.postMetaList = []
     },
     fetchDataPostViewSuccess(state) {
       state.loading = false
@@ -34,6 +38,7 @@ const postViewSlice = createSlice({
     },
     setPostViewDetail(state, action: PayloadAction<Post>) {
       state.postViewDetail = action.payload
+      state.postMetaList = action.payload.postMetas
     },
     setPostRelates(state, action: PayloadAction<ListResponseDTO<Post[]>>) {
       const { data, ...paginationWithoutData } = action.payload
@@ -55,6 +60,7 @@ export const {
 } = postViewSlice.actions
 
 export const postViewLoadingSelector = (state: RootState) => state.postView.loading
+export const postViewMetaSelector = (state: RootState) => state.postView.postMetaList
 export const postViewDetailSelector = (state: RootState) => state.postView.postViewDetail
 export const postViewCommentSelector = (state: RootState) => state.postView.postViewComments
 export const postViewRelateSelector = (state: RootState) => state.postView.postViewRelates
