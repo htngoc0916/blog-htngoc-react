@@ -26,7 +26,7 @@ function* handleFetchRelatedPosts(action: PayloadAction<string>) {
   }
 }
 
-function* handleFetchPostComments(action: PayloadAction<string>) {
+function* handleFetchPostComments(_action: PayloadAction<string>) {
   try {
     yield put(setPostViewComments([]))
 

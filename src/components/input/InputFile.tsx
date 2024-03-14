@@ -4,7 +4,6 @@ import { FileRejection, useDropzone } from 'react-dropzone'
 import { ReactNode, memo, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { ActionClose } from '../action'
-import Loader from '../loader'
 import { Spinner } from 'flowbite-react'
 
 const classes = {

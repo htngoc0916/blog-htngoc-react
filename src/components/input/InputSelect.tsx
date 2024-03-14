@@ -1,7 +1,7 @@
 import { Control, useController } from 'react-hook-form'
 import { SelectOption } from './inputSelectOptions'
 import Select, { StylesConfig } from 'react-select'
-import { memo, useEffect, useState } from 'react'
+import { memo } from 'react'
 
 const dot = (color = 'transparent') => ({
   alignItems: 'center',
