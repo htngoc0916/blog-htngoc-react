@@ -1,16 +1,16 @@
 import axios from 'axios'
 import { getFreshToken, removeToken, saveToken } from '~/utils/auth'
-import { APP_API_URL_PROD } from './apiConstanst'
 import { store } from '~/app/store'
 import { refreshTokenFailed, refreshTokenSuccess } from '~/app/auth/authSlice'
 import { API_STATUS, ApiResponseDTO, AuthResponseDTO } from '~/types'
 import authApi from './authApi'
 import globalRouter from '~/utils/globalRouter'
 
+const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL
+
 //public
 const axiosPublic = axios.create({
-  // baseURL: APP_API_URL_DEV,
-  baseURL: APP_API_URL_PROD,
+  baseURL: VITE_APP_API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -32,8 +32,7 @@ axiosPublic.interceptors.response.use(
 
 //private
 const axiosPrivate = axios.create({
-  // baseURL: APP_API_URL_DEV,
-  baseURL: APP_API_URL_PROD,
+  baseURL: VITE_APP_API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
