@@ -63,8 +63,8 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
       const editor = editorRef.current.editor
       const title = editor?.selection.getContent({ format: 'text' })
       if (title && title.trim() !== '') {
-        const slug = 'meta-' + slugify(title)
-        editor?.execCommand('mceInsertContent', false, `<h3 id="${slug}">${title}</h3>`)
+        const slug = slugify(title)
+        editor?.execCommand('mceInsertContent', false, `<h3 id="${slug}" class="post-meta">${title}</h3>`)
         selectedMeta?.({ title, slug })
       }
     }

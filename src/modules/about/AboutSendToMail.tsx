@@ -14,7 +14,7 @@ export default function AboutSendToMail(props: AboutSendToMailProps) {
             Cùng lên ý tưởng nào 💡
           </TextDescript>
           <TextMark className='text-center text-text6'>
-            Không có việc gì khó chỉ sợ lòng không bền, đào núi và lập biển, quyết chí ắt làm nên.
+            Nếu bạn có ý tưởng hay đang muốn thực hiện. Hãy để lại email mình sẽ tự động liên hệ để cùng nhau hợp tác.
           </TextMark>
         </div>
 

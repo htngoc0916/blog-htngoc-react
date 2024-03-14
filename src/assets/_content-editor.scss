@@ -58,9 +58,6 @@
   }
 
   pre[class*='language-'] {
-    @apply text-sm overflow-x-scroll rounded-lg max-w-screen-md mx-auto mb-6;
-    code {
-      @apply text-sm rounded-lg;
-    }
+    @apply text-sm rounded-lg max-w-screen-md mx-auto mb-6 whitespace-pre-wrap overflow-x-auto break-all;
   }
 }

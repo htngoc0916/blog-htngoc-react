@@ -37,7 +37,7 @@ const PostViewContentLeft = memo(function PostViewContentLeft({ contentRef }: Po
     const handleScroll = () => {
       const contentElement = contentRef.current
       if (contentElement) {
-        const headings = contentElement.querySelectorAll('h3[id^="meta-"]')
+        const headings = contentElement.querySelectorAll('h3[class="post-meta"]')
         headings.forEach((heading) => {
           const rect = heading.getBoundingClientRect()
           if (rect.top <= 300 && rect.bottom >= 0) {
