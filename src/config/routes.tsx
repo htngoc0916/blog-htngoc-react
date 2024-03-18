@@ -42,7 +42,7 @@ const routes = createBrowserRouter(
         <Route path='tags' element={<TagsPage></TagsPage>}></Route>
         <Route path='users' element={<UsersPage></UsersPage>}></Route>
         <Route path='contacts' element={<ContactsPage></ContactsPage>}></Route>
-        <Route path='system' element={<SystemPage></SystemPage>}></Route>
+        <Route path='systems' element={<SystemPage></SystemPage>}></Route>
       </Route>
 
       <Route path='/login' element={<LoginPage></LoginPage>}></Route>
