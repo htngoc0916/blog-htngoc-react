@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useAppSelector } from '~/app/hooks'
 import { postViewDetailSelector } from '~/app/post/postViewSlice'
 import { HtmlContent } from '~/components/common'

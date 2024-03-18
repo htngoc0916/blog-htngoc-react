@@ -22,6 +22,16 @@
 
   p {
     @apply mt-2 leading-9 lg:text-lg text-base;
+    img {
+      @apply mx-auto;
+    }
+    a {
+      @apply bg-primary-100 rounded-md px-2 py-1 text-primary-800;
+    }
+  }
+
+  img {
+    @apply rounded-lg mt-7 object-cover max-w-full;
   }
 
   ul {
@@ -38,16 +48,6 @@
     li {
       @apply mb-3;
     }
-  }
-
-  p {
-    img {
-      @apply mx-auto;
-    }
-  }
-
-  img {
-    @apply rounded-lg mt-7 object-cover max-w-full;
   }
 
   blockquote {

@@ -27,8 +27,8 @@ const postViewSlice = createSlice({
   reducers: {
     fetchDataPostView(state, _action: PayloadAction<string>) {
       state.loading = true
-      state.postViewDetail = undefined
       state.postMetaList = []
+      state.postViewDetail = undefined
     },
     fetchDataPostViewSuccess(state) {
       state.loading = false

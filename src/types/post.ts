@@ -1,5 +1,4 @@
-import { PostSlectedMeta } from '~/modules/post/PostDetailForm'
-import { BaseDTO, User, Tag } from '.'
+import { BaseDTO, User, Tag, PostMeta } from '.'
 
 export interface Post extends BaseDTO {
   id: number
@@ -12,7 +11,7 @@ export interface Post extends BaseDTO {
   viewCnt?: number
   categoryId?: number
   tags?: Tag[]
-  postMetas?: PostSlectedMeta[]
+  postMetas?: PostMeta[]
   usedYn: 'Y' | 'N' | ''
   user: User
 
