@@ -7,7 +7,7 @@ export default defineConfig({
   },
   plugins: [react()],
   server: {
-    port: 3100
+    port: 3101
   },
   css: {
     devSourcemap: true

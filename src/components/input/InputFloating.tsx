@@ -1,4 +1,5 @@
-import { ReactNode } from 'react'
+import { ChangeEvent, ReactNode } from 'react'
+import { Control, useController } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 const classes = {
   input: {
@@ -105,9 +106,13 @@ export interface InputFloatingProps extends React.InputHTMLAttributes<HTMLInputE
   sizing?: Size
   color?: Color
   label?: ReactNode
+  message?: string
   helperText?: string
   className?: string
   children?: ReactNode
+  name: string
+  control: Control<any>
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function InputFloating(props: InputFloatingProps) {
@@ -121,24 +126,40 @@ export default function InputFloating(props: InputFloatingProps) {
     name,
     type = 'text',
     className = '',
+    message,
+    control,
+    onChange,
     ...rest
   } = props
 
+  const { field } = useController({ control, name })
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    field.onChange(e)
+  }
+
   return (
     <div>
-      <div className='relative'>
-        <input
-          type={type}
-          id={name}
-          className={twMerge(classes.input[color][variant][sizing], className)}
-          placeholder=' '
-          {...rest}
-        />
-        <label htmlFor={name} className={twMerge(classes.label[color][variant][sizing])}>
-          {label}
-        </label>
+      <div>
+        <div className='relative'>
+          <input
+            type={type}
+            id={name}
+            className={twMerge(classes.input[color][variant][sizing], className)}
+            placeholder=' '
+            {...rest}
+            {...field}
+            onChange={handleOnChange}
+          />
+          <label htmlFor={name} className={twMerge(classes.label[color][variant][sizing])}>
+            {label}
+          </label>
+        </div>
+        {children}
       </div>
-      {children}
+      <div>
+        <span className='mt-2 ml-2 text-sm text-red-600 dark:text-red-500'>{message}</span>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { PostViewContentLeft, PostViewContentMain } from '.'
+import { PostViewContentRight, PostViewContentMain } from '.'
 import { Button, Tooltip } from 'flowbite-react'
 import { IconFacebook } from '~/components/icons'
 import { HiOutlineHeart } from 'react-icons/hi2'
@@ -29,7 +29,7 @@ export default function PostViewContent() {
       </div>
 
       <div className='hidden lg:col-span-3 lg:block'>
-        <PostViewContentLeft contentRef={contentRef}></PostViewContentLeft>
+        <PostViewContentRight contentRef={contentRef}></PostViewContentRight>
       </div>
     </div>
   )

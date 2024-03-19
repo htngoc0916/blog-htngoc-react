@@ -22,7 +22,6 @@ export default function HeaderItems(props: HeaderItemsProps) {
   }, [dispatch])
 
   const handleOnClick = () => {
-    console.log('🚀 ~ handleOnClick ~ handleOnClick:')
     const navbarToggleButton = document.querySelector("[data-testid='flowbite-navbar-toggle']") as HTMLButtonElement
     if (navbarToggleButton) {
       navbarToggleButton.click()

@@ -4,12 +4,12 @@ import { twMerge } from 'tailwind-merge'
 import { useAppSelector } from '~/app/hooks'
 import { postViewMetaSelector } from '~/app/post/postViewSlice'
 
-export interface PostContentLeftProps {
+export interface PostContentRightProps {
   contentRef: React.RefObject<HTMLDivElement>
 }
 
 const classes = {
-  base: 'sticky flex flex-col items-center justify-end w-full p-4 ml-4 rounded-lg top-20 bg-gray-50 dark:bg-gray-800 gap-y-4',
+  base: 'sticky flex flex-col w-full py-4 px-6 ml-4 rounded-lg top-20 bg-gray-50 dark:bg-gray-800 gap-y-4',
   navlink: {
     base: 'block mb-3 duration-100 cursor-pointer hover:text-primary-700',
     actived: {
@@ -19,7 +19,7 @@ const classes = {
   }
 }
 
-const PostViewContentLeft = memo(function PostViewContentLeft({ contentRef }: PostContentLeftProps) {
+const PostViewContentRight = memo(function PostViewContentLeft({ contentRef }: PostContentRightProps) {
   const postMetaList = useAppSelector(postViewMetaSelector)
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -82,4 +82,4 @@ const PostViewContentLeft = memo(function PostViewContentLeft({ contentRef }: Po
   )
 })
 
-export default PostViewContentLeft
+export default PostViewContentRight

@@ -12,7 +12,7 @@ const DETECTION_OPTIONS = {
   caches: ['localStorage'],
   convertDetectedLanguage: () => {
     const defaultLanguage = localStorage.getItem('i18nextLng')
-    if (defaultLanguage === null) {
+    if (defaultLanguage === null || defaultLanguage === 'en-US') {
       return 'vi'
     }
     return defaultLanguage

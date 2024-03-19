@@ -1,5 +1,6 @@
 import TextMark from './TextMark'
 import { Badge, Button } from 'flowbite-react'
+import { useNavigate } from 'react-router-dom'
 import { BadgeGroup } from '~/components/badge'
 import { TextCustom } from '~/components/text'
 
@@ -8,6 +9,7 @@ export interface AboutIntroProps {
 }
 
 export default function AboutBanner(props: AboutIntroProps) {
+  const navigation = useNavigate()
   return (
     <div className={props.className}>
       <div className='container-page pt-page max-w-screen-2xl'>
@@ -32,7 +34,7 @@ export default function AboutBanner(props: AboutIntroProps) {
               <Button gradientDuoTone='primary' pill className='font-bold w-28'>
                 Liên hệ
               </Button>
-              <Button gradientDuoTone='primary' pill className='font-bold w-28' outline>
+              <Button gradientDuoTone='primary' pill className='font-bold w-28' outline onClick={() => navigation('/')}>
                 Blogs
               </Button>
             </div>
@@ -44,7 +46,7 @@ export default function AboutBanner(props: AboutIntroProps) {
               alt='banner'
               className='absolute top-0 right-0 z-0 translate-y-1 w-100'
             />
-            <img srcSet='/img/about_banner2.png' alt='logo' className='relative z-10 object-cover' />
+            {/* <img srcSet='/img/about_banner2.png' alt='logo' className='relative z-10 object-cover' /> */}
           </div>
         </div>
       </div>
