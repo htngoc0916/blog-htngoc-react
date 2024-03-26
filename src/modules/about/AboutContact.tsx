@@ -6,6 +6,10 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { TextareaCustom } from '~/components/textarea'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { API_STATUS, ApiResponseDTO, Contact } from '~/types'
+import contactApi from '~/apis/apiContact'
 
 export interface IAboutContactProps {
   className?: string
@@ -32,13 +36,29 @@ export default function AboutContact(props: IAboutContactProps) {
     }
   })
 
-  const handleSendEmail = (value: any) => {
-    console.log('🚀 ~ handleSendEmail ~ value:', value)
+  const [loading, setLoading] = useState(false)
+
+  const handleSendEmail = async (contact: Contact) => {
+    try {
+      setLoading(true)
+      const response: ApiResponseDTO<Contact> = await contactApi.sendContact(contact)
+
+      if (response?.status.includes(API_STATUS.SUCCESS)) {
+        toast.success(response?.message)
+      } else {
+        toast.error(response.message)
+      }
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div id='contact-to-me' className={props.className}>
-      <div className='container px-4 mx-auto py-page md:px-0'>
+      <div className='container p-4 mx-auto py-page md:px-0'>
         <div className='flex flex-col items-center justify-center pb-14'>
           <TextTitle>Liên hệ với tôi 📟</TextTitle>
           <TextDescript>Gửi Đến Tôi</TextDescript>
@@ -80,7 +100,7 @@ export default function AboutContact(props: IAboutContactProps) {
             </div>
           </div>
           <div className='flex items-center justify-center pt-10'>
-            <Button type='submit' gradientDuoTone='primary' className='font-bold w-28'>
+            <Button type='submit' gradientDuoTone='primary' className='font-bold w-28' disabled={loading}>
               Gửi
             </Button>
           </div>

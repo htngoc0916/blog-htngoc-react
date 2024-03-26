@@ -44,7 +44,6 @@ export default function AboutSendToMail(props: AboutSendToMailProps) {
   }, [errors?.email])
 
   const handleSendEmail = async (data: { email: string }) => {
-    console.log('🚀 ~ handleSendEmail ~ email:', data.email)
     try {
       setLoading(true)
       const response: ApiResponseDTO<Contact> = await contactApi.sendIdea({ email: data.email })

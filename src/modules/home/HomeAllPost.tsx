@@ -57,12 +57,10 @@ export default function HomeAllPost(props: DefaultProps) {
   }
 
   return (
-    <section className={twMerge(props.className)}>
-      <div className='pt-20 pb-10 container-page'>
+    <section className={twMerge('dark:bg-darkbg2', props.className)}>
+      <div className='py-10 md:py-20 container-page'>
         <div className='flex flex-col items-center justify-start mb-10'>
-          <FeatureTitle color='secondary' className='text-2xl md:text-5xl md:font-bold'>
-            {t('post.all.title')}
-          </FeatureTitle>
+          <FeatureTitle className='text-2xl md:text-5xl md:font-bold'>{t('post.all.title')}</FeatureTitle>
           <h3 className='text-lg md:text-xl text-text1 dark:text-text7'>{t('post.all.description')} 🤓</h3>
           <div className='flex flex-row flex-wrap items-end justify-center gap-2 pt-6 md:gap-4'>
             {categoryList &&

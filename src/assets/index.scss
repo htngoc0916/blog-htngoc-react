@@ -8,6 +8,11 @@
   .py-page {
     @apply md:py-32 py-16;
   }
+
+  .pt-page {
+    @apply pt-32;
+  }
+
   .container-page {
     @apply max-w-screen-2xl lg:px-10 px-4 mx-auto;
   }

@@ -13,9 +13,9 @@ export default function HomePage() {
 
   return (
     <main>
-      <HomeBanner className='dark:bg-darkbg1 pt-page dark:bg-darkbg2 bg-text8'></HomeBanner>
-      <HomeTopPost className='pt-10 pb-16 dark:bg-darkbg3 bg-text8'></HomeTopPost>
-      <HomeAllPost className='dark:bg-darkbg2'></HomeAllPost>
+      <HomeBanner></HomeBanner>
+      <HomeTopPost></HomeTopPost>
+      <HomeAllPost></HomeAllPost>
     </main>
   )
 }
