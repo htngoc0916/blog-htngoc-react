@@ -27,8 +27,8 @@ export default function HomeTopPost(props: HomeTopPostProps) {
   const newPosts = hotPostList && hotPostList.length > 0 ? hotPostList.slice(1) : []
 
   return (
-    <section className={twMerge('relative md:py-16 py-8 bg-white dark:bg-darkbg3', props.className)}>
-      <div className='absolute z-[-1] hidden w-full h-full md:block'>
+    <section className={twMerge('relative md:py-16 py-8 bg-gray-50 dark:bg-darkbg3', props.className)}>
+      <div className='absolute z-[-1] hidden w-full h-full md:block bg-transparent'>
         <img src='/img/home_banner.svg' alt='' />
       </div>
       <div className='relative z-30 container-page'>
