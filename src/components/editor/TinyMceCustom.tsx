@@ -18,6 +18,7 @@ export default function TinyMceCustom(props: TinyMceCustomProps) {
   const { value, placeholder, onChange, selectedMeta } = props
   const userInfo = useAppSelector(userInfoSelector)
   const apiKey = import.meta.env.VITE_TINY_MCE_EDITOR
+  console.log('🚀 ~ TinyMceCustom ~ apiKey:', apiKey)
   const editorRef = useRef<Editor>(null)
 
   const [contentEditor, setContentEditor] = useState<string>()
