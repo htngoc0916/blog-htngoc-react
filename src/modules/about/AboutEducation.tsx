@@ -8,7 +8,7 @@ export interface IAboutEducationProps {
 export default function AboutEducation(props: IAboutEducationProps) {
   return (
     <div className={props.className}>
-      <div className='container px-2 pb-20 mx-auto dark:border-text4 pt-72 md:px-0'>
+      <div className='container px-2 mx-auto py-page dark:border-text4 pt-72 md:px-0'>
         <div className='flex flex-col items-center justify-center'>
           <TextTitle>Học vấn và Kinh nghiệm ☘️</TextTitle>
           <TextDescript>Bản tóm tắt</TextDescript>

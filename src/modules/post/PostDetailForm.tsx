@@ -333,9 +333,10 @@ export default function PostDetailForm({ data, isEdit }: PostDetailFormProps) {
                 onFileUpload={handleOnFileUpload}
                 uploadUrl={uploadedImage}
                 onFileDelete={handleOnFileDelete}
-                size='md'
+                size='lg'
                 loading={uploadLoading}
                 maxSize={maxSize}
+                className='max-w-2xl max-auto'
               >
                 <div>
                   <p>

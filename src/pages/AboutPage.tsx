@@ -19,7 +19,7 @@ export default function AboutPage() {
       <AboutSendToMail className='bg-[#090e34] dark:bg-darkbg'></AboutSendToMail>
       <AboutEducation className='dark:bg-darkbg3 '></AboutEducation>
       <AboutContact className='bg-text8 dark:bg-darkbg2'></AboutContact>
-      <AboutFooter className='pt-32 pb-10 bg-[#090e34] dark:bg-darkbg'></AboutFooter>
+      <AboutFooter className='bg-[#090e34] dark:bg-darkbg'></AboutFooter>
     </>
   )
 }

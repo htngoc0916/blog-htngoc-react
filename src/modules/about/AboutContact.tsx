@@ -38,7 +38,7 @@ export default function AboutContact(props: IAboutContactProps) {
 
   return (
     <div id='contact-to-me' className={props.className}>
-      <div className='container p-4 py-32 mx-auto md:px-0'>
+      <div className='container px-4 mx-auto py-page md:px-0'>
         <div className='flex flex-col items-center justify-center pb-14'>
           <TextTitle>Liên hệ với tôi 📟</TextTitle>
           <TextDescript>Gửi Đến Tôi</TextDescript>

@@ -94,7 +94,7 @@ export default function HomeAllPost(props: DefaultProps) {
 
               <CardBody href={`/post/${post?.slug}`}>
                 <CardTitle className='block' animation>
-                  {truncateText(post?.title, 50)}
+                  {truncateText(post?.title, 70)}
                 </CardTitle>
               </CardBody>
 

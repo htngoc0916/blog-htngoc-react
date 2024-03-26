@@ -5,8 +5,8 @@
 @import 'content-editor.scss';
 
 @layer components {
-  .pt-page {
-    @apply pt-32;
+  .py-page {
+    @apply md:py-32 py-16;
   }
   .container-page {
     @apply max-w-screen-2xl lg:px-10 px-4 mx-auto;

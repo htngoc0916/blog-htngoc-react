@@ -9,7 +9,7 @@ export interface IAboutProjectProps {
 export function AboutProject(props: IAboutProjectProps) {
   return (
     <div {...props}>
-      <div className='container px-2 py-32 mx-auto lg:px-0'>
+      <div className='container px-2 mx-auto py-page lg:px-0'>
         <TextTitle className='text-center'>Dự án từng tham gia 🐳</TextTitle>
         <TextDescript className='text-center'>Kinh nghiệm làm việc</TextDescript>
         <TextMark className='mx-auto text-center md:w-2/3'>

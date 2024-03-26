@@ -41,7 +41,7 @@ export default function AboutIntroduction(props: AboutIntroductionProps) {
             </TextMark>
           </div>
 
-          <div className='flex flex-col justify-center'>
+          <div className='flex flex-col justify-center mt-8 md:mt-0'>
             <TextDescript size='2xl' className='md:text-3xl'>
               Kết nối với mình
             </TextDescript>
