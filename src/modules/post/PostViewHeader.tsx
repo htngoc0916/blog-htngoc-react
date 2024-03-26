@@ -33,7 +33,7 @@ const PostViewHeader = memo(function PostViewHeader(props: DefaultProps) {
         </p>
 
         <CardAuthor className='mt-6'>
-          <AuthorAvatar rounded img='/img/avatar_people.jpg' className='w-10 h-10 rounded-full lg:w-14 lg:h-14'>
+          <AuthorAvatar rounded img={postViewDetail?.user?.avatar} className='w-10 h-10 rounded-full lg:w-14 lg:h-14'>
             <AuthorName className='text-sm font-bold md:text-lg'>{postViewDetail?.user?.userName}</AuthorName>
             <CardPostTime className='flex items-center justify-between w-full gap-20 text-sm lg:text-base'>
               <span>{convertToYYYYMMDD(postViewDetail?.regDt as Date)}</span>
